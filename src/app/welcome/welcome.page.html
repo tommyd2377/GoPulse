@@ -1,0 +1,30 @@
+<ion-app>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>GoPulse</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="ion-padding">
+    
+    <h1>Welcome to GoPulse</h1>
+    
+    <p>
+      GoPulse is the next generation of social news. It was designed
+      to prevent the spread of misinformation and to be completely free of advertising. With GoPulse you can:
+    </p>
+    
+    <ul>
+      <li>Get a much broader perspective on current events</li>
+      <li>Discover, read and share the latest news from a growing list of vetted publishers</li>
+      <li>Follow other GoPulse users to get article recomendations designed to keep you informed and open minded</li>
+    </ul>
+
+    <p>New to GoPulse?</p>
+    <ion-button [routerLink]="['/sign-up']" expand="block">Sign Up</ion-button>
+
+    <p>Already have an account?</p>
+    <ion-button [routerLink]="['/tabs']" expand="block">Sign In</ion-button>
+  
+  </ion-content>
+</ion-app>

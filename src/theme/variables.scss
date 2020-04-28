@@ -3,6 +3,13 @@
 
 /** Ionic CSS Variables **/
 :root {
+
+  ion-content {
+    max-width: 600px; 
+    margin-right: auto; 
+    margin-left: auto;
+  }
+  
   /** primary **/
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;

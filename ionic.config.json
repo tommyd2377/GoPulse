@@ -1,5 +1,8 @@
 {
   "name": "GoPulse",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
   "type": "angular"
 }
