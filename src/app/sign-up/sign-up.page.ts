@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FirebaseAuthentication } from '@ionic-native/firebase-authentication/ngx';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 
@@ -9,7 +8,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
   templateUrl: './sign-up.page.html',
   styleUrls: ['./sign-up.page.scss'],
 })
-export class SignUpPage implements OnInit {
+export class SignUpPage {
 
   email: string;
   password: string;
@@ -19,13 +18,9 @@ export class SignUpPage implements OnInit {
   date;
   currentTime;
 
-  constructor(private firebaseAuthentication: FirebaseAuthentication,
-              private fireAuth: AngularFireAuth,
+  constructor(private fireAuth: AngularFireAuth,
               private router: Router,
               private afs: AngularFirestore) { }
-
-  ngOnInit() {
-  }
 
   emailSignUp() {
     this.fireAuth.auth.createUserWithEmailAndPassword(this.email, this.password)

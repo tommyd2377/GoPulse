@@ -23,10 +23,12 @@ export class AppComponent {
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
+    this.platform.ready().then((readySource) => {
+
+      console.log('Platform ready from', readySource);
 
       if(this.isLoggedIn) {
-        this.router.navigateByUrl('');
+        this.router.navigateByUrl('tabs');
       }
       else {
         this.router.navigateByUrl('welcome');
