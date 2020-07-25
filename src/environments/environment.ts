@@ -13,6 +13,11 @@ export const environment = {
     messagingSenderId: "265300354494",
     appId: "1:265300354494:web:1527f58b2f46b5f82445ef",
     measurementId: "G-NLZCPK65G4"
+  },
+  newsApi: {
+    baseURL: "https://gnews.io/api/v3/topics/",
+    tokenURL: "?&token=",
+    key: "c4931a014b7fd1f739c2f493b08d751a"
   }
 };
 

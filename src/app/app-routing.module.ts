@@ -38,10 +38,7 @@ const routes: Routes = [
     path: 'sign-in',
     loadChildren: () => import('./sign-in/sign-in.module').then( m => m.SignInPageModule)
   },
-  {
-    path: 'article',
-    loadChildren: () => import('./article/article.module').then( m => m.ArticlePageModule)
-  },
+
   {
     path: 'user',
     loadChildren: () => import('./user/user.module').then( m => m.UserPageModule)
@@ -57,6 +54,10 @@ const routes: Routes = [
   {
     path: 'profile-settings',
     loadChildren: () => import('./profile-settings/profile-settings.module').then( m => m.ProfileSettingsPageModule)
+  },
+  {
+    path: 'friends',
+    loadChildren: () => import('./friends/friends.module').then( m => m.FriendsPageModule)
   }
 ];
 @NgModule({
