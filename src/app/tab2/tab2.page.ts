@@ -47,7 +47,7 @@ export class Tab2Page implements OnInit {
   }
   
   openArticle() {
-    this.router.navigateByUrl('article/')
+    this.router.navigateByUrl('tabs/tab2/article/33')
   }
 
 }

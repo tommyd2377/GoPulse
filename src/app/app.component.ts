@@ -12,7 +12,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 export class AppComponent {
 
-  isLoggedIn = false;
+  isLoggedIn = true;
 
   constructor(
     private router : Router,

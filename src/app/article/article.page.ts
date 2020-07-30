@@ -15,8 +15,6 @@ export class ArticlePage implements OnInit {
 
   constructor() { }
 
-  apiKey: string = "c4931a014b7fd1f739c2f493b08d751a";
-
   ngOnInit() {
     //use titleId to retrieve data
     //read #, flag #, comment #, direct send #

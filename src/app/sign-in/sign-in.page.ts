@@ -46,6 +46,7 @@ export class SignInPage {
             .then(res => {
               if (res.user) {
                 console.log(res.user);
+                this.router.navigateByUrl('/tabs');
               }
             })
             .catch(err => {

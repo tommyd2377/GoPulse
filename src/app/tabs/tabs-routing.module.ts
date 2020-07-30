@@ -29,6 +29,11 @@ const routes: Routes = [
             path: '',
             loadChildren: () =>
               import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+          },
+          {
+            path: 'article/:id',
+            loadChildren: () =>
+              import('../article/article.module').then(m => m.ArticlePageModule)
           }
         ]
       },
@@ -39,6 +44,11 @@ const routes: Routes = [
             path: '',
             loadChildren: () =>
               import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+          },
+          {
+            path: 'article/:id',
+            loadChildren: () =>
+              import('../article/article.module').then(m => m.ArticlePageModule)
           }
         ]
       },
@@ -49,6 +59,11 @@ const routes: Routes = [
             path: '',
             loadChildren: () =>
               import('../tab4/tab4.module').then(m => m.Tab4PageModule)
+          },
+          {
+            path: 'article/:id',
+            loadChildren: () =>
+              import('../article/article.module').then(m => m.ArticlePageModule)
           }
         ]
       },
