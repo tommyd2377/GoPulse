@@ -11,7 +11,9 @@ export const environment = {
     measurementId: "G-NLZCPK65G4"
   },
   newsApi: {
-    baseURL: "https://gnews.io/api/v3/topics/",
+    topicsUrl: "https://gnews.io/api/v3/topics/",
+    topNewsUrl: "https://gnews.io/api/v3/top-news",
+    searchUrl: "https://gnews.io/api/v3/search?q=",
     tokenURL: "?&token=",
     key: "c4931a014b7fd1f739c2f493b08d751a"
   }

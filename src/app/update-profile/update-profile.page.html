@@ -1,34 +1,35 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button color="primary"></ion-back-button>
     </ion-buttons>
-    <ion-title color="primary">Sign In</ion-title>
+    <ion-title color="primary">Update Profile</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  
+
   <div class="center-desktop">
 
     <ion-item>
       <ion-label position="floating">Email</ion-label>
       <ion-input required type="email" [(ngModel)]="email"></ion-input>
     </ion-item>
-
-
+  
+    <ion-item>
+      <ion-label position="floating">Username</ion-label>
+      <ion-input required type="text" [(ngModel)]="displayName"></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="floating">Full Name</ion-label>
+      <ion-input required type="text" [(ngModel)]="fullName"></ion-input>
+    </ion-item>
+  
     <ion-item>
       <ion-label position="floating">Password</ion-label>
       <ion-input required type="password" [(ngModel)]="password"></ion-input>
     </ion-item>
-
-    <br>
-    
-    <ion-button fill="outline" (click)="emailSignIn()" expand="block">Sign In</ion-button>
-
-    <br>
-
-    <a [routerLink]="['/forgot-password']">Forgot your password?</a>
 
   </div>
 

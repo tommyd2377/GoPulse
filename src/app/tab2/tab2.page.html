@@ -1,40 +1,42 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
+    <ion-title color="primary">
       Headlines
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  
   <div class="center-desktop">
-  <ion-segment scrollable value="World">
-    <ion-segment-button value="World">
-      World
-    </ion-segment-button>
-    <ion-segment-button value="US">
-      US
-    </ion-segment-button>
-    <ion-segment-button value="Business">
-      Business
-    </ion-segment-button>
-    <ion-segment-button value="Technology">
-      Tech
-    </ion-segment-button>
-    <ion-segment-button value="Entertainment">
-      Arts
-    </ion-segment-button>
-    <ion-segment-button value="Sports">
-      Sports
-    </ion-segment-button>
-    <ion-segment-button value="Science">
-      Science
-    </ion-segment-button>
-    <ion-segment-button value="Health">
-      Health
-    </ion-segment-button>
-  </ion-segment>
+    
+    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="World">
+      <ion-segment-button value="World">
+        World
+      </ion-segment-button>
+      <ion-segment-button value="US">
+        US
+      </ion-segment-button>
+      <ion-segment-button value="Business">
+        Business
+      </ion-segment-button>
+      <ion-segment-button value="Technology">
+        Tech
+      </ion-segment-button>
+      <ion-segment-button value="Entertainment">
+        Arts
+      </ion-segment-button>
+      <ion-segment-button value="Sports">
+        Sports
+      </ion-segment-button>
+      <ion-segment-button value="Science">
+        Science
+      </ion-segment-button>
+      <ion-segment-button value="Health">
+        Health
+      </ion-segment-button>
+    </ion-segment>
+ 
   </div>
 
-  <ion-button (click)="openArticle()">Open Article</ion-button>
 </ion-content>

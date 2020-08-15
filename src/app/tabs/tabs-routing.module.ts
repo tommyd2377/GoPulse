@@ -64,6 +64,25 @@ const routes: Routes = [
             path: 'article/:id',
             loadChildren: () =>
               import('../article/article.module').then(m => m.ArticlePageModule)
+          },
+
+          {
+            path: 'profile-settings',
+            children: [
+              {
+                path: '',
+                loadChildren: () =>
+                  import('../profile-settings/profile-settings.module').then( m => m.ProfileSettingsPageModule)
+              },
+              {
+                path: 'account',
+                loadChildren: () => import('../account/account.module').then( m => m.AccountPageModule)
+              },
+              {
+                path: 'update-profile',
+                loadChildren: () => import('../update-profile/update-profile.module').then( m => m.UpdateProfilePageModule)
+              }
+            ]
           }
         ]
       },

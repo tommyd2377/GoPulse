@@ -1,9 +1,33 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>profile-settings</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="primary"></ion-back-button>
+    </ion-buttons>
+    <ion-title color="primary">Settings</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+
+  <div class="center-desktop">
+
+    <ion-item>
+      <ion-label>Go Anonymous</ion-label>
+      <ion-toggle [(ngModel)]="goAnonymous"></ion-toggle>
+    </ion-item>
+
+    <ion-list>
+      <ion-item (click)="goToAccount()">Account</ion-item>
+      <ion-item (click)="goToUpdateProfile()">Profile</ion-item>
+      <ion-item [routerLink]="['/about']">About</ion-item>
+      <ion-item [routerLink]="['/privacy']">Privacy Policy</ion-item>
+      <ion-item [routerLink]="['/terms']">Terms and Conditions</ion-item>
+    </ion-list>
+    
+    <br>
+      
+    <ion-button fill="outline" (click)="emailSignOut()" expand="block">Sign Out</ion-button>
+
+  </div>
 
 </ion-content>

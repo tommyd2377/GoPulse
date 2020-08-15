@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button color="primary"></ion-back-button>
     </ion-buttons>
-    <ion-title>Sign Up</ion-title>
+    <ion-title color="primary">Sign Up</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -42,23 +42,22 @@
 
   <br>
   
-  <ion-button (click)="emailSignUp()" expand="block">Start Free Trial</ion-button>
+  <ion-button fill="outline" (click)="emailSignUp()" expand="block">Start Free Trial</ion-button>
 
   <br>
-
-  <a [routerLink]="['/privacy']">Privacy Policy</a>
-
-  <br>
-  <br>
-
-  <a [routerLink]="['/terms']">Terms and Conditions</a>
-
-  <br>
-  <br>
-
-  <a [routerLink]="['/about']">About</a>
 
 </div>
 
-
 </ion-content>
+
+<ion-footer class="ion-padding center-desktop">
+  <ion-toolbar>
+    <a [routerLink]="['/privacy']">Privacy Policy</a>
+    <br>
+    <br>
+    <a [routerLink]="['/terms']">Terms and Conditions</a>
+    <br>
+    <br>
+    <a [routerLink]="['/about']">About</a>
+  </ion-toolbar>
+</ion-footer>

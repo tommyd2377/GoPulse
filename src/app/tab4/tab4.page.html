@@ -1,9 +1,35 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Profile</ion-title>
+    <ion-title color="primary">Profile</ion-title>
+    <ion-button (click)="settings()" fill="clear" slot="end">
+      <ion-icon slot="icon-only" name="settings"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+
+  <div class="center-desktop">
+
+    <ion-item class="ion-text-wrap">
+
+      <ion-avatar (click)="editPicture()" slot="start">
+        <img src="../../assets/imgs/logo.png">
+      </ion-avatar>
+
+      <ion-label>
+        <h2>TommyD</h2>
+        <p>Tom DeVito</p>
+      </ion-label>
+      
+      <ion-label>
+        <!-- <ion-button expand="block" fill="outline">Follow</ion-button> -->
+        <ion-button expand="block" fill="outline">0 Followers</ion-button>
+        <ion-button expand="block" fill="outline">0 Following</ion-button>
+      </ion-label>
+  
+    </ion-item>
+
+  </div>
 
 </ion-content>

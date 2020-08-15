@@ -1,15 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-profile-settings',
   templateUrl: './profile-settings.page.html',
   styleUrls: ['./profile-settings.page.scss'],
 })
-export class ProfileSettingsPage implements OnInit {
+export class ProfileSettingsPage {
 
-  constructor() { }
+  constructor(private fireAuth: AngularFireAuth,
+              private router: Router) { }
 
-  ngOnInit() {
+  emailSignOut() {
+    this.router.navigateByUrl('/welcome')
+    
+    // this.fireAuth.auth.signOut()
+    //     .then(() => this.router.navigateByUrl('/welcome'));
+  }
+
+  goToUpdateProfile() {
+    this.router.navigateByUrl("tabs/tab4/profile-settings/update-profile")
+  }
+
+  goToAccount() {
+    this.router.navigateByUrl("tabs/tab4/profile-settings/account")
   }
 
 }
+
+
+

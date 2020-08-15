@@ -14,12 +14,8 @@ export class AppComponent {
 
   isLoggedIn = true;
 
-  constructor(
-    private router : Router,
-    public platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar
-  ) {
+  constructor(private router : Router, public platform: Platform, 
+              private splashScreen: SplashScreen, private statusBar: StatusBar) {
     this.initializeApp();
   }
 
@@ -28,7 +24,7 @@ export class AppComponent {
 
       console.log('Platform ready from', readySource);
 
-      if(this.isLoggedIn) {
+      if (this.isLoggedIn) {
         this.router.navigateByUrl('tabs');
       }
       else {

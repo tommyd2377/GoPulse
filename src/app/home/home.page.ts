@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-//import { Content } from '@ionic/angular';
+import { IonContent } from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, DocumentData } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
@@ -13,12 +13,35 @@ import { Observable } from 'rxjs';
 
 export class HomePage implements OnInit {
 
+  activity = [{user: "TommyD",
+                title: "it works",
+                publisher: "wired",
+                date: "August 8th, 2020"},
+                {user: "TommyD2",
+                title: "it works",
+                publisher: "wired",
+                date: "August 8th, 2020"},
+                {user: "TommyD3",
+                title: "it works",
+                publisher: "wired",
+                date: "August 8th, 2020"},
+                {user: "TommyD5",
+                title: "it works", publisher: "wired",
+                date: "August 8th, 2020"},
+                {user: "TommyD",
+                title: "it works",
+                publisher: "wired",
+                date: "August 8th, 2020"},
+              ]
+
+  //@ViewChild(IonContent) private ionContent: IonContent;
+
   uid: string;
-  articleID: string;
+  titleID: string;
   followingActivity: Observable<DocumentData[]>;
   unread: Observable<DocumentData[]>;
   read: Observable<DocumentData[]>;
-  activity: Observable<DocumentData[]>;
+ // activity: Observable<DocumentData[]>;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -38,31 +61,34 @@ export class HomePage implements OnInit {
           //.map((array) => array.reverse()) as Observable<any[]>;
       }
     })
-}
+  }
+
+  // ionViewWillEnter() {
+  //   this.ionContent.scrollToTop();
+  // }
 
   openArticle(event, active) {
     this.read = this.afs.collection("users").doc(this.uid).collection("read-direct-sends").valueChanges();
     
-    this.activity = this.afs.collection("users").doc(this.uid).collection("activity").valueChanges();
+    //this.activity = this.afs.collection("users").doc(this.uid).collection("activity").valueChanges();
     
-    this.router.navigateByUrl('tabs/home/article/33')
+    this.router.navigateByUrl('tabs/home/article/33');
   }
 
   openUser(uid) {
-    this.router.navigateByUrl('user/'+uid)
+    this.router.navigateByUrl('user/'+uid);
   }
 
   openFollower(followerUid) {
-    this.router.navigateByUrl('user/')
+    this.router.navigateByUrl('user/');
   }
 
   openFollowing(followingUid) {
-    this.router.navigateByUrl('user/')
+    this.router.navigateByUrl('user/');
   }
 
   ionSelected() {
    // this.content.scrollToTop();
   }
-  //@ViewChild(Content) content: Content;
   
 }

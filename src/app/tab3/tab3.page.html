@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Search</ion-title>
+    <ion-title color="primary">Search</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,7 +8,22 @@
 
   <div class="center-desktop">
 
-  <ion-input color="primary" clearInput="true" type="search"></ion-input>
+    <ion-segment (ionChange)="segmentChanged($event)" value="news">
+      <ion-segment-button value="news">
+        <ion-label>News</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="users">
+        <ion-label>Users</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <ion-searchbar *ngIf="searchingNews" inputmode="search" enterkeyhint="search" debounce="500" type="search" 
+        (ionInput)="searchNews($event)" placeholder="search the news..." clearInput="true">
+    </ion-searchbar>
+
+    <ion-searchbar *ngIf="searchingUsers" inputmode="search" enterkeyhint="search" type="search" 
+        (ionInput)="searchUsers()" [(ngModel)]="userQuery" placeholder="search for a user..." clearInput="true">
+    </ion-searchbar>
 
   </div>
 

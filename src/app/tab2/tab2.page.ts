@@ -12,37 +12,38 @@ import { environment } from '../../environments/environment';
 
 export class Tab2Page implements OnInit {
 
-  worldRequest: string;
-  worldResults: Object[];
-  worldView: boolean;
+  results: Object[];
 
-  baseUrl: string = environment.newsApi.baseURL;
+  topicsUrl: string = environment.newsApi.topicsUrl;
   tokenUrl: string = environment.newsApi.tokenURL;
   apiKey: string = environment.newsApi.key;
   category: string = "world";
-
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
               private afs: AngularFirestore) { }
 
   ngOnInit() {
-    fetch(this.baseUrl + this.category + this.tokenUrl + this.apiKey)
+    fetch(this.topicsUrl + this.category + this.tokenUrl + this.apiKey)
       .then((response) => {
         return response.json();
       })
       .then((data) => {
+
           console.log(data);
       });
   }
 
-  newsByTopic(topic: string) {
-    fetch(this.baseUrl + this.category + this.tokenUrl + this.apiKey)
+  segmentChanged(ev: any) {
+    let topic = ev.detail.value;
+    console.log('Segment changed', topic);
+    fetch(this.topicsUrl + topic + this.tokenUrl + this.apiKey)
       .then((response) => {
           return response.json();
       })
       .then((data) => {
-          console.log(data);
+        console.log(data);
+        this.results = data;
       });
   }
   
