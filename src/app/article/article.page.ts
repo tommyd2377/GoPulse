@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
+//import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, DocumentData } from '@angular/fire/firestore';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-article',
@@ -13,26 +14,33 @@ import { ToastController } from '@ionic/angular';
 
 export class ArticlePage implements OnInit {
   
-  userHasRead: boolean = false;
+  userHasRead: boolean = true;
   userHasShared: boolean = false;
+  userHasFlagged: boolean = false;
   uid: string;
-  title: string;
+  title: string = "2020 election";
+  publisher: string;
+  publishDate: string;
   comment: string;
-  //titleID: string = this.title.replace(/[^A-Z0-9]+/ig, "-");
+  titleID: string = this.title.replace(/[^A-Z0-9]+/ig, "-");
   reads: Observable<DocumentData[]>;
-  shares: Observable<DocumentData[]>;
+  shares: any;
   flags: Observable<DocumentData[]>;
   comments: Observable<DocumentData[]>;
+  commentLikes: Observable<DocumentData[]>;
+  commentReplies: Observable<DocumentData[]>;
   sends: Observable<DocumentData[]>;
   followers: Observable<DocumentData[]>;
-  shareRef;
-  date;
-  currentTime;
+  date: Date;
+  currentTime: number;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
               private afs: AngularFirestore,
-              public toastController: ToastController) { }
+              public toastController: ToastController,
+              ) { }
+
+              //private iab: InAppBrowser
 
   ngOnInit() {
 
@@ -67,10 +75,17 @@ export class ArticlePage implements OnInit {
     toast.present();
   }
 
+  openArticle() {
+    // const browser = this.iab.create('https://ionicframework.com/');
+    //   browser.on('closePressed').subscribe(data => {
+    //     browser.close();
+    //   })
+  }
+
   share() {
     
     if (!this.userHasRead) {
-      this.presentToast("You should probably read an article before sharing it")
+      this.presentToast("Articles must be read before they can be shared");
     }
     
     else {    
@@ -84,7 +99,7 @@ export class ArticlePage implements OnInit {
       const shareRef2 = this.afs.collection("users").doc(this.uid).collection("activity");
         shareRef2.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), sharedIsTrue: (true) });
 
-      const shareRef3 = this.afs.collection("articles").doc(this.title).collection("shares");
+      const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("shares");
         shareRef3.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), sharedIsTrue: (true) });
 
       this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
@@ -95,7 +110,7 @@ export class ArticlePage implements OnInit {
         }
       })
 
-      this.presentToast("Article shared with followers");
+      this.presentToast("Article shared");
     
   
     }
@@ -108,7 +123,7 @@ export class ArticlePage implements OnInit {
 
   flag(flagType) {
     if (!this.userHasRead) {
-      this.presentToast("You should probably read an article before flagging it as biased")
+      this.presentToast("Articles must be read before they can be flagged as biased");
     }
     
     else {
@@ -133,7 +148,7 @@ export class ArticlePage implements OnInit {
         }
       })
 
-      this.presentToast("Article flagged for followers");
+      this.presentToast("Article flagged as biased");
     
   
   }
@@ -147,7 +162,7 @@ export class ArticlePage implements OnInit {
 
   send() {
     if (!this.userHasRead) {
-      this.presentToast("You should probably read an article before sending it to someone")
+      this.presentToast("Articles must be read before they can be sent to someone");
     }
     
     else {
@@ -172,7 +187,7 @@ export class ArticlePage implements OnInit {
         }
       })
 
-      this.presentToast("Article shared with followers");
+      this.presentToast("Article sent");
     
   
   }
@@ -181,7 +196,7 @@ export class ArticlePage implements OnInit {
 
   newComment() {
     if (!this.userHasRead) {
-      this.presentToast("You should probably read an article before commenting on it")
+      this.presentToast("Articles must be read before they can be commented on");
     }
     
     else {
@@ -206,7 +221,7 @@ export class ArticlePage implements OnInit {
         }
       })
 
-      this.presentToast("Article shared with followers");
+      this.presentToast("Comment posted");
     
   }
 

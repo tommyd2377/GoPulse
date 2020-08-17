@@ -14,8 +14,8 @@ import { Observable } from 'rxjs';
 export class HomePage implements OnInit {
 
   activity = [{user: "TommyD",
-                title: "it works",
-                publisher: "wired",
+                title: "Who will win the 2020 Presidential election?",
+                publisher: "The Wall Street Journal",
                 date: "August 8th, 2020"},
                 {user: "TommyD2",
                 title: "it works",
@@ -63,15 +63,15 @@ export class HomePage implements OnInit {
     })
   }
 
-  // ionViewWillEnter() {
-  //   this.ionContent.scrollToTop();
-  // }
+  ionViewWillEnter() {
+  //  this.ionContent.scrollToTop();
+  }
+
+  ionSelected() {
+    // this.content.scrollToTop();
+  }
 
   openArticle(event, active) {
-    this.read = this.afs.collection("users").doc(this.uid).collection("read-direct-sends").valueChanges();
-    
-    //this.activity = this.afs.collection("users").doc(this.uid).collection("activity").valueChanges();
-    
     this.router.navigateByUrl('tabs/home/article/33');
   }
 
@@ -85,10 +85,6 @@ export class HomePage implements OnInit {
 
   openFollowing(followingUid) {
     this.router.navigateByUrl('user/');
-  }
-
-  ionSelected() {
-   // this.content.scrollToTop();
   }
   
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -12,10 +13,9 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 export class AppComponent {
 
-  isLoggedIn = true;
-
   constructor(private router : Router, public platform: Platform, 
-              private splashScreen: SplashScreen, private statusBar: StatusBar) {
+              private splashScreen: SplashScreen, private statusBar: StatusBar,
+              public fireAuth: AngularFireAuth) {
     this.initializeApp();
   }
 
@@ -24,12 +24,26 @@ export class AppComponent {
 
       console.log('Platform ready from', readySource);
 
-      if (this.isLoggedIn) {
-        this.router.navigateByUrl('tabs');
-      }
-      else {
-        this.router.navigateByUrl('welcome');
-      }
+      this.fireAuth.auth.onAuthStateChanged((user) => {
+        
+        if (user) {
+          console.log(user);
+          this.router.navigateByUrl('tabs');
+        }
+
+        else if (!user) {
+          console.log("No user logged in");
+          this.router.navigateByUrl('welcome');
+        }
+      
+      });
+
+      // if (this.isLoggedIn) {
+      //   this.router.navigateByUrl('tabs');
+      // }
+      // else if (!this.isLoggedIn) {
+      //   this.router.navigateByUrl('welcome');
+      // }
       
       this.statusBar.styleDefault();
       this.splashScreen.hide();
