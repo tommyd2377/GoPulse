@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
-//import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, DocumentData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
@@ -14,9 +14,10 @@ import { Observable } from 'rxjs';
 
 export class ArticlePage implements OnInit {
   
-  userHasRead: boolean = true;
-  userHasShared: boolean = false;
-  userHasFlagged: boolean = false;
+  userHasRead: boolean = false;
+  userHasShared: boolean;
+  userHasCommented: boolean;
+  userHasFlagged: boolean;
   uid: string;
   title: string = "2020 election";
   publisher: string;
@@ -38,30 +39,22 @@ export class ArticlePage implements OnInit {
               private router: Router,
               private afs: AngularFirestore,
               public toastController: ToastController,
-              ) { }
-
-              //private iab: InAppBrowser
+              public iab: InAppBrowser) { }
 
   ngOnInit() {
-
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
         
         console.log(user.displayName);
         this.uid = user.uid;
         
-        this.reads = this.afs.collection("articles").doc(this.title).collection("reads").valueChanges();
-
-          this.afs.collection('users', ref => ref.where('size', '==', 'large'))
-        
+        this.reads = this.afs.collection("articles").doc(this.title).collection("reads").valueChanges(); 
         this.shares = this.afs.collection("articles").doc(this.title).collection("shares").valueChanges();
-        
         this.flags = this.afs.collection("articles").doc(this.title).collection("flags").valueChanges();
-        
         this.sends = this.afs.collection("articles").doc(this.title).collection("sends").valueChanges();
-        
         this.comments = this.afs.collection("articles").doc(this.title).collection("comments").valueChanges();
-      
+
+        //check for user actions and set boolean class properties
       }
     })
 
@@ -94,31 +87,37 @@ export class ArticlePage implements OnInit {
       this.currentTime = this.date.getTime();
 
       const shareRef1 = this.afs.collection("users").doc(this.uid).collection("shares");
-        shareRef1.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), sharedIsTrue: (true) });
+        shareRef1.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sharedIsTrue: (true) });
 
       const shareRef2 = this.afs.collection("users").doc(this.uid).collection("activity");
-        shareRef2.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), sharedIsTrue: (true) });
+        shareRef2.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sharedIsTrue: (true) });
 
       const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("shares");
-        shareRef3.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), sharedIsTrue: (true) });
+        shareRef3.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sharedIsTrue: (true) });
 
       this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       this.followers.subscribe(results => {
         for (let result of results) { 
           const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          shareRef4.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), sharedIsTrue: (true) });
+          shareRef4.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sharedIsTrue: (true) });
         }
       })
 
       this.presentToast("Article shared");
-    
   
     }
   }
 
   unshare() {
-    //delete from shares, activity, followers activity using id with loops or collection group queries
-  
+    if (this.userHasShared) {
+
+      const unShareRef1 = this.afs.collection("users").doc(this.uid).collection("shares", ref => 
+        ref.where('uid', '==', this.uid)
+         .where('titleId', "==", this.titleID)).snapshotChanges();
+
+      
+    }
+
   }
 
   flag(flagType) {
@@ -132,19 +131,19 @@ export class ArticlePage implements OnInit {
       this.currentTime = this.date.getTime();
 
       const shareRef1 = this.afs.collection("users").doc(this.uid).collection("flags");
-        shareRef1.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), flaggedIsTrue: (true) });
+        shareRef1.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), flaggedIsTrue: (true) });
 
       const shareRef2 = this.afs.collection("users").doc(this.uid).collection("activity");
-        shareRef2.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), flaggedIsTrue: (true) });
+        shareRef2.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), flaggedIsTrue: (true) });
 
       const shareRef3 = this.afs.collection("articles").doc(this.title).collection("flags");
-        shareRef3.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), flaggedIsTrue: (true) });
+        shareRef3.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), flaggedIsTrue: (true) });
 
       this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       this.followers.subscribe(results => {
         for (let result of results) { 
           const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          shareRef4.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), flaggedIsTrue: (true) });
+          shareRef4.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), flaggedIsTrue: (true) });
         }
       })
 
@@ -171,19 +170,19 @@ export class ArticlePage implements OnInit {
       this.currentTime = this.date.getTime();
 
       const shareRef1 = this.afs.collection("users").doc(this.uid).collection("sends");
-        shareRef1.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), sentIsTrue: (true) });
+        shareRef1.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sentIsTrue: (true) });
 
       const shareRef2 = this.afs.collection("users").doc(this.uid).collection("activity");
-        shareRef2.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), sentIsTrue: (true) });
+        shareRef2.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sentIsTrue: (true) });
 
       const shareRef3 = this.afs.collection("articles").doc(this.title).collection("sends");
-        shareRef3.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), sentIsTrue: (true) });
+        shareRef3.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sentIsTrue: (true) });
 
       this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       this.followers.subscribe(results => {
         for (let result of results) { 
           const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          shareRef4.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), sentIsTrue: (true) });
+          shareRef4.add({ uid: (this.uid), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sentIsTrue: (true) });
         }
       })
 
@@ -205,19 +204,19 @@ export class ArticlePage implements OnInit {
       this.currentTime = this.date.getTime();
 
       const shareRef1 = this.afs.collection("users").doc(this.uid).collection("comments");
-        shareRef1.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), commentIsTrue: (true) });
+        shareRef1.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), commentIsTrue: (true) });
 
       const shareRef2 = this.afs.collection("users").doc(this.uid).collection("activity");
-        shareRef2.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), commentIsTrue: (true) });
+        shareRef2.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), commentIsTrue: (true) });
 
       const shareRef3 = this.afs.collection("articles").doc(this.title).collection("comments");
-        shareRef3.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), commentIsTrue: (true) });
+        shareRef3.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), commentIsTrue: (true) });
 
       this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       this.followers.subscribe(results => {
         for (let result of results) { 
           const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          shareRef4.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), commentIsTrue: (true) });
+          shareRef4.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), commentIsTrue: (true) });
         }
       })
 
@@ -232,7 +231,35 @@ export class ArticlePage implements OnInit {
   }
 
   likeComment() {
-    //add to commentLikes, activity, followers activity
+    if (!this.userHasRead) {
+      this.presentToast("Articles must be read before they can be commented on");
+    }
+    
+    else {
+      
+      this.date = new Date();
+      this.currentTime = this.date.getTime();
+
+      const shareRef1 = this.afs.collection("users").doc(this.uid).collection("comments");
+        shareRef1.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), commentIsTrue: (true) });
+
+      const shareRef2 = this.afs.collection("users").doc(this.uid).collection("activity");
+        shareRef2.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), commentIsTrue: (true) });
+
+      const shareRef3 = this.afs.collection("articles").doc(this.title).collection("comments");
+        shareRef3.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), commentIsTrue: (true) });
+
+      this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
+      this.followers.subscribe(results => {
+        for (let result of results) { 
+          const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
+          shareRef4.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), commentIsTrue: (true) });
+        }
+      })
+
+      this.presentToast("Comment posted");
+    
+  }
 
   }
 
@@ -242,7 +269,35 @@ export class ArticlePage implements OnInit {
   }
 
   commentReply() {
-    //add to commentReplies, activity, followers activity
+    if (!this.userHasRead) {
+      this.presentToast("Articles must be read before they can be commented on");
+    }
+    
+    else {
+      
+      this.date = new Date();
+      this.currentTime = this.date.getTime();
+
+      const shareRef1 = this.afs.collection("users").doc(this.uid).collection("comments");
+        shareRef1.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), commentIsTrue: (true) });
+
+      const shareRef2 = this.afs.collection("users").doc(this.uid).collection("activity");
+        shareRef2.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), commentIsTrue: (true) });
+
+      const shareRef3 = this.afs.collection("articles").doc(this.title).collection("comments");
+        shareRef3.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), commentIsTrue: (true) });
+
+      this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
+      this.followers.subscribe(results => {
+        for (let result of results) { 
+          const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
+          shareRef4.add({ uid: (this.uid), comment: (this.comment), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), commentIsTrue: (true) });
+        }
+      })
+
+      this.presentToast("Comment posted");
+    
+  }
 
   }
 

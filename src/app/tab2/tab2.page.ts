@@ -37,6 +37,7 @@ export class Tab2Page implements OnInit {
   segmentChanged(ev: any) {
     let topic = ev.detail.value;
     console.log('Segment changed', topic);
+    console.log(this.topicsUrl + topic + this.tokenUrl + this.apiKey);
     fetch(this.topicsUrl + topic + this.tokenUrl + this.apiKey)
       .then((response) => {
           return response.json();

@@ -37,6 +37,7 @@ export class Tab3Page implements OnInit  {
   ngOnInit() {
     fetch(this.topNewsUrl + this.tokenUrl + this.apiKey)
       .then(function (response) {
+        console.log(response);
           return response.json();
       })
       .then(function (data) {

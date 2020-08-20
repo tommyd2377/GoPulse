@@ -13,10 +13,8 @@ export class ProfileSettingsPage {
               private router: Router) { }
 
   emailSignOut() {
-    this.router.navigateByUrl('/welcome')
-    
-    // this.fireAuth.auth.signOut()
-    //     .then(() => this.router.navigateByUrl('/welcome'));
+     this.fireAuth.auth.signOut()
+        .then(() => this.router.navigateByUrl('/welcome'));
   }
 
   goToUpdateProfile() {

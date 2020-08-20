@@ -13,6 +13,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 export class AppComponent {
 
+  isLoggedIn: boolean = true;
+
   constructor(private router : Router, public platform: Platform, 
               private splashScreen: SplashScreen, private statusBar: StatusBar,
               public fireAuth: AngularFireAuth) {
@@ -24,26 +26,31 @@ export class AppComponent {
 
       console.log('Platform ready from', readySource);
 
-      this.fireAuth.auth.onAuthStateChanged((user) => {
+      // this.fireAuth.auth.onAuthStateChanged((user) => {
         
-        if (user) {
-          console.log(user);
-          this.router.navigateByUrl('tabs');
-        }
+      //   // if (user) {
+      //   //   console.log(user);
+      //   //   this.router.navigateByUrl('tabs');
+      //   // }
 
-        else if (!user) {
-          console.log("No user logged in");
-          this.router.navigateByUrl('welcome');
-        }
+      //   // else if (!user) {
+      //   //   console.log("No user logged in");
+      //   //   this.router.navigateByUrl('welcome');
+      //   // }
+
+      //   // else {
+      //   //   console.log("No user logged in fallback");
+      //   //   this.router.navigateByUrl('welcome');
+      //   // }
       
-      });
+      // });
 
-      // if (this.isLoggedIn) {
-      //   this.router.navigateByUrl('tabs');
-      // }
-      // else if (!this.isLoggedIn) {
-      //   this.router.navigateByUrl('welcome');
-      // }
+      if (this.isLoggedIn) {
+        this.router.navigateByUrl('tabs');
+      }
+      else if (!this.isLoggedIn) {
+        this.router.navigateByUrl('welcome');
+      }
       
       this.statusBar.styleDefault();
       this.splashScreen.hide();

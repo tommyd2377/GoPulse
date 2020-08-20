@@ -11,6 +11,53 @@
 
   <div class="center-desktop">
 
+    <ion-item class="ion-text-wrap">
+
+      <ion-avatar id="ion-avatar" slot="start">
+        <img src="../../assets/imgs/portrait.jpg">
+      </ion-avatar>
+
+      <ion-label>
+        <h2>displayName</h2>
+        <p>fullName</p>
+      </ion-label>
+      
+      <ion-label>
+        <ion-button expand="block" fill="outline">Follow</ion-button>
+        <ion-button expand="block" fill="outline">0 Followers</ion-button>
+        <ion-button expand="block" fill="outline">0 Following</ion-button>
+      </ion-label>
+  
+    </ion-item>
+
+    <div *ngFor="let active of activity">
+
+      <ion-item>
+        
+        <ion-avatar slot="start" button (click)="openUser()">
+          <img src="../../assets/imgs/portrait.jpg">
+        </ion-avatar>
+        
+        <ion-label class="ion-text-wrap" button (click)="openArticle()">
+          <h2>{{ active.user }}</h2> sent you an article
+        </ion-label>
+  
+      </ion-item>
+  
+      <ion-item>
+
+        <ion-label class="ion-text-wrap" button (click)="openArticle()">
+          <h1>{{ active.title }}</h1>
+          <br>
+          <h2>{{ active.publisher }}</h2> 
+          <p>{{ active.date }}</p>
+          <br>
+        </ion-label>
+      
+      </ion-item>
+  
+    </div>
+
   </div>
 
 </ion-content>

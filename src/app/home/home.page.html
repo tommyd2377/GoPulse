@@ -10,9 +10,9 @@
 
     <div *ngFor="let active of activity">
 
-    <ion-item>
+    <ion-item detail="false" button>
       <ion-avatar slot="start" button (click)="openUser()">
-        <img src="../../assets/imgs/logo.png">
+        <img src="../../assets/imgs/portrait.jpg">
       </ion-avatar>
       
         <ion-label class="ion-text-wrap" button (click)="openArticle()">
@@ -21,7 +21,7 @@
 
       </ion-item>
 
-        <ion-item>
+        <ion-item detail="false" button>
   
         <ion-label class="ion-text-wrap" button (click)="openArticle()">
           <h1>{{ active.title }}</h1>

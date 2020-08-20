@@ -8,15 +8,19 @@
 
   <div class="center-desktop">
 
-    <ion-item>
-      <ion-avatar slot="start">
-        <img src="../../assets/imgs/logo.png">
-      </ion-avatar>
-      <ion-label>
-        <h2>H2 Title Text</h2>
-        <p>Button on right</p>
-      </ion-label>
-    </ion-item>
+    <div *ngFor="let follower of followers">
+
+      <ion-item>
+        <ion-avatar slot="start">
+          <img src="../../assets/imgs/logo.png">
+        </ion-avatar>
+        <ion-label>
+          <h2>H2 Title Text</h2>
+          <p>Button on right</p>
+        </ion-label>
+      </ion-item>
+
+    </div>
 
   </div>
 
