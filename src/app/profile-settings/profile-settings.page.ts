@@ -18,11 +18,11 @@ export class ProfileSettingsPage {
   }
 
   goToUpdateProfile() {
-    this.router.navigateByUrl("tabs/tab4/profile-settings/update-profile")
+    this.router.navigateByUrl("tabs/profile/profile-settings/update-profile")
   }
 
   goToAccount() {
-    this.router.navigateByUrl("tabs/tab4/profile-settings/account")
+    this.router.navigateByUrl("tabs/profile/profile-settings/account")
   }
 
 }

@@ -5,12 +5,12 @@ import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss']
+  selector: 'app-pulse',
+  templateUrl: 'pulse.page.html',
+  styleUrls: ['pulse.page.scss']
 })
 
-export class Tab2Page implements OnInit {
+export class PulsePage implements OnInit {
 
   results: Object[];
 
@@ -49,7 +49,7 @@ export class Tab2Page implements OnInit {
   }
   
   openArticle() {
-    this.router.navigateByUrl('tabs/tab2/article/33')
+    this.router.navigateByUrl('tabs/pulse/article/33')
   }
 
 }

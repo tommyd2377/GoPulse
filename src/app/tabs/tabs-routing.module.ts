@@ -13,7 +13,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../home/home.module').then(m => m.homePageModule)
+              import('../home/home.module').then(m => m.HomePageModule)
           },
           {
             path: 'article/:id',
@@ -23,12 +23,12 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'tab2',
+        path: 'pulse',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+              import('../pulse/pulse.module').then(m => m.PulsePageModule)
           },
           {
             path: 'article/:id',
@@ -38,12 +38,12 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'tab3',
+        path: 'search',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+              import('../search/search.module').then(m => m.SearchPageModule)
           },
           {
             path: 'article/:id',
@@ -53,12 +53,12 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'tab4',
+        path: 'profile',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab4/tab4.module').then(m => m.Tab4PageModule)
+              import('../profile/profile.module').then(m => m.ProfilePageModule)
           },
           {
             path: 'article/:id',

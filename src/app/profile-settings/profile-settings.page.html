@@ -17,8 +17,8 @@
     </ion-item>
 
     <ion-list>
-      <ion-item (click)="goToAccount()">Account</ion-item>
-      <ion-item (click)="goToUpdateProfile()">Update Profile</ion-item>
+      <ion-item detail="false" button (click)="goToAccount()">Account</ion-item>
+      <ion-item detail="false" button (click)="goToUpdateProfile()">Update Profile</ion-item>
       <ion-item detail="false" [routerLink]="['/about']">About</ion-item>
       <ion-item detail="false" [routerLink]="['/privacy']">Privacy Policy</ion-item>
       <ion-item detail="false" [routerLink]="['/terms']">Terms and Conditions</ion-item>

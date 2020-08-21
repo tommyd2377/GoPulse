@@ -56,9 +56,6 @@ export class HomePage implements OnInit {
         
         this.followingActivity = this.afs.collection("users").doc(this.uid).collection("following-activity").valueChanges();
           //.map((array) => array.reverse()) as Observable<any[]>;
-
-        this.unread = this.afs.collection("users").doc(this.uid).collection("unread-direct-sends").valueChanges();
-          //.map((array) => array.reverse()) as Observable<any[]>;
       }
     })
   }

@@ -7,12 +7,12 @@ import { environment } from '../../environments/environment';
 //import { Content } from '@ionic/angular';
 
 @Component({
-  selector: 'app-tab3',
-  templateUrl: 'tab3.page.html',
-  styleUrls: ['tab3.page.scss']
+  selector: 'app-search',
+  templateUrl: 'search.page.html',
+  styleUrls: ['search.page.scss']
 })
 
-export class Tab3Page implements OnInit  {
+export class SearchPage implements OnInit  {
 
   users$: Observable<any>;
   sizeFilter$: BehaviorSubject<string|null>;
