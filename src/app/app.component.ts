@@ -15,9 +15,11 @@ export class AppComponent {
 
   isLoggedIn: boolean = true;
 
-  constructor(private router : Router, public platform: Platform, 
-              private splashScreen: SplashScreen, private statusBar: StatusBar,
-              public fireAuth: AngularFireAuth) {
+  constructor(private router : Router, 
+              public platform: Platform,  
+              private statusBar: StatusBar,
+              public fireAuth: AngularFireAuth,
+              private splashScreen: SplashScreen) {
     this.initializeApp();
   }
 

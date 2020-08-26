@@ -15,10 +15,20 @@ export class UpdateProfilePage {
 
   uploadPercent: Observable<number>;
   downloadURL: Observable<string>;
+  displayName: string;
+  email: string;
+  fullName: string;
 
-  constructor(private storage: AngularFireStorage) { }
+  constructor(private storage: AngularFireStorage,
+              private fireAuth: AngularFireAuth,
+              private afs: AngularFirestore) { }
 
   ngOnInit() {
+    this.fireAuth.auth.onAuthStateChanged((user) => {
+      if (user) {
+        
+      }
+    }) 
   }
 
   uploadFile(event) {
@@ -34,6 +44,28 @@ export class UpdateProfilePage {
         finalize(() => this.downloadURL = fileRef.getDownloadURL() )
      )
     .subscribe()
+  }
+
+  updateProfile() {
+    this.fireAuth.auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log(user);
+        user.updateProfile({
+          displayName: this.displayName,
+          photoURL: "",
+        }).then(() => {
+            let uid = user.uid;
+            let userData = this.afs.collection("users").doc(uid);
+            userData.update({
+              email: this.email,
+              displayName: this.displayName,
+              fullName: this.fullName,
+              fullNameSearch: this.fullName.toUpperCase(),
+              photoURL: ""
+            })
+          })
+      }
+    }) 
   }
 
 }

@@ -63,7 +63,7 @@ export class ArticlePage implements OnInit {
   async presentToast(message) {
     const toast = await this.toastController.create({
       message: message,
-      duration: 5000
+      duration: 4000
     });
     toast.present();
   }
@@ -113,14 +113,13 @@ export class ArticlePage implements OnInit {
 
       const unShareRef1 = this.afs.collection("users").doc(this.uid).collection("shares", ref => 
         ref.where('uid', '==', this.uid)
-         .where('titleId', "==", this.titleID)).snapshotChanges();
-
-      
+           .where('titleId', "==", this.titleID));
+      unShareRef1.doc().delete().then(() => console.log("unshared"));
     }
 
   }
 
-  flag(flagType) {
+  flag() {
     if (!this.userHasRead) {
       this.presentToast("Articles must be read before they can be flagged as biased");
     }

@@ -18,6 +18,8 @@ export class ProfilePage implements OnInit {
   uid;
   userActivity;
   profileUrl: Observable<string | null>;
+  followers: Observable<DocumentData[]>;
+  following: Observable<DocumentData[]>;
 
   activity = [{user: "TommyD",
     title: "Who will win the 2020 Presidential election?",
@@ -57,9 +59,13 @@ export class ProfilePage implements OnInit {
           this.profileUrl = ref.getDownloadURL();
         
         this.profileDoc = this.afs.collection("users").doc(this.uid).get();
-          //.map((array) => array.reverse()) as Observable<any[]>;
+        console.log(this.profileDoc);
 
         this.userActivity = this.afs.collection("users").doc(this.uid).collection("activity").get();
+        console.log(this.userActivity);
+
+        this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
+        this.following = this.afs.collection("users").doc(this.uid).collection("following").valueChanges();
 
         console.log(this.profileDoc);
         console.log(this.userActivity);
@@ -71,11 +77,11 @@ export class ProfilePage implements OnInit {
     this.router.navigateByUrl('tabs/profile/article/33');
   }
 
-  followers() {
+  goToFollowers() {
     this.router.navigateByUrl('tabs/profile/followers');
   }
 
-  following() {
+  gotoFollowing() {
     this.router.navigateByUrl('tabs/profile/following');
   }
 

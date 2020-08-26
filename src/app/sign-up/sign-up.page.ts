@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { AlertController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
 
 @Component({
@@ -21,22 +22,48 @@ export class SignUpPage {
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
               private afs: AngularFirestore,
-              public platform: Platform) { }
+              public platform: Platform,
+              public alertController: AlertController) { }
+
+  async presentAlertConfirm() {
+    const alert = await this.alertController.create({
+      header: 'Confirm Sign Up',
+      message: 'By clicking "Okay" you agree to our <strong>Privacy Policy</strong> and <strong>Terms and Conditions</strong>.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Okay',
+          handler: () => {
+            console.log('Confirm Okay');
+            this.emailSignUp();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
 
   emailSignUp() {
 
-    this.fireAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
-      .then(res => {
-        if (res.user) {
-          console.log(res.user);
-          this.setProfile();
-        }
-      })
-      .catch(err => {
-        console.log(`signup failed ${err}`);
-        this.error = err.message;
-      });
-    
+    console.log(this.email, this.password);
+    // this.fireAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
+    //   .then(res => {
+    //     if (res.user) {
+    //       console.log(res.user);
+    //       this.setProfile();
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.log(`signup failed ${err}`);
+    //     this.error = err.message;
+    //   });
   }
 
   setProfile() {
