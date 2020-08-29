@@ -4,6 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, DocumentData } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { GlobalParamsService } from '../global-params.service'; 
 
 @Component({
   selector: 'app-home',
@@ -45,7 +46,8 @@ export class HomePage implements OnInit {
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
-              private afs: AngularFirestore) {}
+              private afs: AngularFirestore,
+              public globalProps: GlobalParamsService) {}
 
   ngOnInit() {
     this.fireAuth.auth.onAuthStateChanged((user) => {
@@ -54,7 +56,7 @@ export class HomePage implements OnInit {
         console.log(user.displayName);
         this.uid = user.uid;
         
-        this.followingActivity = this.afs.collection("users").doc(this.uid).collection("following-activity").valueChanges();
+        this.followingActivity = this.afs.collection("users").doc(this.uid).collection("followingActivity").valueChanges();
           //.map((array) => array.reverse()) as Observable<any[]>;
       }
     })
@@ -69,11 +71,15 @@ export class HomePage implements OnInit {
   }
 
   openArticle(event, active) {
+    // this.globalProps.title = active.title;
+    // this.globalProps.articleUrl = active.articleUrl;
+    // this.globalProps.publishDate = active.publishDate;
+    // this.globalProps.publisher = active.publisher;
     this.router.navigateByUrl('tabs/home/article/33');
   }
 
-  openUser(uid) {
-    this.router.navigateByUrl('user/'+uid);
+  openUser(event, user) {
+    this.router.navigateByUrl('tabs/home/user/33');
   }
 
   openFollower(followerUid) {

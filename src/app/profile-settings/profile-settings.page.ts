@@ -10,7 +10,13 @@ import { AngularFireAuth } from '@angular/fire/auth';
 export class ProfileSettingsPage {
 
   constructor(private fireAuth: AngularFireAuth,
-              private router: Router) { }
+              private router: Router) { 
+                if (this.goAnonymous) {
+                  console.log('isan')
+                }
+              }
+
+  goAnonymous: boolean;
 
   emailSignOut() {
      this.fireAuth.auth.signOut()

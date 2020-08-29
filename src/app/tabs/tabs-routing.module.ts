@@ -19,7 +19,12 @@ const routes: Routes = [
             path: 'article/:id',
             loadChildren: () =>
               import('../article/article.module').then(m => m.ArticlePageModule)
-          }
+          },
+          {
+            path: 'user/:id',
+            loadChildren: () => 
+              import('../user/user.module').then( m => m.UserPageModule)
+          },
         ]
       },
       {
@@ -34,6 +39,11 @@ const routes: Routes = [
             path: 'article/:id',
             loadChildren: () =>
               import('../article/article.module').then(m => m.ArticlePageModule)
+          },
+          {
+            path: 'user/:id',
+            loadChildren: () => 
+              import('../user/user.module').then( m => m.UserPageModule)
           }
         ]
       },
@@ -49,6 +59,11 @@ const routes: Routes = [
             path: 'article/:id',
             loadChildren: () =>
               import('../article/article.module').then(m => m.ArticlePageModule)
+          },
+          {
+            path: 'user/:id',
+            loadChildren: () => 
+              import('../user/user.module').then( m => m.UserPageModule)
           }
         ]
       },
@@ -65,7 +80,11 @@ const routes: Routes = [
             loadChildren: () =>
               import('../article/article.module').then(m => m.ArticlePageModule)
           },
-
+          {
+            path: 'user/:id',
+            loadChildren: () => 
+              import('../user/user.module').then( m => m.UserPageModule)
+          },
           {
             path: 'profile-settings',
             children: [

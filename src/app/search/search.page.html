@@ -22,7 +22,7 @@
     </ion-searchbar>
 
     <ion-searchbar *ngIf="searchingUsers" inputmode="search" enterkeyhint="search" type="search" 
-        (ionInput)="searchUsers()" [(ngModel)]="userQuery" placeholder="search for a user..." clearInput="true">
+        (ionInput)="searchUsers($event)" placeholder="search for a user..." clearInput="true">
     </ion-searchbar>
 
   </div>

@@ -1,7 +1,7 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { AngularFirestore, DocumentData } from 'angularfire2/firestore';
 import { Router } from '@angular/router';
-import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { Observable, BehaviorSubject, Subject, combineLatest } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 //import { Content } from '@ionic/angular';
@@ -14,14 +14,11 @@ import { environment } from '../../environments/environment';
 
 export class SearchPage implements OnInit  {
 
-  users$: Observable<any>;
-  sizeFilter$: BehaviorSubject<string|null>;
-  colorFilter$: BehaviorSubject<string|null>;
-
+  userQuery = new Subject<string>();
   newsQuery: string;
-  userQuery: string;
+
   newsResults: Object[];
-  userResults: Observable<DocumentData[]>;
+  userResults;
 
   topNewsUrl: string = environment.newsApi.topNewsUrl;
   searchUrl: string = environment.newsApi.searchUrl;
@@ -43,6 +40,14 @@ export class SearchPage implements OnInit  {
       .then(function (data) {
           console.log(data);
       });
+      const queryObservable = this.userQuery.pipe(
+        switchMap(fullName => 
+          this.afs.collection('users', ref => ref.where('fullNameSearch', '==', fullName.toUpperCase())).valueChanges()
+        )
+      );
+      queryObservable.subscribe(queriedItems => {
+        console.log(queriedItems);  
+      });
   }
 
   segmentChanged(ev: any) {
@@ -63,7 +68,8 @@ export class SearchPage implements OnInit  {
   }
 
   searchNews($event) {
-    fetch(this.searchUrl + $event + this.tokenUrl + this.apiKey)
+    let q = $event.target.value;
+    fetch(this.searchUrl + q + this.tokenUrl + this.apiKey)
       .then(function (response) {
           return response.json();
       })
@@ -72,32 +78,16 @@ export class SearchPage implements OnInit  {
       });
   }
 
-  searchUsers() {
-    
-    console.log("query: " + this.userQuery.toUpperCase());
+  searchUsers($event) {
+    let q = $event.target.value;
+    console.log("query: " + q);
+    this.userQuery.next(q + "\uf8ff")
+  }
 
-    this.sizeFilter$ = new BehaviorSubject(null);
-    this.colorFilter$ = new BehaviorSubject(null);
-    this.users$ = combineLatest(
-      this.sizeFilter$,
-      this.colorFilter$
-    ).pipe(
-      switchMap(([size, color]) => 
-        this.afs.collection('users', ref => {
-          let query : firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
-          if (size) { query = query.where('size', '==', size) };
-          if (color) { query = query.where('color', '==', color) };
-          return query;
-        }).valueChanges()
-      )
-    );
-  }
-  
-  filterBySize(size: string|null) {
-    this.sizeFilter$.next(size); 
-  }
-  filterByColor(color: string|null) {
-    this.colorFilter$.next(color); 
+  searchUsers2($event) {
+    let q = $event.target.value;
+    console.log("query: " + q);
+    this.userResults = this.afs.collection('users', ref => ref.where('fullNameSearch', '==', q.toUpperCase())).valueChanges();
   }
   
 }

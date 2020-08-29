@@ -28,7 +28,7 @@ export class SignUpPage {
   async presentAlertConfirm() {
     const alert = await this.alertController.create({
       header: 'Confirm Sign Up',
-      message: 'By clicking "Okay" you agree to our <strong>Privacy Policy</strong> and <strong>Terms and Conditions</strong>.',
+      message: 'By clicking "Sign Up" you agree to our <strong>Privacy Policy</strong> and <strong>Terms and Conditions</strong>.',
       buttons: [
         {
           text: 'Cancel',
@@ -38,7 +38,7 @@ export class SignUpPage {
             console.log('Confirm Cancel: blah');
           }
         }, {
-          text: 'Okay',
+          text: 'Sign Up',
           handler: () => {
             console.log('Confirm Okay');
             this.emailSignUp();
@@ -46,7 +46,6 @@ export class SignUpPage {
         }
       ]
     });
-
     await alert.present();
   }
 
