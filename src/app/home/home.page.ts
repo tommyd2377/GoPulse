@@ -14,35 +14,10 @@ import { GlobalParamsService } from '../global-params.service';
 
 export class HomePage implements OnInit {
 
-  activity = [{user: "TommyD",
-                title: "Who will win the 2020 Presidential election?",
-                publisher: "The Wall Street Journal",
-                date: "August 8th, 2020"},
-                {user: "TommyD2",
-                title: "it works",
-                publisher: "wired",
-                date: "August 8th, 2020"},
-                {user: "TommyD3",
-                title: "it works",
-                publisher: "wired",
-                date: "August 8th, 2020"},
-                {user: "TommyD5",
-                title: "it works", publisher: "wired",
-                date: "August 8th, 2020"},
-                {user: "TommyD",
-                title: "it works",
-                publisher: "wired",
-                date: "August 8th, 2020"},
-              ]
-
-  //@ViewChild(IonContent) private ionContent: IonContent;
-
   uid: string;
   titleID: string;
-  followingActivity: Observable<DocumentData[]>;
-  unread: Observable<DocumentData[]>;
-  read: Observable<DocumentData[]>;
- // activity: Observable<DocumentData[]>;
+  followingActivity;
+  read;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -52,34 +27,28 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
-        
-        console.log(user.displayName);
         this.uid = user.uid;
-        
-        this.followingActivity = this.afs.collection("users").doc(this.uid).collection("followingActivity").valueChanges();
-          //.map((array) => array.reverse()) as Observable<any[]>;
+        console.log("User Home: " + this.uid);
+        this.followingActivity = this.afs.collection("users").doc(this.uid).collection("followingActivity").valueChanges()
+          .subscribe(activity => this.followingActivity = activity);
+          console.log("User Following Activity: " + this.followingActivity);
       }
     })
   }
 
-  ionViewWillEnter() {
-  //  this.ionContent.scrollToTop();
-  }
-
-  ionSelected() {
-    // this.content.scrollToTop();
-  }
-
-  openArticle(event, active) {
-    // this.globalProps.title = active.title;
-    // this.globalProps.articleUrl = active.articleUrl;
-    // this.globalProps.publishDate = active.publishDate;
-    // this.globalProps.publisher = active.publisher;
-    this.router.navigateByUrl('tabs/home/article/33');
+  openArticle($event, active) {
+    console.log($event, active);
+    this.globalProps.title = active.title;
+    this.globalProps.articleUrl = active.articleUrl;
+    this.globalProps.publishDate = active.publishDate;
+    this.globalProps.publisher = active.publisher;
+    this.globalProps.titleID = active.title.replace(/[^A-Z0-9]+/ig, "-");
+    this.router.navigateByUrl('tabs/home/article/' + this.globalProps.titleID);
   }
 
   openUser(event, user) {
-    this.router.navigateByUrl('tabs/home/user/33');
+    console.log(event, user);
+    this.router.navigateByUrl('tabs/user/' + user.uid);
   }
 
   openFollower(followerUid) {

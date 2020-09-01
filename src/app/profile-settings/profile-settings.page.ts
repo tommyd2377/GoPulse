@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore } from 'angularfire2/firestore';
 
 @Component({
   selector: 'app-profile-settings',
@@ -9,14 +10,48 @@ import { AngularFireAuth } from '@angular/fire/auth';
 })
 export class ProfileSettingsPage {
 
+  uid;
+  profileDoc;
+  isAnonymous: boolean;
+
   constructor(private fireAuth: AngularFireAuth,
-              private router: Router) { 
-                if (this.goAnonymous) {
-                  console.log('isan')
-                }
+              private router: Router,
+              private afs: AngularFirestore) { 
+                
+    
               }
 
-  goAnonymous: boolean;
+              ngOnInit() {
+       
+
+                this.fireAuth.auth.onAuthStateChanged((user) => {
+                  if (user) {
+                    
+                    console.log(user.displayName);
+                    console.log(user);
+                    this.uid = user.uid;
+                    console.log(this.uid);
+            
+                    // const ref = this.storage.ref('users/' + (this.uid) + '.jpg');
+                    //   this.profileUrl = ref.getDownloadURL();
+                    
+                    this.profileDoc = this.afs.collection("users").doc(this.uid).get();
+
+                    console.log(this.profileDoc)
+               
+            
+                
+                  }
+                })
+              }
+
+
+  goAnonymous($event) {
+    this.profileDoc.update({ isAnonymous: this.isAnonymous })
+     .then(()=> console.log("email update doc"))
+      .catch((err)=> console.log("email update doc error: " + err));
+    
+  }
 
   emailSignOut() {
      this.fireAuth.auth.signOut()

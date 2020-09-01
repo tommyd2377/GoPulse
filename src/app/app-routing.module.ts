@@ -33,14 +33,6 @@ const routes: Routes = [
   {
     path: 'sign-in',
     loadChildren: () => import('./sign-in/sign-in.module').then( m => m.SignInPageModule)
-  },
-  {
-    path: 'followers',
-    loadChildren: () => import('./followers/followers.module').then( m => m.FollowersPageModule)
-  },
-  {
-    path: 'following',
-    loadChildren: () => import('./following/following.module').then( m => m.FollowingPageModule)
   }
 ];
 @NgModule({

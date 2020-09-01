@@ -8,14 +8,14 @@
 
   <div class="center-desktop">
 
-    <div *ngFor="let active of activity">
+    <div *ngFor="let active of followingActivity">
 
     <ion-item detail="false" button>
-      <ion-avatar slot="start" button (click)="openUser()">
+      <ion-avatar slot="start" button (click)="openUser($event, active)">
         <img src="../../assets/imgs/portrait.jpg">
       </ion-avatar>
       
-        <ion-label class="ion-text-wrap" button (click)="openUser()">
+        <ion-label class="ion-text-wrap" button (click)="openUser($event, active)">
           <h2>{{ active.user }}</h2> sent you an article
         </ion-label>
 
@@ -23,7 +23,7 @@
 
         <ion-item detail="false" button>
   
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
+        <ion-label class="ion-text-wrap" href='' router-direction="forward" button (click)="openArticle($event, active)">
           <h1>{{ active.title }}</h1>
           <br>
           <h2>{{ active.publisher }}</h2> 

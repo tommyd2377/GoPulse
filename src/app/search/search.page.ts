@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, BehaviorSubject, Subject, combineLatest } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { GlobalParamsService } from '../global-params.service';
 //import { Content } from '@ionic/angular';
 
 @Component({
@@ -17,8 +18,9 @@ export class SearchPage implements OnInit  {
   userQuery = new Subject<string>();
   newsQuery: string;
 
-  newsResults: Object[];
   userResults;
+
+  articles = [];
 
   topNewsUrl: string = environment.newsApi.topNewsUrl;
   searchUrl: string = environment.newsApi.searchUrl;
@@ -28,26 +30,36 @@ export class SearchPage implements OnInit  {
   searchingNews: boolean = true;
   searchingUsers: boolean = false;
 
+
   constructor(private router: Router,
-              private afs: AngularFirestore) { }
+              private afs: AngularFirestore,
+              public globalProps: GlobalParamsService) { }
+              
 
   ngOnInit() {
+
     fetch(this.topNewsUrl + this.tokenUrl + this.apiKey)
-      .then(function (response) {
+      .then((response) => {
         console.log(response);
           return response.json();
       })
-      .then(function (data) {
-          console.log(data);
+      .then((data) => {
+          console.log(data.articles);
+          this.articles = data.articles;
       });
-      const queryObservable = this.userQuery.pipe(
-        switchMap(fullName => 
-          this.afs.collection('users', ref => ref.where('fullNameSearch', '==', fullName.toUpperCase())).valueChanges()
-        )
-      );
-      queryObservable.subscribe(queriedItems => {
-        console.log(queriedItems);  
-      });
+
+      this.userResults = this.afs.collection("users").valueChanges()
+        .subscribe(activity => this.userResults = activity);
+        console.log("User Following Activity: " + this.userResults);
+      
+      // const queryObservable = this.userQuery.pipe(
+      //   switchMap(fullName => 
+      //     this.afs.collection('users', ref => ref.where('fullNameSearch', '==', fullName.toUpperCase())).valueChanges()
+      //   )
+      // );
+      // queryObservable.subscribe(queriedItems => {
+      //   console.log(queriedItems);  
+      // });
   }
 
   segmentChanged(ev: any) {
@@ -88,6 +100,16 @@ export class SearchPage implements OnInit  {
     let q = $event.target.value;
     console.log("query: " + q);
     this.userResults = this.afs.collection('users', ref => ref.where('fullNameSearch', '==', q.toUpperCase())).valueChanges();
+  }
+
+  openArticle($event, article) {
+    this.globalProps.title = article.title;
+    this.globalProps.articleUrl = article.url;
+    this.globalProps.publishDate = article.publishedAt;
+    this.globalProps.publisher = article.source.name;
+    this.globalProps.titleID = article.title.replace(/[^A-Z0-9]+/ig, "-");
+    console.log(this.globalProps);
+    this.router.navigateByUrl('tabs/search/article/' + this.globalProps.titleID)
   }
   
 }

@@ -13,12 +13,12 @@
 
     <ion-item>
       <ion-label>Go Anonymous</ion-label>
-      <ion-toggle [(ngModel)]="goAnonymous"></ion-toggle>
+      <ion-toggle [(ngModel)]="isAnonymous" (ionChange)="goAnonymous($event)"></ion-toggle>
     </ion-item>
 
     <ion-list>
+      <ion-item detail="false" button (click)="goToUpdateProfile()">Profile</ion-item>
       <ion-item detail="false" button (click)="goToAccount()">Account</ion-item>
-      <ion-item detail="false" button (click)="goToUpdateProfile()">Update Profile</ion-item>
       <ion-item detail="false" [routerLink]="['/about']">About GoPulse</ion-item>
       <ion-item detail="false" [routerLink]="['/privacy']">Privacy Policy</ion-item>
       <ion-item detail="false" [routerLink]="['/terms']">Terms and Conditions</ion-item>

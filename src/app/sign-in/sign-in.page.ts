@@ -25,19 +25,14 @@ export class SignInPage {
     this.fireAuth.auth.signInWithEmailAndPassword(this.email, this.password)
       .then(res => {
         if (res.user) {
-          let user = res.user;
-          let uid = user.uid;
-          let userData = this.afs.collection("users").doc(uid);
-          userData.set({
-            signedIn: user.metadata.lastSignInTime
-          })
-          console.log(user);
+          console.log("User Signed In: " + res.user);
           this.router.navigateByUrl('/tabs');
         }
       })
       .catch(err => {
-        console.log(`login failed ${err}`);
         this.error = err.message;
+        console.log("User Sign In Error: " + err);
+        console.log("User Sign Error Message: " + this.error);
       });
   }  
 

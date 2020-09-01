@@ -1,8 +1,1 @@
-{
-  "appId": "app.ionic.gopulse",
-  "appName": "GoPulse",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "www",
-  "cordova": {}
-}
+{}

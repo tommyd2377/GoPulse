@@ -88,26 +88,36 @@ export class UserPage implements OnInit {
 
       const followRef1 = this.afs.collection("users").doc(this.userId).collection("followers");
         followRef1.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), 
-                         followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followedIsTrue: (true) });
+                         followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followedIsTrue: (true) })
+                         .then(()=> console.log("Following"))
+                         .catch((err)=> console.log("Following Error: " + err));
 
       const followRef2 = this.afs.collection("users").doc(this.userId).collection("publicActivity");
       followRef2.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), 
-                       followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followedIsTrue: (true) });
+                       followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followedIsTrue: (true) })
+                       .then(()=> console.log("Following"))
+                       .catch((err)=> console.log("Following Error: " + err));
 
       const followRef3 = this.afs.collection("users").doc(this.uid).collection("following");
       followRef3.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), 
-                       followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followingIsTrue: (true) });
+                       followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followingIsTrue: (true) })
+                       .then(()=> console.log("Following"))
+                       .catch((err)=> console.log("Following Error: " + err));
 
       const followRef4 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
       followRef4.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), 
-                       followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followingIsTrue: (true) });
+                       followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followingIsTrue: (true) })
+                       .then(()=> console.log("Following"))
+                       .catch((err)=> console.log("Following Error: " + err));
 
       this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       this.followers.subscribe(results => {
         for (let result of results) { 
           const followRef5 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
           followRef5.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), 
-                           followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followingIsTrue: (true) });
+                           followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followingIsTrue: (true) })
+                           .then(()=> console.log("Following"))
+                           .catch((err)=> console.log("Following Error: " + err));
         }
       })
       this.presentToast("Following");
@@ -146,6 +156,10 @@ export class UserPage implements OnInit {
         }
       })
     }
+  }
+
+  goToFollowers() {
+    this.router.navigateByUrl('tabs/user/33/followers');
   }
 
 }

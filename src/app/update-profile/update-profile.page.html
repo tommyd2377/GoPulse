@@ -12,18 +12,28 @@
   <div class="center-desktop">
   
     <ion-item>
-      <ion-label position="floating">Username</ion-label>
-      <ion-input required type="text" [(ngModel)]="displayName"></ion-input>
+      <ion-label position="floating">{{ (profileDoc | async)?.displayName }}</ion-label>
+      <ion-input type="text" [(ngModel)]="newDisplayName"></ion-input>
     </ion-item>
   
     <ion-item>
-      <ion-label position="floating">Full Name</ion-label>
-      <ion-input required type="text" [(ngModel)]="fullName"></ion-input>
+      <ion-label position="floating">{{ (profileDoc | async)?.fullName }}</ion-label>
+      <ion-input type="text" [(ngModel)]="newFullName"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">{{ (profileDoc | async)?.email}}</ion-label>
+      <ion-input type="text" [(ngModel)]="newEmail"></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="floating">New Password</ion-label>
+      <ion-input type="password" [(ngModel)]="newPassword"></ion-input>
     </ion-item>
 
     <br>
   
-    <ion-button fill="outline" expand="block">Update</ion-button>
+    <ion-button (click)="updateProfile()" fill="outline" expand="block">Update</ion-button>
 
     <br>
 
@@ -35,18 +45,6 @@
     <ion-input type="file" (change)="uploadFile($event)"></ion-input>
     <div>{{ uploadPercent | async }}</div>
     <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
-
-    <br>
-
-    <br>
-  
-    <ion-button fill="outline" expand="block">Reset Email</ion-button>
-
-    <br>
-
-    <br>
-  
-    <ion-button fill="outline" (click)="passwordResetEmail()" expand="block">Reset Password</ion-button>
 
     <br>
 

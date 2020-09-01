@@ -5,6 +5,7 @@ import { AngularFirestore, DocumentData } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { GlobalParamsService } from '../global-params.service';
 
 @Component({
   selector: 'app-profile',
@@ -17,35 +18,27 @@ export class ProfilePage implements OnInit {
   profileDoc;
   uid;
   userActivity;
+  title: string = "2020 election";
+  publisher: string;
+  publishDate: string;
+  articleUrl: string;
+  comment: string;
+  titleID: string
   profileUrl: Observable<string | null>;
-  followers: Observable<DocumentData[]>;
-  following: Observable<DocumentData[]>;
-
-  activity = [{user: "TommyD",
-    title: "Who will win the 2020 Presidential election?",
-    publisher: "The Wall Street Journal",
-    date: "August 8th, 2020"},
-    {user: "TommyD2",
-    title: "it works",
-    publisher: "wired",
-    date: "August 8th, 2020"},
-    {user: "TommyD3",
-    title: "it works",
-    publisher: "wired",
-    date: "August 8th, 2020"},
-    {user: "TommyD5",
-    title: "it works", publisher: "wired",
-    date: "August 8th, 2020"},
-    {user: "TommyD",
-    title: "it works",
-    publisher: "wired",
-    date: "August 8th, 2020"},
-  ]
+  followers;
+  following;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
               private afs: AngularFirestore,
-              private storage: AngularFireStorage) { }
+              private storage: AngularFireStorage,
+              public globalProps: GlobalParamsService) {
+                this.globalProps.title = this.title;
+                this.globalProps.articleUrl = this.articleUrl;
+                this.globalProps.publishDate = this.publishDate;
+                this.globalProps.publisher = this.publisher;
+                this.globalProps.titleID = this.titleID;
+              }
   
   ngOnInit() {
     this.fireAuth.auth.onAuthStateChanged((user) => {
@@ -54,15 +47,16 @@ export class ProfilePage implements OnInit {
         console.log(user.displayName);
         console.log(user);
         this.uid = user.uid;
+        console.log(this.uid);
 
-        const ref = this.storage.ref('users/' + (this.uid) + '.jpg');
-          this.profileUrl = ref.getDownloadURL();
+        // const ref = this.storage.ref('users/' + (this.uid) + '.jpg');
+        //   this.profileUrl = ref.getDownloadURL();
         
-        this.profileDoc = this.afs.collection("users").doc(this.uid).get();
-        console.log(this.profileDoc);
+        this.profileDoc = this.afs.collection("users").doc(this.uid).valueChanges();
+   
 
-        this.userActivity = this.afs.collection("users").doc(this.uid).collection("activity").get();
-        console.log(this.userActivity);
+        this.userActivity = this.afs.collection("users").doc(this.uid).collection("publicActivity").valueChanges()
+        .subscribe(activity => this.userActivity = activity);
 
         this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
         this.following = this.afs.collection("users").doc(this.uid).collection("following").valueChanges();
@@ -72,16 +66,22 @@ export class ProfilePage implements OnInit {
       }
     })
   }
-
-  openArticle(event, active) {
-    this.router.navigateByUrl('tabs/profile/article/33');
+  
+  openArticle($event, active) {
+    console.log($event, active);
+    this.globalProps.title = active.title;
+    this.globalProps.articleUrl = active.articleUrl;
+    this.globalProps.publishDate = active.publishDate;
+    this.globalProps.publisher = active.publisher;
+    this.globalProps.titleID = active.title.replace(/[^A-Z0-9]+/ig, "-");
+    this.router.navigateByUrl('tabs/profile/article/' + this.globalProps.titleID);
   }
 
   goToFollowers() {
     this.router.navigateByUrl('tabs/profile/followers');
   }
 
-  gotoFollowing() {
+  goToFollowing() {
     this.router.navigateByUrl('tabs/profile/following');
   }
 

@@ -14,7 +14,10 @@ export class ForgotPasswordPage {
   constructor(private fireAuth: AngularFireAuth) { }
 
   passwordResetEmail() {
-    this.fireAuth.auth.sendPasswordResetEmail(this.email);
+    console.log(this.email)
+    this.fireAuth.auth.sendPasswordResetEmail(this.email)
+      .then(()=> console.log("Password Reset Email Sent to: " + this.email))
+      .catch((error)=>console.log("Password Reset Email Error: " + error));
   }
  
 }

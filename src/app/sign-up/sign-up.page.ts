@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { ToastController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
 
@@ -23,7 +24,8 @@ export class SignUpPage {
               private router: Router,
               private afs: AngularFirestore,
               public platform: Platform,
-              public alertController: AlertController) { }
+              public alertController: AlertController,
+              public toastController: ToastController) { }
 
   async presentAlertConfirm() {
     const alert = await this.alertController.create({
@@ -34,8 +36,8 @@ export class SignUpPage {
           text: 'Cancel',
           role: 'cancel',
           cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
+          handler: () => {
+            console.log('Confirm Cancel');
           }
         }, {
           text: 'Sign Up',
@@ -49,31 +51,45 @@ export class SignUpPage {
     await alert.present();
   }
 
+  async presentToast(message) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 4000
+    });
+    toast.present();
+  }
+
   emailSignUp() {
 
-    console.log(this.email, this.password);
-    // this.fireAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
-    //   .then(res => {
-    //     if (res.user) {
-    //       console.log(res.user);
-    //       this.setProfile();
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log(`signup failed ${err}`);
-    //     this.error = err.message;
-    //   });
+   
+      console.log(this.email, this.password);
+      this.fireAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
+        .then(res => {
+          if (res.user) {
+            console.log("User Created: " + res.user);
+            this.setProfile();
+          }
+        })
+        .catch(err => {
+          console.log(`signup failed ${err}`);
+          this.error = err.message;
+        });
+    
+
   }
 
   setProfile() {
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log(user);
         user.updateProfile({
           displayName: this.displayName,
           photoURL: "",
         }).then(() => {
-            let uid = user.uid;
+            console.log("Profile Updated: " + user.uid);
+          })
+        user.sendEmailVerification().then(() => {
+          let uid = user.uid;
+            console.log(uid)
             let userData = this.afs.collection("users").doc(uid);
             userData.set({
               uid: uid,
@@ -82,15 +98,13 @@ export class SignUpPage {
               fullName: this.fullName,
               fullNameSearch: this.fullName.toUpperCase(),
               photoURL: "",
-              signedUp: user.metadata.creationTime,
-              signedIn: user.metadata.lastSignInTime,
               isAnonymous: false
             })
-          })
-        user.sendEmailVerification().then(() => {
-          console.log("email verification sent");
-        }).catch(error => 
-          console.log("email verification error: " + error));
+            .then(() => console.log("Profile Data Set: " + user.uid))
+            .catch((error) => console.log("Profile Data Set Error: " + error));
+          console.log("email verification sent to: " + user.uid);
+        })
+        .catch(error => console.log("email verification error: " + error));
         this.router.navigateByUrl('/tabs');
       }
     }) 

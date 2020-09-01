@@ -25,6 +25,37 @@
         (ionInput)="searchUsers($event)" placeholder="search for a user..." clearInput="true">
     </ion-searchbar>
 
+    <div *ngFor="let article of articles">
+  
+          <ion-item *ngIf="searchingNews" detail="false" button>
+    
+          <ion-label class="ion-text-wrap" href='' router-direction="forward" button (click)="openArticle($event, article)">
+            <h1>{{ article.title }}</h1>
+            <br>
+            <h2>{{ article.source.name }}</h2> 
+            <p>{{ article.publishedAt }}</p>
+            <br>
+          </ion-label>
+        
+          </ion-item>
+  
+      </div>
+
+      <div *ngFor="let user of userResults">
+  
+        <ion-item *ngIf="searchingUsers"  detail="false" button>
+          <ion-avatar slot="start" button (click)="openUser($event, user)">
+            <img src="../../assets/imgs/portrait.jpg">
+          </ion-avatar>
+          
+            <ion-label class="ion-text-wrap" button (click)="openUser($event, user)">
+              <h2>{{ user.uid }}</h2>
+            </ion-label>
+    
+          </ion-item>
+
+    </div>
+
   </div>
 
 </ion-content>
