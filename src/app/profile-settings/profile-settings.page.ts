@@ -16,41 +16,29 @@ export class ProfileSettingsPage {
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
-              private afs: AngularFirestore) { 
-                
-    
-              }
+              private afs: AngularFirestore) { }
 
-              ngOnInit() {
-       
+  ngOnInit() {
+    this.fireAuth.auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log(user.displayName);
+        console.log(user);
+        this.uid = user.uid;
+        console.log(this.uid);
 
-                this.fireAuth.auth.onAuthStateChanged((user) => {
-                  if (user) {
-                    
-                    console.log(user.displayName);
-                    console.log(user);
-                    this.uid = user.uid;
-                    console.log(this.uid);
-            
-                    // const ref = this.storage.ref('users/' + (this.uid) + '.jpg');
-                    //   this.profileUrl = ref.getDownloadURL();
-                    
-                    this.profileDoc = this.afs.collection("users").doc(this.uid).get();
-
-                    console.log(this.profileDoc)
-               
-            
-                
-                  }
-                })
-              }
-
+        // const ref = this.storage.ref('users/' + (this.uid) + '.jpg');
+        //   this.profileUrl = ref.getDownloadURL();
+        
+        this.profileDoc = this.afs.collection("users").doc(this.uid).get();
+        console.log(this.profileDoc)
+      }
+    })
+  }
 
   goAnonymous($event) {
     this.profileDoc.update({ isAnonymous: this.isAnonymous })
      .then(()=> console.log("email update doc"))
       .catch((err)=> console.log("email update doc error: " + err));
-    
   }
 
   emailSignOut() {

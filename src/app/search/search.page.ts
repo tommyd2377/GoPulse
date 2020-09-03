@@ -1,5 +1,5 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
-import { AngularFirestore, DocumentData } from 'angularfire2/firestore';
+import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { Router } from '@angular/router';
 import { Observable, BehaviorSubject, Subject, combineLatest } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -19,7 +19,6 @@ export class SearchPage implements OnInit  {
   newsQuery: string;
 
   userResults;
-
   articles = [];
 
   topNewsUrl: string = environment.newsApi.topNewsUrl;
@@ -30,27 +29,19 @@ export class SearchPage implements OnInit  {
   searchingNews: boolean = true;
   searchingUsers: boolean = false;
 
-
   constructor(private router: Router,
               private afs: AngularFirestore,
               public globalProps: GlobalParamsService) { }
               
-
   ngOnInit() {
 
     fetch(this.topNewsUrl + this.tokenUrl + this.apiKey)
       .then((response) => {
-        console.log(response);
           return response.json();
       })
       .then((data) => {
-          console.log(data.articles);
           this.articles = data.articles;
       });
-
-      this.userResults = this.afs.collection("users").valueChanges()
-        .subscribe(activity => this.userResults = activity);
-        console.log("User Following Activity: " + this.userResults);
       
       // const queryObservable = this.userQuery.pipe(
       //   switchMap(fullName => 
@@ -64,29 +55,31 @@ export class SearchPage implements OnInit  {
 
   segmentChanged(ev: any) {
     if (ev.detail.value === "news") {
-      console.log(ev.detail.value);
       this.searchingNews = true;
       this.searchingUsers = false;
     }
     else if (ev.detail.value === "users") {
-      console.log(ev.detail.value);
       this.searchingNews = false;
       this.searchingUsers = true;
+      this.userResults = this.afs.collection("users").valueChanges()
+        .subscribe(activity => this.userResults = activity);
     }
   }          
 
-  openUser(uid) {
-    this.router.navigateByUrl('user/' + uid)
+  openUser($event, user) {
+    console.log($event, user);
+    this.router.navigateByUrl('tabs/search/user/' + user.uid);
   }
 
   searchNews($event) {
     let q = $event.target.value;
     fetch(this.searchUrl + q + this.tokenUrl + this.apiKey)
-      .then(function (response) {
+      .then((response) => {
           return response.json();
       })
-      .then(function (data) {
+      .then((data) => {
           console.log(data);
+          this.articles = data.articles;
       });
   }
 

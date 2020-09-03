@@ -49,7 +49,8 @@
           </ion-avatar>
           
             <ion-label class="ion-text-wrap" button (click)="openUser($event, user)">
-              <h2>{{ user.uid }}</h2>
+              <h2>{{ user.displayName }}</h2>
+              <h3>{{ user.fullName }}</h3>
             </ion-label>
     
           </ion-item>

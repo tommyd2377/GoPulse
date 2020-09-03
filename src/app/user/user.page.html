@@ -3,7 +3,8 @@
     <ion-buttons slot="start">
       <ion-back-button color="primary"></ion-back-button>
     </ion-buttons>
-    <ion-title color="primary">Some User</ion-title>
+    <ion-title *ngIf="!thisIsYou" color="primary">{{ (userProfileDoc | async)?.displayName }}</ion-title>
+    <ion-title *ngIf="thisIsYou" color="primary">This is You</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -18,12 +19,12 @@
       </ion-avatar>
 
       <ion-label>
-        <h2>displayName</h2>
-        <p>fullName</p>
+        <h2>{{ (userProfileDoc | async)?.displayName }}</h2>
+        <p>{{ (userProfileDoc | async)?.fullName }}</p>
       </ion-label>
       
       <ion-label>
-        <ion-button expand="block" fill="outline" (click)="follow()">Follow</ion-button>
+        <ion-button *ngIf="!thisIsYou" expand="block" fill="outline" (click)="follow()">Follow</ion-button>
         <ion-button expand="block" fill="outline" (click)="goToFollowers()">0 Followers</ion-button>
         <ion-button expand="block" fill="outline" (click)="goToFollowing()">0 Following</ion-button>
       </ion-label>
@@ -33,15 +34,15 @@
     <br>
     <br>
 
-    <div *ngFor="let active of activity">
+    <div *ngFor="let active of userActivity">
 
       <ion-item>
         
-        <ion-avatar slot="start" button (click)="openUser()">
+        <ion-avatar slot="start" button (click)="openUser($event, active)">
           <img src="../../assets/imgs/portrait.jpg">
         </ion-avatar>
         
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
+        <ion-label class="ion-text-wrap" button (click)="openUser($event, active)">
           <h2>{{ active.user }}</h2> sent you an article
         </ion-label>
   
@@ -49,7 +50,7 @@
   
       <ion-item>
 
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
+        <ion-label class="ion-text-wrap" button (click)="openArticle($event, active)">
           <h1>{{ active.title }}</h1>
           <br>
           <h2>{{ active.publisher }}</h2> 

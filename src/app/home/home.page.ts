@@ -28,10 +28,8 @@ export class HomePage implements OnInit {
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
         this.uid = user.uid;
-        console.log("User Home: " + this.uid);
         this.followingActivity = this.afs.collection("users").doc(this.uid).collection("followingActivity").valueChanges()
           .subscribe(activity => this.followingActivity = activity);
-          console.log("User Following Activity: " + this.followingActivity);
       }
     })
   }
@@ -46,17 +44,9 @@ export class HomePage implements OnInit {
     this.router.navigateByUrl('tabs/home/article/' + this.globalProps.titleID);
   }
 
-  openUser(event, user) {
-    console.log(event, user);
-    this.router.navigateByUrl('tabs/user/' + user.uid);
+  openUser(event, active) {
+    console.log(event, active);
+    this.router.navigateByUrl('tabs/home/user/' + active.uid);
   }
 
-  openFollower(followerUid) {
-    this.router.navigateByUrl('user/');
-  }
-
-  openFollowing(followingUid) {
-    this.router.navigateByUrl('user/');
-  }
-  
 }

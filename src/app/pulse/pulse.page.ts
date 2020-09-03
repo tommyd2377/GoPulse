@@ -1,6 +1,4 @@
 import { Component, OnInit  } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from 'angularfire2/firestore';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { GlobalParamsService } from '../global-params.service';
@@ -20,20 +18,17 @@ export class PulsePage implements OnInit {
   apiKey: string = environment.newsApi.key;
   category: string = "world";
 
-  constructor(private fireAuth: AngularFireAuth,
-              private router: Router,
-              private afs: AngularFirestore,
+  constructor(private router: Router,
               public globalProps: GlobalParamsService) { }
 
   ngOnInit() {
     fetch(this.topicsUrl + this.category + this.tokenUrl + this.apiKey)
-    .then((response) => {
-      return response.json();
-  })
-  .then((data) => {
-      console.log(data);
-      this.articles = data.articles;
-  });
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        this.articles = data.articles;
+      });
   }
 
   segmentChanged(ev: any) {

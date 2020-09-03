@@ -15,9 +15,8 @@ import { GlobalParamsService } from '../global-params.service';
 
 export class ArticlePage implements OnInit {
   
-  userHasRead: boolean = true;
+  userHasRead: boolean;
   userHasShared: boolean;
-  userHasCommented: boolean;
   userHasFlagged: boolean;
   uid: string;
   displayName: string;
@@ -56,7 +55,6 @@ export class ArticlePage implements OnInit {
     //check for user actions and set boolean class properties
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log(user.displayName);
         this.uid = user.uid;
         this.displayName = user.displayName;
         this.reads = this.afs.collection("articles").doc(this.titleID).collection("reads").valueChanges(); 
@@ -81,14 +79,11 @@ export class ArticlePage implements OnInit {
       // browser.on('closePressed').subscribe(data => {
       //   browser.close();
       // })
+    this.userHasRead = true;
   }
 
   share() {
-    if (!this.userHasRead) {
-      this.presentToast("Articles must be read before they can be shared");
-    }
-
-    else {    
+     if (this.userHasRead) {    
       this.date = new Date();
       this.currentTime = this.date.getTime();
 
@@ -129,10 +124,16 @@ export class ArticlePage implements OnInit {
       this.userHasShared = true;
       this.presentToast("Article shared");
     }
+    else if (!this.userHasRead) {
+      this.presentToast("Articles must be read before they can be shared");
+    }
+    else {
+      this.presentToast("Articles must be read before they can be shared");
+    }
+   
   }
 
   unshare() {
- 
       const unShareRef1 = this.afs.collection("users").doc(this.uid).collection("shares", ref => 
         ref.where('uid', '==', this.uid)
            .where('titleID', "==", this.titleID));
@@ -162,7 +163,7 @@ export class ArticlePage implements OnInit {
           unShareRef4.doc().delete().then(() => console.log("unshared"));
         }
       })
-    
+      this.userHasShared = false;
   }
 
   flag() {
@@ -209,6 +210,7 @@ export class ArticlePage implements OnInit {
         }
       })
       this.presentToast("Article flagged as biased");
+      this.userHasFlagged = true;
     }
   }
 
@@ -244,15 +246,12 @@ export class ArticlePage implements OnInit {
           unFlagRef4.doc().delete().then(() => console.log("unflagged"));
         }
       })
+      this.userHasFlagged = false;
     }
   }
 
-  send() {
-    if (!this.userHasRead) {
-      this.presentToast("Articles must be read before they can be sent to someone");
-    }
-    
-    else {
+  send() {  
+    if (this.userHasRead) {
       this.date = new Date();
       this.currentTime = this.date.getTime();
 
@@ -276,14 +275,18 @@ export class ArticlePage implements OnInit {
 
       this.presentToast("Article sent");
     }
+
+    else if (!this.userHasRead) {
+      this.presentToast("Articles must be read before they can be sent to someone");
+    }
+
+    else {
+      this.presentToast("Articles must be read before they can be sent to someone");
+    }
   }
 
   newComment() {
-    if (!this.userHasRead) {
-      this.presentToast("Articles must be read before they can be commented on");
-    }
-    
-    else {
+    if (this.userHasRead) {
       this.date = new Date();
       this.currentTime = this.date.getTime();
 
@@ -323,6 +326,14 @@ export class ArticlePage implements OnInit {
       })
       this.presentToast("Comment posted");
     }
+    else if (!this.userHasRead) {
+      this.presentToast("Articles must be read before they can be commented on");
+    }
+    else {
+      this.presentToast("Articles must be read before they can be commented on");
+    }
+    
+    
   }
 
   deleteComment() {
@@ -360,7 +371,7 @@ export class ArticlePage implements OnInit {
     }
   }
 
-  likeComment() {
+  likeComment($event, comment) {
     if (!this.userHasRead) {
       this.presentToast("Articles must be read before comments can be liked");
     }

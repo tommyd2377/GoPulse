@@ -8,16 +8,6 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'article/:id',
-        loadChildren: () =>
-          import('../article/article.module').then(m => m.ArticlePageModule)
-      },
-      {
-        path: 'user/:id',
-        loadChildren: () => 
-          import('../user/user.module').then( m => m.UserPageModule)
-      },
-      {
         path: 'home',
         children: [
           {
@@ -32,9 +22,22 @@ const routes: Routes = [
           },
           {
             path: 'user/:id',
-            loadChildren: () => 
-              import('../user/user.module').then( m => m.UserPageModule)
-          },
+            children: [
+              {
+                path: '',
+                loadChildren: () =>
+                import('../user/user.module').then(m => m.UserPageModule)
+              },
+              {
+                path: 'followers',
+                loadChildren: () => import('../followers/followers.module').then( m => m.FollowersPageModule)
+              },
+              {
+                path: 'following',
+                loadChildren: () => import('../following/following.module').then( m => m.FollowingPageModule)
+              },
+            ]
+          }
         ]
       },
       {
@@ -52,8 +55,21 @@ const routes: Routes = [
           },
           {
             path: 'user/:id',
-            loadChildren: () => 
-              import('../user/user.module').then( m => m.UserPageModule)
+            children: [
+              {
+                path: '',
+                loadChildren: () =>
+                import('../user/user.module').then(m => m.UserPageModule)
+              },
+              {
+                path: 'followers',
+                loadChildren: () => import('../followers/followers.module').then( m => m.FollowersPageModule)
+              },
+              {
+                path: 'following',
+                loadChildren: () => import('../following/following.module').then( m => m.FollowingPageModule)
+              },
+            ]
           }
         ]
       },
@@ -72,8 +88,21 @@ const routes: Routes = [
           },
           {
             path: 'user/:id',
-            loadChildren: () => 
-              import('../user/user.module').then( m => m.UserPageModule)
+            children: [
+              {
+                path: '',
+                loadChildren: () =>
+                import('../user/user.module').then(m => m.UserPageModule)
+              },
+              {
+                path: 'followers',
+                loadChildren: () => import('../followers/followers.module').then( m => m.FollowersPageModule)
+              },
+              {
+                path: 'following',
+                loadChildren: () => import('../following/following.module').then( m => m.FollowingPageModule)
+              },
+            ]
           }
         ]
       },
@@ -92,8 +121,21 @@ const routes: Routes = [
           },
           {
             path: 'user/:id',
-            loadChildren: () => 
-              import('../user/user.module').then( m => m.UserPageModule)
+            children: [
+              {
+                path: '',
+                loadChildren: () =>
+                import('../user/user.module').then(m => m.UserPageModule)
+              },
+              {
+                path: 'followers',
+                loadChildren: () => import('../followers/followers.module').then( m => m.FollowersPageModule)
+              },
+              {
+                path: 'following',
+                loadChildren: () => import('../following/following.module').then( m => m.FollowingPageModule)
+              },
+            ]
           },
           {
             path: 'followers',

@@ -20,6 +20,7 @@ export class UpdateProfilePage {
   newEmail: string;
   newFullName: string;
   profileDoc;
+  profileUrl;
 
   constructor(private storage: AngularFireStorage,
               private fireAuth: AngularFireAuth,
@@ -50,15 +51,12 @@ export class UpdateProfilePage {
         task.snapshotChanges().pipe(
             finalize(() =>  { this.downloadURL = fileRef.getDownloadURL()
               console.log(this.downloadURL);
-              // userData.update({ photoURL: this.downloadURL })
-              //   .then(()=> console.log("photoUrl set"))
-            }
-            
-             )
-         )
-         
-        .subscribe()
-        console.log(this.downloadURL);
+            }))
+          .subscribe()
+          console.log(this.downloadURL);
+          this.profileUrl = fileRef.getDownloadURL();
+          userData.update({ photoURL: this.profileUrl })
+                .then(()=> console.log("photoUrl set"))
       }
     })
   }
