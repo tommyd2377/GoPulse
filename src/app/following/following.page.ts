@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 export class FollowingPage implements OnInit {
 
   uid: string;
-  following: Observable<DocumentData[]>;
+  following;
 
   constructor(private fireAuth: AngularFireAuth,
               private afs: AngularFirestore) { }
@@ -23,7 +23,8 @@ export class FollowingPage implements OnInit {
         
         console.log("currentUser: " + user);
         this.uid = user.uid;
-        this.following = this.afs.collection("users").doc(this.uid).collection("following").valueChanges();
+        this.following = this.afs.collection("users").doc(this.uid).collection("following").valueChanges()
+          .subscribe(following => this.following = following);
       }
     })
   }

@@ -1,7 +1,7 @@
 {
-  "name": "app",
-  "short_name": "app",
-  "theme_color": "#1976d2",
+  "name": "GoPulse",
+  "short_name": "GoPulse",
+  "theme_color": "rgb(25, 105, 209)",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",

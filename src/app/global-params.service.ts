@@ -11,5 +11,6 @@ export class GlobalParamsService {
   publisher: string;
   publishDate: string;
   titleID: string;
+  currentTab: string = "home";
 
 }

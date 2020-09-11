@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, DocumentData } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-followers',
@@ -12,7 +11,7 @@ import { Observable } from 'rxjs';
 export class FollowersPage implements OnInit {
 
   uid: string;
-  followers: Observable<DocumentData[]>;
+  followers;
 
   constructor(private fireAuth: AngularFireAuth,
               private afs: AngularFirestore) { }
@@ -23,7 +22,8 @@ export class FollowersPage implements OnInit {
         
         console.log("currentUser: " + user);
         this.uid = user.uid;
-        this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
+        this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges()
+          .subscribe(followers => this.followers = followers)
       }
     })
   }

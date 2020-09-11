@@ -16,14 +16,17 @@
       </ion-avatar>
       
         <ion-label class="ion-text-wrap" button (click)="openUser($event, active)">
-          <h2>{{ active.user }}</h2> sent you an article
+          <h2 *ngIf="active.sharedIsTrue">{{ active.displayName }} shared an article</h2> 
+          <h2 *ngIf="active.sentIsTrue">{{ active.senderDisplayName }} sent you an article</h2> 
+          <h2 *ngIf="active.commentIsTrue">{{ active.displayName }}commented on an article</h2> 
+          <h2 *ngIf="active.flaggedIsTrue">{{ active.displayName }} flagged an article as biased</h2> 
         </ion-label>
 
       </ion-item>
 
         <ion-item detail="false" button>
   
-        <ion-label class="ion-text-wrap" href='' router-direction="forward" button (click)="openArticle($event, active)">
+        <ion-label class="ion-text-wrap" button (click)="openArticle($event, active)">
           <h1>{{ active.title }}</h1>
           <br>
           <h2>{{ active.publisher }}</h2> 
@@ -33,188 +36,13 @@
       
         </ion-item>
 
-    </div>
-<!-- 
-    <ion-item>
-      <br>
-      <ion-avatar slot="start" button (click)="openUser()">
-        <img src="../../assets/imgs/logo.png">
-      </ion-avatar>
-      <ion-text>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          TommyD shared an article
-        </ion-label>
-        <br>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          <h1>Dewey defeats Truman!</h1>
-          <br>
-          <h2>Wired</h2> 
-          <p>August 8th, 2020</p>
-          <br>
-        </ion-label>
-      </ion-text>
-    </ion-item>
-
-    <ion-item>
-      <ion-avatar slot="start" button (click)="openUser()">
-        <img src="../../assets/imgs/logo.png">
-      </ion-avatar>
-      <ion-text>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          TommyD flagged this article as politically biased
-        </ion-label>
-        <br>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          <h1>Dewey defeats Truman!</h1>
-          <br>
-          <h2>Wired</h2>
-          <p>August 8th, 2020</p>
-          <br>
-        </ion-label>
-      </ion-text>
-    </ion-item>
-
-    <ion-item>
-      <ion-avatar slot="start" button (click)="openUser()">
-        <img src="../../assets/imgs/logo.png">
-      </ion-avatar>
-      <ion-text>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          TommyD flagged this headline as misleading
-        </ion-label>
-        <br>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          <h1>Dewey defeats Truman!</h1>
-          <br>
-          <h2>Wired</h2>
-          <p>August 8th, 2020</p>
-          <br>
-        </ion-label>
-      </ion-text>
-    </ion-item>
-
-    <ion-item>
-      <ion-avatar slot="start" button (click)="openUser()">
-        <img src="../../assets/imgs/logo.png">
-      </ion-avatar>
-      <ion-text>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          TommyD flagged this article as factually incorrect
-        </ion-label>
-        <br>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          <h1>Dewey defeats Truman!</h1>
-          <br>
-          <h2>Wired</h2>
-          <p>August 8th, 2020</p>
-          <br>
-        </ion-label>
-      </ion-text>
-    </ion-item>
-
-    <ion-item>
-      <ion-avatar slot="start" button (click)="openUser()">
-        <img src="../../assets/imgs/logo.png">
-      </ion-avatar>
-      <ion-text>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          TommyD flagged this article as sensationalism
-        </ion-label>
-        <br>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          <h1>Dewey defeats Truman!</h1>
-          <br>
-          <h2>Wired</h2>
-          <p>August 8th, 2020</p>
-          <br>
-        </ion-label>
-      </ion-text>
-    </ion-item>
-
-    <ion-item>
-      <ion-avatar slot="start" button (click)="openUser()">
-        <img src="../../assets/imgs/logo.png">
-      </ion-avatar>
-      <ion-text>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          TommyD wrote a comment for this article
-        </ion-label>
-        <br>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          <h1>Dewey defeats Truman!</h1>
-          <br>
-          <h2>Wired</h2> 
-          <p>August 8th, 2020</p>
-          <br>
+        <ion-item *ngIf="active.commentIsTrue">
           <p>
-            "Serverless architectures are application designs that incorporate third-party 
-          “Backend as a Service” (BaaS) services, and/or that include custom code run in 
-          managed, ephemeral containers on a “Functions as a Service” (FaaS) platform."
+            {{ active.comment }}
           </p>
-          <br>
-        </ion-label>
-      </ion-text>
-    </ion-item>
-
-    <ion-item>
-      <ion-avatar slot="start" button (click)="openUser()">
-        <img src="../../assets/imgs/logo.png">
-      </ion-avatar>
-      <ion-text>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          TommyD shared an article
-        </ion-label>
-        <br>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          <h1>Dewey defeats Truman!</h1>
-          <br>
-          <h2>Wired</h2> 
-          <p>August 8th, 2020</p>
-          <br>
-        </ion-label>
-      </ion-text>
-    </ion-item>
-
-    <ion-item>
-      <ion-avatar slot="start" button (click)="openUser()">
-        <img src="../../assets/imgs/logo.png">
-      </ion-avatar>
-      <ion-text>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          TommyD shared an article
-        </ion-label>
-        <br>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          <h1>Dewey defeats Truman!</h1>
-          <br>
-          <h2>Wired</h2> 
-          <p>August 8th, 2020</p>
-          <br>
-        </ion-label>
-      </ion-text>
-    </ion-item>
-
-    <ion-item>
-      <ion-avatar slot="start" button (click)="openUser()">
-        <img src="../../assets/imgs/logo.png">
-      </ion-avatar>
-      <ion-text>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          TommyD shared an article
-        </ion-label>
-        <br>
-        <ion-label class="ion-text-wrap" button (click)="openArticle()">
-          <h1>Dewey defeats Truman!</h1>
-          <br>
-          <h2>Wired</h2> 
-          <p>August 8th, 2020</p>
-          <br>
-        </ion-label>
-      </ion-text>
-    </ion-item> -->
-
-    
-   
+        </ion-item>
+    </div>
+ 
   </div>
 
 </ion-content>

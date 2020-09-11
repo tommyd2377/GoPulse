@@ -23,8 +23,8 @@
       </ion-label>
       
       <ion-label>
-        <ion-button expand="block" fill="outline" (click)="goToFollowers()">0 Followers</ion-button>
-        <ion-button expand="block" fill="outline" (click)="goToFollowing()">0 Following</ion-button>
+        <ion-button expand="block" fill="outline" (click)="goToFollowers()">{{ (followers | async)?.length }} Followers</ion-button>
+        <ion-button expand="block" fill="outline" (click)="goToFollowing()">{{ (following | async)?.length }} Following</ion-button>
       </ion-label>
   
     </ion-item>
@@ -37,11 +37,14 @@
       <ion-item detail="false" button>
         
         <ion-avatar slot="start" button (click)="openUser($event, active)">
-          <img src="../../assets/imgs/portrait.jpg">
+          <img src="profileUrl | async">
         </ion-avatar>
         
         <ion-label class="ion-text-wrap" button (click)="openArticle($event, active)">
-          <h2>{{ active.uid }}</h2> sent you an article
+          <h2 *ngIf="active.sharedIsTrue">You shared an article </h2>
+          <h2 *ngIf="active.sentIsTrue">{{ active.senderUid }} sent you an article </h2>
+          <h2 *ngIf="active.commentIsTrue">You commented on an article</h2>
+          <h2 *ngIf="active.flaggedIsTrue">You flagged an article as biased</h2>
         </ion-label>
   
       </ion-item>
@@ -56,6 +59,12 @@
           <br>
         </ion-label>
       
+      </ion-item>
+
+      <ion-item *ngIf="active.commentIsTrue">
+        <p>
+          "{{ active.comment }}"
+        </p>
       </ion-item>
   
     </div>

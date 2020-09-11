@@ -28,7 +28,7 @@ export class UserPage implements OnInit {
   userActivity;
   photoUrl;
   userPhotoUrl;
-  parentTab:string;
+  parentTab;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -38,8 +38,8 @@ export class UserPage implements OnInit {
               public toastController: ToastController) { }
 
   ngOnInit() {
-    this.parentTab = this.route.snapshot.parent.toString()
-    console.log("Parent " + this.parentTab);
+    // this.parentTab = this.route.parent.pathFromRoot
+    // console.log("Parent " + this.parentTab);
     //check for user actions and set boolean class properties
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
@@ -49,7 +49,6 @@ export class UserPage implements OnInit {
         this.photoUrl = user.photoURL;
 
         this.userId = this.route.snapshot.paramMap.get('id');
-        console.log(this.userId);
 
         if (this.uid === this.userId) {
           this.thisIsYou = true;
@@ -82,12 +81,12 @@ export class UserPage implements OnInit {
     this.globalProps.publishDate = active.publishDate;
     this.globalProps.publisher = active.publisher;
     this.globalProps.titleID = active.title.replace(/[^A-Z0-9]+/ig, "-");
-    this.router.navigateByUrl('tabs/search/article/' + this.globalProps.titleID);
+    this.router.navigateByUrl('tabs/' + this.globalProps.currentTab + '/article/' + this.globalProps.titleID);
   }
 
   openUser($event, active) {
     console.log($event, active);
-    this.router.navigateByUrl('tabs/search/user/' + active.uid);
+    this.router.navigateByUrl('tabs/' + this.globalProps.currentTab + '/user/' + active.uid);
   }
 
   async presentToast(message) {

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, DocumentData } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { GlobalParamsService } from '../global-params.service';
 
 @Component({
@@ -39,6 +38,7 @@ export class ArticlePage implements OnInit {
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
+              public route: ActivatedRoute,
               private afs: AngularFirestore,
               public toastController: ToastController,
               public iab: InAppBrowser,
@@ -52,6 +52,7 @@ export class ArticlePage implements OnInit {
                }
 
   ngOnInit() {
+    console.log(this.globalProps.currentTab)
     //check for user actions and set boolean class properties
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
@@ -61,7 +62,9 @@ export class ArticlePage implements OnInit {
         this.shares = this.afs.collection("articles").doc(this.titleID).collection("shares").valueChanges();
         this.flags = this.afs.collection("articles").doc(this.titleID).collection("flags").valueChanges();
         this.sends = this.afs.collection("articles").doc(this.titleID).collection("sends").valueChanges();
-        this.comments = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges();
+        
+        this.comments = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges()
+          .subscribe(comments => this.comments = comments);
       }
     })
   }
@@ -76,10 +79,25 @@ export class ArticlePage implements OnInit {
 
   openArticle() {
     this.iab.create(this.articleUrl);
-      // browser.on('closePressed').subscribe(data => {
-      //   browser.close();
-      // })
     this.userHasRead = true;
+    this.date = new Date();
+      this.currentTime = this.date.getTime();
+
+    const shareRef1 = this.afs.collection("users").doc(this.uid).collection("reads");
+      shareRef1.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title),
+        titleID: (this.titleID), readIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+          .then(()=> console.log("Read"))
+          .catch((err)=> console.log("Read Error: " + err));
+
+    const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("reads");
+      shareRef3.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title),
+        titleID: (this.titleID), readIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+          .then(()=> console.log("Read"))
+          .catch((err)=> console.log("Read Error: " + err));
+  }
+
+  openUser($event, comment) {
+    this.router.navigateByUrl("tabs/" + this.globalProps.currentTab + "/user/" + comment.uid);
   }
 
   share() {
@@ -167,11 +185,8 @@ export class ArticlePage implements OnInit {
   }
 
   flag() {
-    if (!this.userHasRead) {
-      this.presentToast("Articles must be read before they can be flagged as biased");
-    }
     
-    else {
+    if (this.userHasRead) {
       this.date = new Date();
       this.currentTime = this.date.getTime();
 
@@ -212,6 +227,12 @@ export class ArticlePage implements OnInit {
       this.presentToast("Article flagged as biased");
       this.userHasFlagged = true;
     }
+    else if (!this.userHasRead) {
+      this.presentToast("Articles must be read before they can be flagged as biased");
+    }
+    else {
+      this.presentToast("Articles must be read before they can be flagged as biased");
+    }
   }
 
   unflag() {
@@ -250,26 +271,43 @@ export class ArticlePage implements OnInit {
     }
   }
 
-  send() {  
+  send($event) {  
     if (this.userHasRead) {
       this.date = new Date();
       this.currentTime = this.date.getTime();
 
       const shareRef1 = this.afs.collection("users").doc(this.uid).collection("sends");
-        shareRef1.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title),
-          titleID: (this.titleID), sentIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+        shareRef1.add({ senderUid: (this.uid), senderDisplayName: (this.displayName), sendeeUid: (this.uid), sendeeDisplayName: (this.displayName),
+           createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sentIsTrue: (true), articleUrl: (this.articleUrl),
+            publishDate: (this.publishDate), publisher: (this.publisher) })
         .then(()=> console.log("Sent"))
           .catch((err)=> console.log("Sent Error: " + err));
 
       const shareRef2 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
-        shareRef2.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title),
-          titleID: (this.titleID), sentIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+      shareRef2.add({ senderUid: (this.uid), senderDisplayName: (this.displayName), sendeeUid: (this.uid), sendeeDisplayName: (this.displayName),
+        createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sentIsTrue: (true), articleUrl: (this.articleUrl),
+         publishDate: (this.publishDate), publisher: (this.publisher) })
         .then(()=> console.log("Sent"))
           .catch((err)=> console.log("Sent Error: " + err));
 
+      const shareRef4 = this.afs.collection("users").doc(this.uid).collection("sends");
+      shareRef4.add({ senderUid: (this.uid), senderDisplayName: (this.displayName), sendeeUid: (this.uid), sendeeDisplayName: (this.displayName),
+        createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sentIsTrue: (true), articleUrl: (this.articleUrl),
+         publishDate: (this.publishDate), publisher: (this.publisher) })
+      .then(()=> console.log("Sent"))
+        .catch((err)=> console.log("Sent Error: " + err));
+
+    const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
+    shareRef5.add({ senderUid: (this.uid), senderDisplayName: (this.displayName), sendeeUid: (this.uid), sendeeDisplayName: (this.displayName),
+      createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sentIsTrue: (true), articleUrl: (this.articleUrl),
+       publishDate: (this.publishDate), publisher: (this.publisher) })
+      .then(()=> console.log("Sent"))
+        .catch((err)=> console.log("Sent Error: " + err));
+
       const shareRef3 = this.afs.collection("articles").doc(this.title).collection("sends");
-        shareRef3.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title),
-          titleID: (this.titleID), sentIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+      shareRef3.add({ senderUid: (this.uid), senderDisplayName: (this.displayName), sendeeUid: (this.uid), sendeeDisplayName: (this.displayName),
+        createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sentIsTrue: (true), articleUrl: (this.articleUrl),
+         publishDate: (this.publishDate), publisher: (this.publisher) })
         .then(()=> console.log("Sent"))
           .catch((err)=> console.log("Sent Error: " + err));
 
@@ -421,7 +459,7 @@ export class ArticlePage implements OnInit {
     }
   }
 
-  unlikeComment() {
+  unlikeComment($event, comment) {
     if (this.userHasFlagged) {
 
       const unFlagRef1 = this.afs.collection("users").doc(this.uid).collection("flags", ref => 

@@ -1,10 +1,8 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
-import { IonContent } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, DocumentData } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { GlobalParamsService } from '../global-params.service'; 
+import { GlobalParamsService } from '../global-params.service';
 
 @Component({
   selector: 'app-home',
@@ -15,9 +13,7 @@ import { GlobalParamsService } from '../global-params.service';
 export class HomePage implements OnInit {
 
   uid: string;
-  titleID: string;
   followingActivity;
-  read;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -35,7 +31,6 @@ export class HomePage implements OnInit {
   }
 
   openArticle($event, active) {
-    console.log($event, active);
     this.globalProps.title = active.title;
     this.globalProps.articleUrl = active.articleUrl;
     this.globalProps.publishDate = active.publishDate;
@@ -45,7 +40,6 @@ export class HomePage implements OnInit {
   }
 
   openUser(event, active) {
-    console.log(event, active);
     this.router.navigateByUrl('tabs/home/user/' + active.uid);
   }
 

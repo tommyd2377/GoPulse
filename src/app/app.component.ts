@@ -13,8 +13,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 export class AppComponent {
 
-  // isLoggedIn: boolean = true;
-
   constructor(private router : Router, 
               public platform: Platform,  
               private statusBar: StatusBar,
@@ -41,18 +39,11 @@ export class AppComponent {
         }
 
         else {
-          console.log("No user logged in fallback");
+          console.log("No user logged in; else fallback");
           this.router.navigateByUrl('welcome');
         }
       
       });
-
-      // if (this.isLoggedIn) {
-      //   this.router.navigateByUrl('tabs');
-      // }
-      // else if (!this.isLoggedIn) {
-      //   this.router.navigateByUrl('welcome');
-      // }
       
       this.statusBar.styleDefault();
       this.splashScreen.hide();

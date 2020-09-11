@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GlobalParamsService } from '../global-params.service';
 
@@ -22,13 +22,16 @@ export class ProfilePage implements OnInit {
   publishDate: string;
   articleUrl: string;
   comment: string;
-  titleID: string
-  profileUrl;
+  titleID: string;
   followers;
   following;
+  parentTab;
+  Tab;
+  profileUrl: Observable<string | null>;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
+              public route: ActivatedRoute,
               private afs: AngularFirestore,
               private storage: AngularFireStorage,
               public globalProps: GlobalParamsService) { }
@@ -40,20 +43,18 @@ export class ProfilePage implements OnInit {
         this.uid = user.uid;
 
         const ref = this.storage.ref('users/' + this.uid + '.jpg');
-          this.profileUrl = ref.getDownloadURL();
+        this.profileUrl = ref.getDownloadURL();
 
-          console.log(this.profileUrl)
+        console.log(this.profileUrl)
         
         this.profileDoc = this.afs.collection("users").doc(this.uid).valueChanges();
    
         this.userActivity = this.afs.collection("users").doc(this.uid).collection("privateActivity").valueChanges()
           .subscribe(activity => this.userActivity = activity);
 
-        this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges()
-          .subscribe(followers => this.followers = followers);
+        this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
         
-        this.following = this.afs.collection("users").doc(this.uid).collection("following").valueChanges()
-          .subscribe(following => this.following = following);
+        this.following = this.afs.collection("users").doc(this.uid).collection("following").valueChanges();
       }
     })
   }
