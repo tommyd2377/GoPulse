@@ -12,13 +12,13 @@
 
     <ion-item detail="false" button>
       <ion-avatar slot="start" button (click)="openUser($event, active)">
-        <img src="../../assets/imgs/portrait.jpg">
+        <img src="{{ active.photoUrl }}">
       </ion-avatar>
       
         <ion-label class="ion-text-wrap" button (click)="openUser($event, active)">
           <h2 *ngIf="active.sharedIsTrue">{{ active.displayName }} shared an article</h2> 
           <h2 *ngIf="active.sentIsTrue">{{ active.senderDisplayName }} sent you an article</h2> 
-          <h2 *ngIf="active.commentIsTrue">{{ active.displayName }}commented on an article</h2> 
+          <h2 *ngIf="active.commentIsTrue">{{ active.displayName }} commented on an article</h2> 
           <h2 *ngIf="active.flaggedIsTrue">{{ active.displayName }} flagged an article as biased</h2> 
         </ion-label>
 
@@ -30,7 +30,7 @@
           <h1>{{ active.title }}</h1>
           <br>
           <h2>{{ active.publisher }}</h2> 
-          <p>{{ active.date }}</p>
+          <p>{{ active.publishDate }}</p>
           <br>
         </ion-label>
       
@@ -38,9 +38,11 @@
 
         <ion-item *ngIf="active.commentIsTrue">
           <p>
-            {{ active.comment }}
+            "{{ active.comment }}"
           </p>
         </ion-item>
+        <br>
+        <br>
     </div>
  
   </div>

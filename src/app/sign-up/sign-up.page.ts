@@ -83,7 +83,7 @@ export class SignUpPage {
       if (user) {
         user.updateProfile({
           displayName: this.displayName,
-          photoURL: "",
+          photoURL: "https://logodix.com/logo/1984123.png",
         }).then(() => {
             console.log("Profile Updated: " + user.uid);
           })
@@ -97,7 +97,7 @@ export class SignUpPage {
               displayName: this.displayName,
               fullName: this.fullName,
               fullNameSearch: this.fullName.toUpperCase(),
-              photoURL: "",
+              photoURL: "https://logodix.com/logo/1984123.png",
               isAnonymous: false
             })
             .then(() => console.log("Profile Data Set: " + user.uid))

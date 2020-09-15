@@ -45,7 +45,7 @@
   
         <ion-item *ngIf="searchingUsers"  detail="false" button>
           <ion-avatar slot="start" button (click)="openUser($event, user)">
-            <img src="../../assets/imgs/portrait.jpg">
+            <img src="{{ user.photoURL }}">
           </ion-avatar>
           
             <ion-label class="ion-text-wrap" button (click)="openUser($event, user)">

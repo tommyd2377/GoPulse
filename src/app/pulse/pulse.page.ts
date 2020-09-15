@@ -16,7 +16,7 @@ export class PulsePage implements OnInit {
   topicsUrl: string = environment.newsApi.topicsUrl;
   tokenUrl: string = environment.newsApi.tokenURL;
   apiKey: string = environment.newsApi.key;
-  category: string = "world";
+  category: string = "business";
 
   constructor(private router: Router,
               public globalProps: GlobalParamsService) { }
@@ -27,6 +27,7 @@ export class PulsePage implements OnInit {
         return response.json();
       })
       .then((data) => {
+        console.log(data);
         this.articles = data.articles;
       });
   }

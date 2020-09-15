@@ -38,9 +38,6 @@ export class UserPage implements OnInit {
               public toastController: ToastController) { }
 
   ngOnInit() {
-    // this.parentTab = this.route.parent.pathFromRoot
-    // console.log("Parent " + this.parentTab);
-    //check for user actions and set boolean class properties
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
  
@@ -55,26 +52,31 @@ export class UserPage implements OnInit {
         }
 
         this.userProfileDoc = this.afs.collection("users").doc(this.userId).valueChanges();
-      
-        console.log(this.userProfileDoc);
 
-        this.userdoc = this.afs.collection("users").doc(this.userId).valueChanges()
-          .subscribe(activity => this.userdoc = activity);
+        this.userdoc = this.afs.collection("users").doc(this.userId).ref.get().then((doc) => {
+          if (doc.exists) {
+            console.log("Document data:", doc.data());
+            console.log(doc.data().displayName);
+            this.userDisplayName = doc.data().displayName;
+            this.userPhotoUrl = doc.data().photoURL;
 
-        console.log(this.userdoc)
+          } else {
+            console.log("No such document!");
+          }
+        }).catch(function(error) {
+          console.log("Error getting document:", error);
+        });
 
         this.userActivity = this.afs.collection("users").doc(this.userId).collection("publicActivity").valueChanges()
           .subscribe(activity => this.userActivity = activity);
         
-        this.followers = this.afs.collection("users").doc(this.userId).collection("followers").valueChanges()
-          .subscribe(followers => this.followers = followers);
+        this.followers = this.afs.collection("users").doc(this.userId).collection("followers").valueChanges();
         
-        this.following = this.afs.collection("users").doc(this.userId).collection("following").valueChanges()
-          .subscribe(following => this.following = following);
+        this.following = this.afs.collection("users").doc(this.userId).collection("following").valueChanges();
       }
     })
   }
-
+ 
   openArticle($event, active) {
     this.globalProps.title = active.title;
     this.globalProps.articleUrl = active.articleUrl;
@@ -103,26 +105,26 @@ export class UserPage implements OnInit {
       this.currentTime = this.date.getTime();
 
       const followRef1 = this.afs.collection("users").doc(this.userId).collection("followers");
-        followRef1.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), 
-                         followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followedIsTrue: (true) })
+        followRef1.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), followerPhotoUrl: (this.photoUrl), 
+                         followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followedIsTrue: (true) })
                          .then(()=> console.log("Following"))
                          .catch((err)=> console.log("Following Error: " + err));
 
       const followRef2 = this.afs.collection("users").doc(this.userId).collection("publicActivity");
-      followRef2.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), 
-                       followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followedIsTrue: (true) })
+      followRef2.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), followerPhotoUrl: (this.photoUrl), 
+        followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followedIsTrue: (true) })
                        .then(()=> console.log("Following"))
                        .catch((err)=> console.log("Following Error: " + err));
 
       const followRef3 = this.afs.collection("users").doc(this.uid).collection("following");
-      followRef3.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), 
-                       followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followingIsTrue: (true) })
+      followRef3.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), followerPhotoUrl: (this.photoUrl), 
+        followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followingIsTrue: (true) })
                        .then(()=> console.log("Following"))
                        .catch((err)=> console.log("Following Error: " + err));
 
       const followRef4 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
-      followRef4.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), 
-                       followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followingIsTrue: (true) })
+      followRef4.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), followerPhotoUrl: (this.photoUrl), 
+        followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followingIsTrue: (true) })
                        .then(()=> console.log("Following"))
                        .catch((err)=> console.log("Following Error: " + err));
 
@@ -130,8 +132,8 @@ export class UserPage implements OnInit {
       this.followers.subscribe(results => {
         for (let result of results) { 
           const followRef5 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          followRef5.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), 
-                           followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followingIsTrue: (true) })
+          followRef5.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), followerPhotoUrl: (this.photoUrl), 
+            followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followingIsTrue: (true) })
                            .then(()=> console.log("Following"))
                            .catch((err)=> console.log("Following Error: " + err));
         }

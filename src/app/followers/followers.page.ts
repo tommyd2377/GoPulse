@@ -24,6 +24,7 @@ export class FollowersPage implements OnInit {
         this.uid = user.uid;
         this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges()
           .subscribe(followers => this.followers = followers)
+          console.log(this.followers)
       }
     })
   }

@@ -15,7 +15,7 @@
     <ion-item class="ion-text-wrap">
 
       <ion-avatar id="ion-avatar" slot="start">
-        <img src="../../assets/imgs/portrait.jpg">
+        <img src="{{ (userProfileDoc | async)?.photoURL }}">
       </ion-avatar>
 
       <ion-label>
@@ -24,9 +24,10 @@
       </ion-label>
       
       <ion-label>
-        <ion-button *ngIf="!thisIsYou" expand="block" fill="outline" (click)="follow()">Follow</ion-button>
-        <ion-button expand="block" fill="outline" (click)="goToFollowers()">0 Followers</ion-button>
-        <ion-button expand="block" fill="outline" (click)="goToFollowing()">0 Following</ion-button>
+        <ion-button *ngIf="!thisIsYou && !userIsFollowing" expand="block" fill="outline" (click)="follow()">Follow</ion-button>
+        <ion-button *ngIf="userIsFollowing" expand="block" fill="outline" (click)="follow()">UnFollow</ion-button>
+        <ion-button expand="block" fill="outline" (click)="goToFollowers()">{{ (followers | async)?.length }} Followers</ion-button>
+        <ion-button expand="block" fill="outline" (click)="goToFollowing()">{{ (following | async)?.length }} Following</ion-button>
       </ion-label>
   
     </ion-item>
@@ -39,7 +40,8 @@
       <ion-item> 
         
         <ion-avatar slot="start" button (click)="openUser($event, active)">
-          <img src="../../assets/imgs/portrait.jpg">
+          <img *ngIf="!active.followingIsTrue" src="{{ active.photoURL }}">
+          <img *ngIf="active.followingIsTrue" src="{{ active.followerPhotoUrl }}">
         </ion-avatar>
         
         <ion-label class="ion-text-wrap" button (click)="openUser($event, active)">
@@ -47,9 +49,21 @@
           <h2 *ngIf="active.sentIsTrue">{{ active.senderDisplayName }} sent {{ active.sendeeDisplayName }} an article</h2>
           <h2 *ngIf="active.commentIsTrue">{{ active.displayName }} commented on an article</h2>
           <h2 *ngIf="active.flaggedIsTrue">{{ active.displayName }} flagged an article as biased</h2>
+          <h2 *ngIf="active.followingIsTrue">{{ active.followerDisplayName }} started following</h2>
         </ion-label>
   
       </ion-item>
+
+      <ion-item *ngIf="active.followingIsTrue"  button>
+        <ion-avatar slot="start" button (click)="openUser($event, active)">
+          <img src="{{ active.followeePhotoUrl }}">
+        </ion-avatar>
+        
+          <ion-label class="ion-text-wrap" button (click)="openUser($event, user)">
+            <h2>{{ active.followeeDisplayName }}</h2>
+          </ion-label>
+  
+        </ion-item>
   
       <ion-item>
 
@@ -65,7 +79,7 @@
 
       <ion-item *ngIf="active.commentIsTrue">
         <p>
-          {{ active.comment }}
+          "{{ active.comment }}"
         </p>
       </ion-item>
   

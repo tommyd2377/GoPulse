@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, DocumentData } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { GlobalParamsService } from '../global-params.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-following',
@@ -15,7 +16,9 @@ export class FollowingPage implements OnInit {
   following;
 
   constructor(private fireAuth: AngularFireAuth,
-              private afs: AngularFirestore) { }
+              private afs: AngularFirestore,
+              public router: Router,
+              public globalProps: GlobalParamsService) { }
 
   ngOnInit() {
     this.fireAuth.auth.onAuthStateChanged((user) => {
@@ -27,6 +30,10 @@ export class FollowingPage implements OnInit {
           .subscribe(following => this.following = following);
       }
     })
+  } 
+
+  openUser($event, followee) {
+    this.router.navigateByUrl("tabs/" + this.globalProps.currentTab + "/user/" + followee.followeeUid);
   }
 
 }

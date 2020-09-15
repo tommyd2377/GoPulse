@@ -37,12 +37,13 @@
       <ion-item detail="false" button>
         
         <ion-avatar slot="start" button (click)="openUser($event, active)">
-          <img src="profileUrl | async">
+          <img src="{{ profileUrl | async }}">
         </ion-avatar>
         
         <ion-label class="ion-text-wrap" button (click)="openArticle($event, active)">
           <h2 *ngIf="active.sharedIsTrue">You shared an article </h2>
-          <h2 *ngIf="active.sentIsTrue">{{ active.senderUid }} sent you an article </h2>
+          <h2 *ngIf="active.recievedIsTrue">{{ active.senderDisplayName }} sent you an article </h2>
+          <h2 *ngIf="active.sentIsTrue">You sent {{ active.sendeeDisplayName }} an article </h2>
           <h2 *ngIf="active.commentIsTrue">You commented on an article</h2>
           <h2 *ngIf="active.flaggedIsTrue">You flagged an article as biased</h2>
         </ion-label>

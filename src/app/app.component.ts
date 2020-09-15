@@ -33,11 +33,6 @@ export class AppComponent {
           this.router.navigateByUrl('tabs');
         }
 
-        else if (!user) {
-          console.log("No user logged in");
-          this.router.navigateByUrl('welcome');
-        }
-
         else {
           console.log("No user logged in; else fallback");
           this.router.navigateByUrl('welcome');

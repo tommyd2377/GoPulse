@@ -44,9 +44,9 @@
     <ion-label position="floating">Update Profile Picture</ion-label>
     <ion-input type="file" (change)="uploadFile($event)"></ion-input>
     <div>{{ uploadPercent | async }}</div>
-    <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
+    <a [href]="downloadURL">{{ downloadURL }}</a>
     <ion-avatar id="ion-avatar" slot="start">
-      <img src="{{ downloadURL | async }}">
+      <img src="{{ downloadURL }}">
     </ion-avatar>
 
     <br>

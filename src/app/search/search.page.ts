@@ -41,6 +41,7 @@ export class SearchPage implements OnInit  {
       })
       .then((data) => {
           this.articles = data.articles;
+          console.log(data);
       });
       
       // const queryObservable = this.userQuery.pipe(

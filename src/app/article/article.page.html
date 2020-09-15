@@ -44,7 +44,7 @@
         {{ (flags | async)?.length }}
       </ion-button>
 
-      <ion-button (click)="send($event)" fill="clear" icon-start>
+      <ion-button (click)="presentModal()" fill="clear" icon-start>
         <ion-icon name="send"></ion-icon>
         {{ (sends | async)?.length }}
       </ion-button>
@@ -82,7 +82,7 @@
 
       <ion-item>
         <p>
-          {{ comment.comment }}
+          "{{ comment.comment }}"
         </p>
       </ion-item>
 

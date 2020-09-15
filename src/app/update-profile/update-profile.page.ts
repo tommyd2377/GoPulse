@@ -14,7 +14,7 @@ import { finalize } from 'rxjs/operators';
 export class UpdateProfilePage {
 
   uploadPercent: Observable<number>;
-  downloadURL: Observable<string>;
+  downloadURL;
   newPassword: string;
   newDisplayName: string;
   newEmail: string;
@@ -48,19 +48,21 @@ export class UpdateProfilePage {
         // observe percentage changes
         this.uploadPercent = task.percentageChanges();
         // get notified when the download URL is available
-        task.snapshotChanges().pipe(
-            finalize(() =>  { this.downloadURL = fileRef.getDownloadURL()
-              console.log(this.downloadURL);
-            }))
-          .subscribe()
-          console.log(this.downloadURL);
-          this.photoUrl = fileRef.getDownloadURL().subscribe(data => this.photoUrl = data);
-          user.updateProfile({ photoURL: this.photoUrl });
-          userData.update({ photoURL: this.photoUrl })
-                .then(()=> console.log("photoUrl set"))
+        task.snapshotChanges().pipe(finalize(() => 
+             fileRef.getDownloadURL()
+                .subscribe(profilePicture => { console.log(profilePicture)
+                  this.downloadURL = profilePicture;
+                  user.updateProfile({ photoURL: profilePicture })
+                    .then(()=> console.log("photoUrl profile update"));
+                  userData.update({ photoURL: profilePicture })
+                    .then(()=> console.log("photoUrl set"))
+                })         
+        ))   
+        .subscribe()
       }
     })
   }
+  
   updateProfile() {
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {

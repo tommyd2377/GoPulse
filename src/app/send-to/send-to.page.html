@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar>
-  <ion-buttons slot="start">
-      <ion-back-button color="primary"></ion-back-button>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">Close</ion-button>
     </ion-buttons>
-    <ion-title>Followers</ion-title>
+    <ion-title>Send Article To...</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -13,13 +13,12 @@
 
     <div *ngFor="let follower of followers">
 
-      <ion-item>
+      <ion-item (click)="sendArticle($event, follower)">
         <ion-avatar slot="start">
           <img src="{{ follower.followerPhotoUrl }}">
         </ion-avatar>
         <ion-label>
-          <h2>{{ follower.followerUid }}</h2>
-          <p>{{ follower.followerDisplayName }}</p>
+          <h2>{{ follower.followerDisplayName }}</h2>
         </ion-label>
       </ion-item>
 

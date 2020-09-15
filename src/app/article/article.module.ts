@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { ArticlePageRoutingModule } from './article-routing.module';
 
 import { ArticlePage } from './article.page';
+import { SendToPageModule } from '../send-to/send-to.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ArticlePageRoutingModule
+    ArticlePageRoutingModule,
+    SendToPageModule
   ],
   declarations: [ArticlePage]
 })
