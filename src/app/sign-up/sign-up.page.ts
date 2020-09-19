@@ -18,7 +18,9 @@ export class SignUpPage {
   password: string;
   displayName: string;
   fullName: string;
+  goCode: string;
   error: string;
+  newgoCodes = [];
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -59,23 +61,30 @@ export class SignUpPage {
     toast.present();
   }
 
+  confirmGoCode() {
+    //check gocodes for a match
+    const GoCodes = {
+      "code": "uidCreator"
+    }
+    //get uid of GoCode creator
+    //delete, move gocode to used
+
+    //return true, creator uid
+    //else check used gocodes
+    //
+  }
+
   emailSignUp() {
-
-   
-      console.log(this.email, this.password);
-      this.fireAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
-        .then(res => {
-          if (res.user) {
-            console.log("User Created: " + res.user);
-            this.setProfile();
-          }
-        })
-        .catch(err => {
-          console.log(`signup failed ${err}`);
-          this.error = err.message;
-        });
-    
-
+    this.fireAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
+      .then(res => {
+        if (res.user) {
+          this.presentToast("User Created: " + res.user.uid);
+          this.setProfile();
+        }
+      })
+      .catch(err => {
+        this.presentToast("Sign Up Failed: " + err.message);
+      });
   }
 
   setProfile() {
@@ -98,7 +107,8 @@ export class SignUpPage {
               fullName: this.fullName,
               fullNameSearch: this.fullName.toUpperCase(),
               photoURL: "https://logodix.com/logo/1984123.png",
-              isAnonymous: false
+              isAnonymous: false,
+              goCodes: this.goCodes()
             })
             .then(() => console.log("Profile Data Set: " + user.uid))
             .catch((error) => console.log("Profile Data Set Error: " + error));
@@ -109,5 +119,19 @@ export class SignUpPage {
       }
     }) 
   }
+
+  goCodes() {
+    let goCodes = [];
+    for (let i = 0; i < 3; i++) {
+      let goCode: string = "";
+      let characters: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let charactersLength: number = characters.length;
+      for (let j = 0; j < 7; j++) {
+        goCode += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      goCodes.push(goCode)
+    } 
+    return goCodes;
+ }
 
 }

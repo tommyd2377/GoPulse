@@ -21,6 +21,7 @@ export class UserPage implements OnInit {
   userDisplayName: string;
   followers;
   following;
+  cuFollowing;
   date: Date;
   currentTime: number;
   userProfileDoc;
@@ -50,6 +51,18 @@ export class UserPage implements OnInit {
         if (this.uid === this.userId) {
           this.thisIsYou = true;
         }
+
+        this.cuFollowing = this.afs.collection("users").doc(this.uid).collection("following").valueChanges()
+          .subscribe(results => {
+            for (let result of results) { 
+              if (result.followerUid === this.uid) {
+                  this.userIsFollowing = true;
+              }
+              else {
+                this.userIsFollowing = false;
+              }
+            }
+          })
 
         this.userProfileDoc = this.afs.collection("users").doc(this.userId).valueChanges();
 

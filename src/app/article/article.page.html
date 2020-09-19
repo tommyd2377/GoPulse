@@ -21,32 +21,32 @@
     
       <ion-button (click)="openArticle()" fill="clear" icon-start>
         <ion-icon name="open"></ion-icon>
-        {{ (reads | async)?.length }}
+        {{ (readCount | async)?.length }}
       </ion-button>
 
       <ion-button *ngIf="!userHasShared" (click)="share()" fill="clear" icon-start>
         <ion-icon name="arrow-redo-sharp"></ion-icon>
-        {{ (shares | async)?.length }}
+        {{ (shareCount | async)?.length }}
       </ion-button>
 
       <ion-button *ngIf="userHasShared" (click)="unShare()" fill="clear" icon-start>
         <ion-icon name="arrow-redo-sharp"></ion-icon>
-        {{ (shares | async)?.length }}
+        {{ (shareCount | async)?.length }}
       </ion-button>
 
       <ion-button *ngIf="!userHasFlagged" (click)="flag()" fill="clear" icon-start>
         <ion-icon name="flag"></ion-icon>
-        {{ (flags | async)?.length }}
+        {{ (flagCount | async)?.length }}
       </ion-button>
 
       <ion-button *ngIf="userHasFlagged" (click)="unFlag()" fill="clear" icon-start>
         <ion-icon name="flag"></ion-icon>
-        {{ (flags | async)?.length }}
+        {{ (flagCount | async)?.length }}
       </ion-button>
 
       <ion-button (click)="presentModal()" fill="clear" icon-start>
         <ion-icon name="send"></ion-icon>
-        {{ (sends | async)?.length }}
+        {{ (sendCount | async)?.length }}
       </ion-button>
 
     </div>
@@ -71,7 +71,7 @@
       <ion-item>
         
         <ion-avatar slot="start">
-          <img src="../../assets/imgs/portrait.jpg">
+          <img src="{{ comment.photoUrl }}">
         </ion-avatar>
         
         <ion-label (click)="openUser($event, comment)">
@@ -86,7 +86,7 @@
         </p>
       </ion-item>
 
-      <ion-button (click)="likeComment($event, comment)" fill="clear">
+      <ion-button (click)="likeComment(commentId)" fill="clear">
         <ion-icon name="thumbs-up-sharp"></ion-icon>
           0
       </ion-button>

@@ -39,14 +39,13 @@
 
       <ion-item> 
         
-        <ion-avatar slot="start" button (click)="openUser($event, active)">
+        <ion-avatar slot="start" (click)="openUser($event, active)">
           <img *ngIf="!active.followingIsTrue" src="{{ active.photoURL }}">
           <img *ngIf="active.followingIsTrue" src="{{ active.followerPhotoUrl }}">
         </ion-avatar>
         
-        <ion-label class="ion-text-wrap" button (click)="openUser($event, active)">
+        <ion-label class="ion-text-wrap" (click)="openUser($event, active)">
           <h2 *ngIf="active.sharedIsTrue">{{ active.displayName }} shared an article</h2>
-          <h2 *ngIf="active.sentIsTrue">{{ active.senderDisplayName }} sent {{ active.sendeeDisplayName }} an article</h2>
           <h2 *ngIf="active.commentIsTrue">{{ active.displayName }} commented on an article</h2>
           <h2 *ngIf="active.flaggedIsTrue">{{ active.displayName }} flagged an article as biased</h2>
           <h2 *ngIf="active.followingIsTrue">{{ active.followerDisplayName }} started following</h2>
@@ -54,12 +53,12 @@
   
       </ion-item>
 
-      <ion-item *ngIf="active.followingIsTrue"  button>
-        <ion-avatar slot="start" button (click)="openUser($event, active)">
+      <ion-item *ngIf="active.followingIsTrue">
+        <ion-avatar slot="start" (click)="openUser($event, active)">
           <img src="{{ active.followeePhotoUrl }}">
         </ion-avatar>
         
-          <ion-label class="ion-text-wrap" button (click)="openUser($event, active)">
+          <ion-label class="ion-text-wrap" (click)="openUser($event, active)">
             <h2>{{ active.followeeDisplayName }}</h2>
           </ion-label>
   
@@ -67,7 +66,7 @@
   
       <ion-item>
 
-        <ion-label class="ion-text-wrap" button (click)="openArticle($event, active)">
+        <ion-label class="ion-text-wrap" (click)="openArticle($event, active)">
           <h1>{{ active.title }}</h1>
           <br>
           <h2>{{ active.publisher }}</h2> 

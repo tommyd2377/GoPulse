@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { GlobalParamsService } from '../global-params.service';
 
 @Component({
   selector: 'app-profile-settings',
@@ -12,33 +13,37 @@ export class ProfileSettingsPage {
 
   uid;
   profileDoc;
+  profile;
   isAnonymous: boolean;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
+              public globalProps: GlobalParamsService,
               private afs: AngularFirestore) { }
 
   ngOnInit() {
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log(user.displayName);
-        console.log(user);
         this.uid = user.uid;
-        console.log(this.uid);
-
-        // const ref = this.storage.ref('users/' + (this.uid) + '.jpg');
-        //   this.profileUrl = ref.getDownloadURL();
-        
-        this.profileDoc = this.afs.collection("users").doc(this.uid).get();
-        console.log(this.profileDoc)
+        this.profileDoc = this.afs.collection("users").doc(this.uid);
+        this.afs.collection("users").doc(this.uid).ref.get().then((doc) => {
+          if (doc.exists) {
+            console.log("Document data:", doc.data());
+            console.log(doc.data().isAnonymous);
+            this.isAnonymous = doc.data().isAnonymous;
+            this.globalProps.isAnonymous = this.isAnonymous;
+          }
+        })
       }
     })
   }
 
   goAnonymous($event) {
+    console.log(this.globalProps.isAnonymous)
     this.profileDoc.update({ isAnonymous: this.isAnonymous })
-     .then(()=> console.log("email update doc"))
-      .catch((err)=> console.log("email update doc error: " + err));
+      .then(() => this.globalProps.isAnonymous = this.isAnonymous)
+      .catch((err)=> console.log(err));
+      console.log(this.isAnonymous, this.globalProps.isAnonymous)
   }
 
   emailSignOut() {
@@ -55,6 +60,3 @@ export class ProfileSettingsPage {
   }
 
 }
-
-
-
