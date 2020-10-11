@@ -10,8 +10,8 @@
 
     <div *ngFor="let active of followingActivity">
 
-    <ion-item detail="false" button>
-      <ion-avatar slot="start" button (click)="openUser($event, active)">
+    <ion-item detail="false">
+      <ion-avatar slot="start" (click)="openUser($event, active)">
         <img src="{{ active.photoUrl }}">
       </ion-avatar>
       
@@ -24,9 +24,9 @@
 
       </ion-item>
 
-        <ion-item detail="false" button>
+        <ion-item detail="false">
   
-        <ion-label class="ion-text-wrap" button (click)="openArticle($event, active)">
+        <ion-label class="ion-text-wrap" (click)="openArticle($event, active)">
           <h1>{{ active.title }}</h1>
           <br>
           <h2>{{ active.publisher }}</h2> 
@@ -44,18 +44,18 @@
     </div>
     <br>
 
-    <h5>Thanks for signing up to GoPulse.</h5>
+    <h5>Thanks for subscribing to GoPulse.</h5>
 
     <p>
-      Below are your three GoCodes. Use these to invite the three smartest people 
+      Below are your new GoCodes. Use these to invite the three smartest people 
       you know who are also news junkies and tend to think for themselves.
       It's important to bring new users onto the platform that are honest and open to new perspectives.
     </p>
 
     <ul>
-      <li>Code</li>
-      <li>Code</li>
-      <li>Code</li>
+      <li>{{ (profileDoc | async)?.goCodes[0] }}</li>
+      <li>{{ (profileDoc | async)?.goCodes[1] }}</li>
+      <li>{{ (profileDoc | async)?.goCodes[2] }}</li>
     </ul>
 
  

@@ -1,18 +1,28 @@
-import { database } from 'firebase-admin';
+import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+admin.initializeApp();
+const db = admin.firestore();
 
-// Start writing Firebase Functions
-// https://firebase.google.com/docs/functions/typescript
+import * as Stripe from 'stripe';
+const stripe = new Stripe(functions.config().stripe.secret);
 
-export const helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from Firebase!");
-});
+export const createStripeCustomer = functions.auth
+  .user()
+  .onCreate(async (userRecord, context) => {
+    const firebaseUID = userRecord.uid;
 
-export const newUser = functions.auth.user().onCreate((user, context) => {
+    const customer = await stripe.customers.create({
+      email: userRecord.email,
+      metaData: { firebaseUID }
+    });
 
-})
+    const sub = await stripe.subscriptions.create({
+      customer: customer.id,
+      items: [{plan: 'plan'}]
+    })
 
-export const getNewArticles = functions.https.onCall((data, context) => {
-  let reqType = data.hh
-})
+    return db.doc(`users/${firebaseUID}`).update({
+      stripeId: customer.id,
+      status: sub.status
+    });
+  })

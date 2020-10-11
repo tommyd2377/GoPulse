@@ -40,7 +40,7 @@
       <ion-item> 
         
         <ion-avatar slot="start" (click)="openUser($event, active)">
-          <img *ngIf="!active.followingIsTrue" src="{{ active.photoURL }}">
+          <img *ngIf="!active.followingIsTrue" src="{{ active.photoUrl }}">
           <img *ngIf="active.followingIsTrue" src="{{ active.followerPhotoUrl }}">
         </ion-avatar>
         

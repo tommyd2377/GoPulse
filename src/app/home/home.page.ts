@@ -14,6 +14,7 @@ export class HomePage implements OnInit {
 
   uid: string;
   followingActivity;
+  profileDoc: any;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -24,6 +25,9 @@ export class HomePage implements OnInit {
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
         this.uid = user.uid;
+        
+        this.profileDoc = this.afs.collection("users").doc(this.uid).valueChanges();
+
         this.followingActivity = this.afs.collection("users").doc(this.uid).collection("followingActivity").valueChanges()
           .subscribe(activity => this.followingActivity = activity);
       }

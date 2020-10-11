@@ -34,13 +34,13 @@
 
     <div *ngFor="let active of userActivity">
 
-      <ion-item detail="false" button>
+      <ion-item detail="false">
         
-        <ion-avatar slot="start" button (click)="openUser($event, active)">
-          <img src="{{ profileUrl | async }}">
+        <ion-avatar *ngIf="active.recievedIsTrue" slot="start" (click)="openUser($event, active)">
+          <img src="{{ active.senderPhotoUrl}}">
         </ion-avatar>
         
-        <ion-label class="ion-text-wrap" button (click)="openArticle($event, active)">
+        <ion-label class="ion-text-wrap" (click)="openUser($event, active)">
           <h2 *ngIf="active.sharedIsTrue">You shared an article </h2>
           <h2 *ngIf="active.recievedIsTrue">{{ active.senderDisplayName }} sent you an article </h2>
           <h2 *ngIf="active.sentIsTrue">You sent {{ active.sendeeDisplayName }} an article </h2>
@@ -50,9 +50,9 @@
   
       </ion-item>
   
-      <ion-item detail="false" button>
+      <ion-item detail="false">
 
-        <ion-label class="ion-text-wrap" button (click)="openArticle($event, active)">
+        <ion-label class="ion-text-wrap" (click)="openArticle($event, active)">
           <h1>{{ active.title }}</h1>
           <br>
           <h2>{{ active.publisher }}</h2> 

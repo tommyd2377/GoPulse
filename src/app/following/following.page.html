@@ -15,7 +15,7 @@
 
       <ion-item (click)="openUser($event, followee)">
         <ion-avatar slot="start">
-          <img src="../../assets/imgs/logo.png">
+          <img src="{{ followee.followePhotoUrl }}">
         </ion-avatar>
         <ion-label>
           <h2>{{ followee.followeeDisplayName }}</h2>

@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 import { GlobalParamsService } from '../global-params.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -31,7 +31,6 @@ export class ProfilePage implements OnInit {
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
-              public route: ActivatedRoute,
               private afs: AngularFirestore,
               private storage: AngularFireStorage,
               public globalProps: GlobalParamsService) { }

@@ -53,7 +53,7 @@
 
     <br>
 
-    <h3>Comments</h3>
+    <h3>Comments {{ (commentCount | async)?.length }}</h3>
 
     <br>
 
@@ -86,7 +86,7 @@
         </p>
       </ion-item>
 
-      <ion-button (click)="likeComment(commentId)" fill="clear">
+      <ion-button (click)="likeComment($event, comment)" fill="clear">
         <ion-icon name="thumbs-up-sharp"></ion-icon>
           0
       </ion-button>

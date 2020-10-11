@@ -34,7 +34,6 @@ export class SearchPage implements OnInit  {
               public globalProps: GlobalParamsService) { }
               
   ngOnInit() {
-
     fetch(this.topNewsUrl + this.tokenUrl + this.apiKey)
       .then((response) => {
           return response.json();
@@ -43,15 +42,6 @@ export class SearchPage implements OnInit  {
           this.articles = data.articles;
           console.log(data);
       });
-      
-      // const queryObservable = this.userQuery.pipe(
-      //   switchMap(fullName => 
-      //     this.afs.collection('users', ref => ref.where('fullNameSearch', '==', fullName.toUpperCase())).valueChanges()
-      //   )
-      // );
-      // queryObservable.subscribe(queriedItems => {
-      //   console.log(queriedItems);  
-      // });
   }
 
   segmentChanged(ev: any) {
@@ -87,14 +77,10 @@ export class SearchPage implements OnInit  {
   searchUsers($event) {
     let q = $event.target.value;
     console.log("query: " + q);
-    this.userQuery.next(q + "\uf8ff")
+    this.userResults = this.afs.collection("users", ref => ref.where('fullName', '==', q)).valueChanges()
+      .subscribe(activity => this.userResults = activity);
   }
 
-  searchUsers2($event) {
-    let q = $event.target.value;
-    console.log("query: " + q);
-    this.userResults = this.afs.collection('users', ref => ref.where('fullNameSearch', '==', q.toUpperCase())).valueChanges();
-  }
 
   openArticle($event, article) {
     this.globalProps.title = article.title;

@@ -8,7 +8,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
 import { GlobalParamsService } from '../global-params.service';
 import { SendToPage } from '../send-to/send-to.page';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-article',
@@ -45,6 +44,7 @@ export class ArticlePage implements OnInit {
   isAnonymous: boolean;
   flagCount: any;
   sendCount: any;
+  commentCount: any;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -65,6 +65,7 @@ export class ArticlePage implements OnInit {
               }
 
   ngOnInit() {
+    console.log("anonymous" + this.isAnonymous);
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
         
@@ -83,6 +84,7 @@ export class ArticlePage implements OnInit {
               else {
                 this.userHasRead = false;
               }
+              console.log("userhasread" + this.userHasRead);
             }
         });
 
@@ -97,6 +99,7 @@ export class ArticlePage implements OnInit {
               else {
                 this.userHasShared = false;
               }
+              console.log("userhasshared" + this.userHasRead);
             }
         });
 
@@ -111,22 +114,22 @@ export class ArticlePage implements OnInit {
                 else {
                   this.userHasFlagged = false;
                 }
+                console.log("userhasflagged" + this.userHasRead);
               }
         });
           
         this.sendCount = this.afs.collection("articles").doc(this.titleID).collection("sends").valueChanges();
+
+        this.commentCount = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges();
         
-        this.comments = this.afs.collection("articles").doc(this.titleID).collection("comments").snapshotChanges()
-          .subscribe(results => {
-            for (let result of results) { 
-              this.comments = result.payload.doc.data();
-              this.commentId = result.payload.doc.id;
-            }
-        });
+        this.comments = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges()
+          .subscribe(comments => this.comments = comments);
+        
           
       }
     })
-    console.log(this.userHasRead)
+    console.log("userhasread " + this.userHasRead);
+    console.log("comments " + this.comments);
   }
 
   async presentToast(message) {
@@ -174,7 +177,7 @@ export class ArticlePage implements OnInit {
           .then(()=> console.log("Read"))
           .catch((err)=> console.log("Read Error: " + err));
 
-    this.analytics.logEvent("article read");
+    this.analytics.logEvent("article read", {["uid"]: this.uid});
   }
 
   openUser($event, comment) {
@@ -182,7 +185,7 @@ export class ArticlePage implements OnInit {
   }
 
   share() {
-     if (this.userHasRead && !this.isAnonymous) {    
+     if (this.userHasRead) {    
 
       this.date = new Date();
       this.currentTime = this.date.getTime();
@@ -222,9 +225,9 @@ export class ArticlePage implements OnInit {
         }
       })
       this.userHasShared = true;
-      this.presentToast("Article shared");
+      this.presentToast("Article shared!");
     }
-    else if (this.userHasRead && this.isAnonymous) {    
+    else if (this.userHasRead) {    
 
       this.date = new Date();
       this.currentTime = this.date.getTime();
@@ -295,8 +298,7 @@ export class ArticlePage implements OnInit {
   }
 
   flag() {
-    
-    if (this.userHasRead && this.globalProps.isAnonymous === false) {
+    if (this.userHasRead) {
       this.date = new Date();
       this.currentTime = this.date.getTime();
 
@@ -382,7 +384,7 @@ export class ArticlePage implements OnInit {
   }
 
   newComment() {
-    if (this.userHasRead && this.globalProps.isAnonymous === false) {
+    if (this.userHasRead) {
       this.date = new Date();
       this.currentTime = this.date.getTime();
 
@@ -422,7 +424,7 @@ export class ArticlePage implements OnInit {
           .catch((err)=> console.log("Comment Error: " + err));
         }
       })
-      this.presentToast("Comment posted");
+      this.presentToast("Comment posted!");
     }
     else if (!this.userHasRead) {
       this.presentToast("Articles must be read before they can be commented on");
@@ -470,12 +472,13 @@ export class ArticlePage implements OnInit {
   }
 
   likeComment($event, comment) {
+    console.log("commentLike event & comment data: " + $event, comment);
+
     if (!this.userHasRead) {
       this.presentToast("Articles must be read before comments can be liked");
     }
     
     else {
-      console.log(comment)
       this.date = new Date();
       this.currentTime = this.date.getTime();
 
@@ -514,7 +517,7 @@ export class ArticlePage implements OnInit {
           .catch((err)=> console.log(" LikeComment Error: " + err));
         }
       })
-      this.presentToast("Comment posted");
+      this.presentToast("Comment Liked!");
     }
   }
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { ToastController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
@@ -20,7 +20,8 @@ export class SignUpPage {
   fullName: string;
   goCode: string;
   error: string;
-  newgoCodes = [];
+  newGoCodes = [];
+  goCodesCollection;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -61,30 +62,35 @@ export class SignUpPage {
     toast.present();
   }
 
-  confirmGoCode() {
-    //check gocodes for a match
-    const GoCodes = {
-      "code": "uidCreator"
-    }
-    //get uid of GoCode creator
-    //delete, move gocode to used
-
-    //return true, creator uid
-    //else check used gocodes
-    //
-  }
-
   emailSignUp() {
-    this.fireAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
-      .then(res => {
-        if (res.user) {
-          this.presentToast("User Created: " + res.user.uid);
-          this.setProfile();
+    this.goCodesCollection = this.afs.collection("goCodes").doc(this.goCode).ref.get()
+      .then((doc) => {
+        if (doc.exists) {
+          console.log("Document data:", doc.data());
+          this.fireAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
+          .then(res => {
+            if (res.user) {
+              this.setProfile();
+              let creatorUid = doc.data().uid;
+                const creatorRef = this.afs.collection("users").doc(creatorUid).collection("privateActivity");
+                  creatorRef.add({ newUserUid: res.user.uid, newUserName: this.fullName, 
+                    newUserDisplayName: res.user.displayName, goCodeUsed: true });
+              this.presentToast("User Created: " + res.user.displayName);
+            }
+          })
+          .catch(err => {
+            this.presentToast("Sign Up Failed: " + err.message);
+          });
+
+        } 
+        else {
+          this.presentToast("Invalid GoCode");
         }
       })
-      .catch(err => {
-        this.presentToast("Sign Up Failed: " + err.message);
+      .catch(function(error) {
+        this.presentToast("GoCode Error: " + error);
       });
+      
   }
 
   setProfile() {
@@ -98,7 +104,8 @@ export class SignUpPage {
           })
         user.sendEmailVerification().then(() => {
           let uid = user.uid;
-            console.log(uid)
+            console.log(uid);
+            this.newGoCodes = this.goCodes();
             let userData = this.afs.collection("users").doc(uid);
             userData.set({
               uid: uid,
@@ -108,7 +115,7 @@ export class SignUpPage {
               fullNameSearch: this.fullName.toUpperCase(),
               photoURL: "https://logodix.com/logo/1984123.png",
               isAnonymous: false,
-              goCodes: this.goCodes()
+              goCodes: this.newGoCodes
             })
             .then(() => console.log("Profile Data Set: " + user.uid))
             .catch((error) => console.log("Profile Data Set Error: " + error));

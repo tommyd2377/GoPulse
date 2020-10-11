@@ -39,9 +39,9 @@
 
     <div *ngFor="let article of articles">
   
-      <ion-item detail="false" button>
+      <ion-item detail="false">
 
-      <ion-label class="ion-text-wrap" href='' router-direction="forward" button (click)="openArticle($event, article)">
+      <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
         <h1>{{ article.title }}</h1>
         <br>
         <h2>{{ article.source.name }}</h2> 

@@ -17,43 +17,44 @@
       </ion-segment-button>
     </ion-segment>
 
-    <ion-searchbar *ngIf="searchingNews" inputmode="search" enterkeyhint="search" debounce="500" type="search" 
+    <ion-searchbar *ngIf="searchingNews" inputmode="search" enterkeyhint="search" debounce="1000" type="search" 
         (ionInput)="searchNews($event)" placeholder="search the news..." clearInput="true">
     </ion-searchbar>
 
-    <ion-searchbar *ngIf="searchingUsers" inputmode="search" enterkeyhint="search" type="search" 
+    <ion-searchbar *ngIf="searchingUsers" inputmode="search" enterkeyhint="search" debounce="1000" type="search" 
         (ionInput)="searchUsers($event)" placeholder="search for a user..." clearInput="true">
     </ion-searchbar>
 
     <div *ngFor="let article of articles">
   
-          <ion-item *ngIf="searchingNews" detail="false" button>
-    
-          <ion-label class="ion-text-wrap" href='' router-direction="forward" button (click)="openArticle($event, article)">
-            <h1>{{ article.title }}</h1>
-            <br>
-            <h2>{{ article.source.name }}</h2> 
-            <p>{{ article.publishedAt }}</p>
-            <br>
-          </ion-label>
-        
-          </ion-item>
-  
-      </div>
+      <ion-item *ngIf="searchingNews" detail="false">
 
-      <div *ngFor="let user of userResults">
-  
-        <ion-item *ngIf="searchingUsers"  detail="false" button>
-          <ion-avatar slot="start" button (click)="openUser($event, user)">
-            <img src="{{ user.photoURL }}">
-          </ion-avatar>
-          
-            <ion-label class="ion-text-wrap" button (click)="openUser($event, user)">
-              <h2>{{ user.displayName }}</h2>
-              <h3>{{ user.fullName }}</h3>
-            </ion-label>
+        <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
+          <h1>{{ article.title }}</h1>
+          <br>
+          <h2>{{ article.source.name }}</h2> 
+          <p>{{ article.publishedAt }}</p>
+          <br>
+        </ion-label>
     
-          </ion-item>
+      </ion-item>
+
+    </div>
+
+    <div *ngFor="let user of userResults">
+
+      <ion-item *ngIf="searchingUsers" detail="false">
+        
+        <ion-avatar slot="start" (click)="openUser($event, user)">
+          <img src="{{ user.photoURL }}">
+        </ion-avatar>
+      
+        <ion-label class="ion-text-wrap" (click)="openUser($event, user)">
+          <h2>{{ user.displayName }}</h2>
+          <h3>{{ user.fullName }}</h3>
+        </ion-label>
+
+      </ion-item>
 
     </div>
 

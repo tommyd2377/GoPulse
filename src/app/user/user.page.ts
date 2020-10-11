@@ -61,6 +61,7 @@ export class UserPage implements OnInit {
               else {
                 this.userIsFollowing = false;
               }
+              console.log(this.userIsFollowing);
             }
           })
 
