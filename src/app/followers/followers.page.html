@@ -13,12 +13,12 @@
 
     <div *ngFor="let follower of followers">
 
-      <ion-item>
+      <ion-item (click)="openUser($event, follower)">
         <ion-avatar slot="start">
           <img src="{{ follower.followerPhotoUrl }}">
         </ion-avatar>
         <ion-label>
-          <h2>{{ follower.followerUid }}</h2>
+          <h2>{{ follower.followerFullName }}</h2>
           <p>{{ follower.followerDisplayName }}</p>
         </ion-label>
       </ion-item>

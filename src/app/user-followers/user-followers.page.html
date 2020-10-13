@@ -1,9 +1,30 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>userFollowers</ion-title>
+  <ion-buttons slot="start">
+      <ion-back-button color="primary"></ion-back-button>
+    </ion-buttons>
+    <ion-title color="primary">Followers</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+
+  <div class="center-desktop">
+
+    <div *ngFor="let follower of followers">
+
+      <ion-item (click)="openUser($event, follower)">
+        <ion-avatar slot="start">
+          <img src="{{ follower.followerPhotoUrl }}">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ follower.followerFullName }}</h2>
+          <p>{{ follower.followerDisplayName }}</p>
+        </ion-label>
+      </ion-item>
+
+    </div>
+
+  </div>
 
 </ion-content>

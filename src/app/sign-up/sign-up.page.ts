@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { ToastController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
@@ -33,7 +33,7 @@ export class SignUpPage {
   async presentAlertConfirm() {
     const alert = await this.alertController.create({
       header: 'Confirm Sign Up',
-      message: 'By clicking "Sign Up" you agree to our <strong>Privacy Policy</strong> and <strong>Terms and Conditions</strong>.',
+      message: 'By creating an account you agree to our <strong>Privacy Policy</strong> and <strong>Terms and Conditions</strong>.',
       buttons: [
         {
           text: 'Cancel',
@@ -43,7 +43,7 @@ export class SignUpPage {
             console.log('Confirm Cancel');
           }
         }, {
-          text: 'Sign Up',
+          text: 'Agree',
           handler: () => {
             console.log('Confirm Okay');
             this.emailSignUp();
@@ -66,31 +66,36 @@ export class SignUpPage {
     this.goCodesCollection = this.afs.collection("goCodes").doc(this.goCode).ref.get()
       .then((doc) => {
         if (doc.exists) {
-          console.log("Document data:", doc.data());
-          this.fireAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
-          .then(res => {
-            if (res.user) {
-              this.setProfile();
-              let creatorUid = doc.data().uid;
+          if (doc.data().goCodeUsed === false) {
+            console.log("Document data:", doc.data());
+            this.fireAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
+            .then(res => {
+              if (res.user) {
+                this.setProfile();
+                let creatorUid = doc.data().uid;
                 const creatorRef = this.afs.collection("users").doc(creatorUid).collection("privateActivity");
                   creatorRef.add({ newUserUid: res.user.uid, newUserName: this.fullName, 
                     newUserDisplayName: res.user.displayName, goCodeUsed: true });
-              this.presentToast("User Created: " + res.user.displayName);
-            }
-          })
-          .catch(err => {
-            this.presentToast("Sign Up Failed: " + err.message);
-          });
-
+                const goCodeRef = this.afs.collection("goCodes").doc(this.goCode);
+                  goCodeRef.update({ goCodeUsed: true, usedBy: res.user.uid });
+                this.presentToast("User Created: " + res.user.displayName);
+              }
+            })
+            .catch(err => {
+              this.presentToast("Sign Up Failed: " + err.message);
+            });
+          }
+          else {
+            this.presentToast("This GoCode has already been used");
+          }
         } 
         else {
           this.presentToast("Invalid GoCode");
         }
       })
-      .catch(function(error) {
-        this.presentToast("GoCode Error: " + error);
-      });
-      
+    .catch(function(error) {
+      this.presentToast("GoCode Error: " + error);
+    });
   }
 
   setProfile() {
@@ -114,7 +119,6 @@ export class SignUpPage {
               fullName: this.fullName,
               fullNameSearch: this.fullName.toUpperCase(),
               photoURL: "https://logodix.com/logo/1984123.png",
-              isAnonymous: false,
               goCodes: this.newGoCodes
             })
             .then(() => console.log("Profile Data Set: " + user.uid))

@@ -14,6 +14,6 @@ export class GlobalParamsService {
   
   currentTab: string = "home";
 
-  isAnonymous: boolean;
+  userId: string;
 
 }

@@ -71,11 +71,11 @@
       <ion-item>
         
         <ion-avatar slot="start">
-          <img src="{{ comment.photoUrl }}">
+          <img src="{{ comment.data().photoUrl }}">
         </ion-avatar>
         
         <ion-label (click)="openUser($event, comment)">
-          {{ comment.displayName }} left a comment
+          {{ comment.data().displayName }} left a comment
         </ion-label>
 
       </ion-item>
@@ -91,7 +91,7 @@
           0
       </ion-button>
 
-      <ion-button (click)="commentReply()" fill="clear">
+      <ion-button (click)="openReplies($event, comment)" fill="clear">
         <ion-icon name="chatbubbles-sharp"></ion-icon>
           0
       </ion-button>

@@ -191,10 +191,12 @@ export class UserPage implements OnInit {
   }
 
   goToFollowers() {
+    this.globalProps.userId = this.userId;
     this.router.navigateByUrl('tabs/user/' + this.userId + '/followers');
   }
 
   goToFollowing() {
+    this.globalProps.userId = this.userId;
     this.router.navigateByUrl('tabs/user/' + this.userId + '/following');
   }
 

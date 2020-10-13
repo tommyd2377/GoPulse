@@ -45,6 +45,10 @@ const routes: Routes = [
   {
     path: 'send-to',
     loadChildren: () => import('./send-to/send-to.module').then( m => m.SendToPageModule)
+  },
+  {
+    path: 'comment-replies',
+    loadChildren: () => import('./comment-replies/comment-replies.module').then( m => m.CommentRepliesPageModule)
   }
 ];
 @NgModule({

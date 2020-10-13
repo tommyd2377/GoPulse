@@ -23,6 +23,7 @@ export const createStripeCustomer = functions.auth
 
     return db.doc(`users/${firebaseUID}`).update({
       stripeId: customer.id,
-      status: sub.status
+      status: sub.status,
+      subId: sub.id
     });
   })

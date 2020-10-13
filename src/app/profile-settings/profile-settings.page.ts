@@ -14,7 +14,6 @@ export class ProfileSettingsPage {
   uid;
   profileDoc;
   profile;
-  isAnonymous: boolean;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -26,24 +25,8 @@ export class ProfileSettingsPage {
       if (user) {
         this.uid = user.uid;
         this.profileDoc = this.afs.collection("users").doc(this.uid);
-        this.afs.collection("users").doc(this.uid).ref.get().then((doc) => {
-          if (doc.exists) {
-            console.log("Document data:", doc.data());
-            console.log(doc.data().isAnonymous);
-            this.isAnonymous = doc.data().isAnonymous;
-            this.globalProps.isAnonymous = this.isAnonymous;
-          }
-        })
       }
     })
-  }
-
-  goAnonymous($event) {
-    console.log(this.globalProps.isAnonymous)
-    this.profileDoc.update({ isAnonymous: this.isAnonymous })
-      .then(() => this.globalProps.isAnonymous = this.isAnonymous)
-      .catch((err)=> console.log(err));
-      console.log(this.isAnonymous, this.globalProps.isAnonymous)
   }
 
   emailSignOut() {

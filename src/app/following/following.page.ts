@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, DocumentData } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { GlobalParamsService } from '../global-params.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-following',
@@ -18,7 +18,7 @@ export class FollowingPage implements OnInit {
   constructor(private fireAuth: AngularFireAuth,
               private afs: AngularFirestore,
               public router: Router,
-              public globalProps: GlobalParamsService) { }
+              public globalProps: GlobalParamsService) { } 
 
   ngOnInit() {
     this.fireAuth.auth.onAuthStateChanged((user) => {

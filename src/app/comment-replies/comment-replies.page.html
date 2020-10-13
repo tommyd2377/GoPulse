@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">Close</ion-button>
+    </ion-buttons>
+    <ion-title>Comment Replies</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="center-desktop">
+
+    <ion-item>
+      <ion-textarea [(ngModel)]="comment" type="text" placeholder="Say something smart..."></ion-textarea>
+      <ion-button (click)="newComment()" fill="clear">
+        <ion-icon name="send"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <div *ngFor="let comment of comments">
+
+       <ion-item>
+        
+        <ion-avatar slot="start">
+          <img src="{{ comment.photoUrl }}">
+        </ion-avatar>
+        
+        <ion-label (click)="openUser($event, comment)">
+          {{ comment.displayName }} left a comment
+        </ion-label>
+
+      </ion-item>
+
+      <ion-item>
+        <p>
+          "{{ comment.comment }}"
+        </p>
+      </ion-item>
+
+      <ion-button (click)="likeComment($event, comment)" fill="clear">
+        <ion-icon name="thumbs-up-sharp"></ion-icon>
+          0
+      </ion-button>
+
+    </div>
+
+  </div>
+
+</ion-content>

@@ -8,6 +8,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
 import { GlobalParamsService } from '../global-params.service';
 import { SendToPage } from '../send-to/send-to.page';
+import { CommentRepliesPage } from '../comment-replies/comment-replies.page';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-article',
@@ -41,7 +43,6 @@ export class ArticlePage implements OnInit {
   commentId: string;
   readCount: any;
   shareCount: any;
-  isAnonymous: boolean;
   flagCount: any;
   sendCount: any;
   commentCount: any;
@@ -61,11 +62,9 @@ export class ArticlePage implements OnInit {
                 this.publishDate = this.globalProps.publishDate;
                 this.publisher = this.globalProps.publisher;
                 this.titleID = this.globalProps.titleID;
-                this.isAnonymous = this.globalProps.isAnonymous;
               }
 
   ngOnInit() {
-    console.log("anonymous" + this.isAnonymous);
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
         
@@ -122,10 +121,11 @@ export class ArticlePage implements OnInit {
 
         this.commentCount = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges();
         
-        this.comments = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges()
-          .subscribe(comments => this.comments = comments);
-        
-          
+        this.comments = this.afs.collection("articles").doc(this.titleID).collection("comments").snapshotChanges()
+            .pipe(map(actions => actions.map(a => {
+                this.comments = a.payload.doc;
+              }))
+            );
       }
     })
     console.log("userhasread " + this.userHasRead);
@@ -157,6 +157,16 @@ export class ArticlePage implements OnInit {
     else {
       this.presentToast("Articles must be read before they can be sent to someone");
     }
+  }
+
+  async openReplies($event, comment) {
+      const modal = await this.modalController.create({
+        component: CommentRepliesPage,
+        componentProps: {
+          comment: comment
+        }
+      });
+      return await modal.present();
   }
 
   openArticle() {
@@ -227,36 +237,11 @@ export class ArticlePage implements OnInit {
       this.userHasShared = true;
       this.presentToast("Article shared!");
     }
-    else if (this.userHasRead) {    
 
-      this.date = new Date();
-      this.currentTime = this.date.getTime();
-
-      const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("shares");
-        shareRef3.add({ displayName: ("A person you're following"), createdAt: (this.currentTime), title: (this.title),
-          titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
-        .then(()=> console.log("Shared"))
-          .catch((err)=> console.log("Shared Error: " + err));
-
-      this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
-      this.followers.subscribe(results => {
-        for (let result of results) { 
-          const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          shareRef4.add({ displayName: ("A person you're following"), createdAt: (this.currentTime), title: (this.title),
-            titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
-          .then(()=> console.log("Shared to follower: " + result.followerUid))
-          .catch((err)=> console.log("Shared Error: " + err));
-        }
-      })
-      this.userHasShared = true;
-      this.presentToast("Article anonymously shared");
-    }
     else if (!this.userHasRead) {
-      console.log("else if" + this.isAnonymous)
       this.presentToast("Articles must be read before they can be shared");
     }
     else {
-      console.log("else" + this.isAnonymous)
       this.presentToast("Articles must be read before they can be shared");
     }
    
