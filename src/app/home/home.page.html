@@ -19,7 +19,7 @@
           <h2 *ngIf="active.sharedIsTrue">{{ active.displayName }} shared an article</h2> 
           <h2 *ngIf="active.sentIsTrue">{{ active.senderDisplayName }} sent you an article</h2> 
           <h2 *ngIf="active.commentIsTrue">{{ active.displayName }} commented on an article</h2> 
-          <h2 *ngIf="active.flaggedIsTrue">{{ active.displayName }} flagged an article as biased</h2> 
+          <h2 *ngIf="active.flaggedIsTrue">{{ active.displayName }} flagged an article as clickbait</h2> 
         </ion-label>
 
       </ion-item>
@@ -30,7 +30,7 @@
           <h1>{{ active.title }}</h1>
           <br>
           <h2>{{ active.publisher }}</h2> 
-          <p>{{ active.publishDate }}</p>
+          <p>{{ active.publishDate | date:'fullDate' }}</p>
           <br>
         </ion-label>
       
@@ -44,18 +44,22 @@
     </div>
     <br>
 
-    <h5>Thanks for subscribing to GoPulse.</h5>
+    <h5>Thank you for subscribing.</h5>
 
     <p>
-      Below are your new GoCodes. Use these to invite the three smartest people 
-      you know who are also news junkies and tend to think for themselves.
-      It's important to bring new users onto the platform that are honest and open to new perspectives.
+      Below are your new GoCodes. Use these to invite the seven smartest people 
+      you know to join you here. It's important to bring new subscribers
+      onto the platform that are intelligent and open to new perspectives.
     </p>
 
     <ul>
       <li>{{ (profileDoc | async)?.goCodes[0] }}</li>
       <li>{{ (profileDoc | async)?.goCodes[1] }}</li>
       <li>{{ (profileDoc | async)?.goCodes[2] }}</li>
+      <li>{{ (profileDoc | async)?.goCodes[3] }}</li>
+      <li>{{ (profileDoc | async)?.goCodes[4] }}</li>
+      <li>{{ (profileDoc | async)?.goCodes[5] }}</li>
+      <li>{{ (profileDoc | async)?.goCodes[6] }}</li>
     </ul>
 
  

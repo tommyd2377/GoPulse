@@ -120,12 +120,15 @@ export class ArticlePage implements OnInit {
         this.sendCount = this.afs.collection("articles").doc(this.titleID).collection("sends").valueChanges();
 
         this.commentCount = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges();
+
+        this.comments = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges()
+          .subscribe(comments => this.comments = comments)
         
-        this.comments = this.afs.collection("articles").doc(this.titleID).collection("comments").snapshotChanges()
-            .pipe(map(actions => actions.map(a => {
-                this.comments = a.payload.doc;
-              }))
-            );
+        // this.comments = this.afs.collection("articles").doc(this.titleID).collection("comments").snapshotChanges()
+        //     .pipe(map(actions => actions.map(a => {
+        //         this.comments = a.payload.doc;
+        //       }))
+        //     );
       }
     })
     console.log("userhasread " + this.userHasRead);

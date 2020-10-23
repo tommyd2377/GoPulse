@@ -45,7 +45,7 @@
         <h1>{{ article.title }}</h1>
         <br>
         <h2>{{ article.source.name }}</h2> 
-        <p>{{ article.publishedAt }}</p>
+        <p>{{ article.publishedAt | date:'fullDate' }}</p>
         <br>
       </ion-label>
     

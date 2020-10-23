@@ -16,7 +16,7 @@ export class PulsePage implements OnInit {
   topicsUrl: string = environment.newsApi.topicsUrl;
   tokenUrl: string = environment.newsApi.tokenURL;
   apiKey: string = environment.newsApi.key;
-  category: string = "business";
+  category: string = "technology";
 
   constructor(private router: Router,
               public globalProps: GlobalParamsService) { }

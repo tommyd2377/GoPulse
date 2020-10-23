@@ -133,7 +133,7 @@ export class SignUpPage {
 
   goCodes() {
     let goCodes = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 7; i++) {
       let goCode: string = "";
       let characters: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       let charactersLength: number = characters.length;

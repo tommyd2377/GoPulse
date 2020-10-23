@@ -13,7 +13,7 @@
 
     <h1>{{ title }}</h1>
 
-    <p>{{ publishDate }}</p>
+    <p>{{ publishDate | date:'fullDate' }}</p>
 
     <br>
 
@@ -71,11 +71,11 @@
       <ion-item>
         
         <ion-avatar slot="start">
-          <img src="{{ comment.data().photoUrl }}">
+          <img src="{{ comment.photoUrl }}">
         </ion-avatar>
         
         <ion-label (click)="openUser($event, comment)">
-          {{ comment.data().displayName }} left a comment
+          {{ comment.displayName }} left a comment
         </ion-label>
 
       </ion-item>

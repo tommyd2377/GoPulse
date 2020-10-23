@@ -34,7 +34,7 @@ export class FollowersPage implements OnInit {
   }
   
   openUser($event, follower) {
-    this.router.navigateByUrl("tabs/" + this.globalProps.currentTab + "/user/" + follower.followeeUid);
+    this.router.navigateByUrl("tabs/" + this.globalProps.currentTab + "/user/" + follower.followerUid);
   }
 
 }

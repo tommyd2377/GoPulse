@@ -45,7 +45,7 @@
           <h2 *ngIf="active.recievedIsTrue">{{ active.senderDisplayName }} sent you an article </h2>
           <h2 *ngIf="active.sentIsTrue">You sent {{ active.sendeeDisplayName }} an article </h2>
           <h2 *ngIf="active.commentIsTrue">You commented on an article</h2>
-          <h2 *ngIf="active.flaggedIsTrue">You flagged an article as biased</h2>
+          <h2 *ngIf="active.flaggedIsTrue">You flagged an article as clickbait</h2>
         </ion-label>
   
       </ion-item>
@@ -56,7 +56,7 @@
           <h1>{{ active.title }}</h1>
           <br>
           <h2>{{ active.publisher }}</h2> 
-          <p>{{ active.date }}</p>
+          <p>{{ active.publishDate | date:'fullDate' }}</p>
           <br>
         </ion-label>
       
