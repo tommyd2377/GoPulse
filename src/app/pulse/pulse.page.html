@@ -10,48 +10,48 @@
   
   <div class="center-desktop">
     
-    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="World">
-      <ion-segment-button value="World">
+    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="WORLD">
+      <ion-segment-button value="WORLD">
         World
       </ion-segment-button>
-      <ion-segment-button value="US">
+      <ion-segment-button value="NATION">
         US
       </ion-segment-button>
-      <ion-segment-button value="Business">
+      <ion-segment-button value="BUSINESS">
         Business
       </ion-segment-button>
-      <ion-segment-button value="Technology">
+      <ion-segment-button value="TECHNOLOGY">
         Tech
       </ion-segment-button>
-      <ion-segment-button value="Entertainment">
+      <ion-segment-button value="ENTERTAINMENT">
         Arts
       </ion-segment-button>
-      <ion-segment-button value="Sports">
+      <ion-segment-button value="SPORTS">
         Sports
       </ion-segment-button>
-      <ion-segment-button value="Science">
+      <ion-segment-button value="SCIENCE">
         Science
       </ion-segment-button>
-      <ion-segment-button value="Health">
+      <ion-segment-button value="HEALTH">
         Health
       </ion-segment-button>
     </ion-segment>
 
-    <div *ngFor="let article of articles">
+    <ion-list *ngFor="let article of articles">
   
       <ion-item detail="false">
 
       <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
         <h1>{{ article.title }}</h1>
         <br>
-        <h2>{{ article.source.name }}</h2> 
-        <p>{{ article.publishedAt | date:'fullDate' }}</p>
+        <h2>{{ article.source[0]._ }}</h2> 
+        <p>{{ article.pubDate | date:'fullDate' }}</p>
         <br>
       </ion-label>
     
       </ion-item>
 
-  </div>
+  </ion-list>
  
   </div>
 

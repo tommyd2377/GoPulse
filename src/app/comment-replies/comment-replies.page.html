@@ -3,7 +3,7 @@
     <ion-buttons slot="end">
       <ion-button (click)="dismissModal()">Close</ion-button>
     </ion-buttons>
-    <ion-title>Comment Replies</ion-title>
+    <ion-title color="primary">Reply to {{ comment.displayName }}'s comment</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -12,36 +12,46 @@
   <div class="center-desktop">
 
     <ion-item>
-      <ion-textarea [(ngModel)]="comment" type="text" placeholder="Say something smart..."></ion-textarea>
+    
+      <ion-avatar slot="start">
+        <img src="{{ comment.photoUrl }}">
+      </ion-avatar>
+
+    <p>"{{ comment.comment }}"</p>
+
+    </ion-item>
+
+    <ion-item>
+      <ion-textarea [(ngModel)]="commentReply" type="text" placeholder="Say something smart..."></ion-textarea>
       <ion-button (click)="newComment()" fill="clear">
         <ion-icon name="send"></ion-icon>
       </ion-button>
     </ion-item>
 
-    <div *ngFor="let comment of comments">
+    <div *ngFor="let reply of commentReplies">
 
        <ion-item>
         
         <ion-avatar slot="start">
-          <img src="{{ comment.photoUrl }}">
+          <img src="{{ reply.photoUrl }}">
         </ion-avatar>
         
         <ion-label (click)="openUser($event, comment)">
-          {{ comment.displayName }} left a comment
+          {{ reply.displayName }} left a comment
         </ion-label>
 
       </ion-item>
 
       <ion-item>
         <p>
-          "{{ comment.comment }}"
+          "{{ reply.reply }}"
         </p>
       </ion-item>
 
-      <ion-button (click)="likeComment($event, comment)" fill="clear">
+      <!-- <ion-button (click)="likeComment($event, comment)" fill="clear">
         <ion-icon name="thumbs-up-sharp"></ion-icon>
           0
-      </ion-button>
+      </ion-button> -->
 
     </div>
 

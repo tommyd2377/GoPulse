@@ -8,6 +8,7 @@ import { ArticlePageRoutingModule } from './article-routing.module';
 
 import { ArticlePage } from './article.page';
 import { SendToPageModule } from '../send-to/send-to.module';
+import { CommentRepliesPageModule } from '../comment-replies/comment-replies.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { SendToPageModule } from '../send-to/send-to.module';
     FormsModule,
     IonicModule,
     ArticlePageRoutingModule,
-    SendToPageModule
+    SendToPageModule,
+    CommentRepliesPageModule
   ],
   declarations: [ArticlePage]
 })

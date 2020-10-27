@@ -66,7 +66,7 @@
     
     <br>
 
-    <div *ngFor="let comment of comments">
+    <ion-list *ngFor="let comment of comments">
 
       <ion-item>
         
@@ -86,19 +86,19 @@
         </p>
       </ion-item>
 
-      <ion-button (click)="likeComment($event, comment)" fill="clear">
+      <!-- <ion-button (click)="likeComment($event, comment)" fill="clear">
         <ion-icon name="thumbs-up-sharp"></ion-icon>
-          0
-      </ion-button>
+        {{ (commentLikeCount | async)?.length }}
+      </ion-button> -->
 
       <ion-button (click)="openReplies($event, comment)" fill="clear">
         <ion-icon name="chatbubbles-sharp"></ion-icon>
-          0
+        {{ (commentReplyCount | async)?.length }}
       </ion-button>
 
       <br>
       <br>
 
-    </div>
+    </ion-list>
 
   </div>

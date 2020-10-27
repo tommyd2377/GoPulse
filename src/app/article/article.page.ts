@@ -9,7 +9,6 @@ import { AngularFireAnalytics } from '@angular/fire/analytics';
 import { GlobalParamsService } from '../global-params.service';
 import { SendToPage } from '../send-to/send-to.page';
 import { CommentRepliesPage } from '../comment-replies/comment-replies.page';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-article',
@@ -46,6 +45,10 @@ export class ArticlePage implements OnInit {
   flagCount: any;
   sendCount: any;
   commentCount: any;
+  commentLikeCount: any;
+  commentLikeCounts: any;
+  commentReplyCounts: any;
+  commentReplyCount: any;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -121,18 +124,25 @@ export class ArticlePage implements OnInit {
 
         this.commentCount = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges();
 
-        this.comments = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges()
+        this.comments = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges({idField: 'customIdName'})
           .subscribe(comments => this.comments = comments)
+
+          this.commentLikeCounts = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges({idField: 'customIdName'})
+              .subscribe(comments => {
+                for (let comment of comments) { 
+                  this.commentLikeCount = this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.customIdName).collection("commentLikes");
+                  }
+            });
+
+            this.commentReplyCounts = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges({idField: 'customIdName'})
+              .subscribe(comments => {
+                for (let comment of comments) { 
+                  this.commentReplyCount = this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.customIdName).collection("commentReplies");
+                  }
+            });
         
-        // this.comments = this.afs.collection("articles").doc(this.titleID).collection("comments").snapshotChanges()
-        //     .pipe(map(actions => actions.map(a => {
-        //         this.comments = a.payload.doc;
-        //       }))
-        //     );
       }
     })
-    console.log("userhasread " + this.userHasRead);
-    console.log("comments " + this.comments);
   }
 
   async presentToast(message) {
@@ -162,11 +172,11 @@ export class ArticlePage implements OnInit {
     }
   }
 
-  async openReplies($event, comment) {
+  async openReplies($event, comments) {
       const modal = await this.modalController.create({
         component: CommentRepliesPage,
         componentProps: {
-          comment: comment
+          comment: comments
         }
       });
       return await modal.present();
@@ -251,38 +261,7 @@ export class ArticlePage implements OnInit {
   }
 
   unShare() {
-    if (this.userHasShared) {
-      const unShareRef1 = this.afs.collection("users").doc(this.uid).collection("shares", ref => 
-        ref.where('titleID', "==", this.titleID)).valueChanges();
-      console.log(unShareRef1.subscribe(data => console.log(data.values())))
-
-    }
-      
-      // const unShareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity", ref => 
-      //   ref.where('uid', '==', this.uid)
-      //      .where('titleID', "==", this.titleID));
-      // unShareRef2.doc().delete().then(() => console.log("unshared"));
-
-      // const unShareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity", ref => 
-      //   ref.where('uid', '==', this.uid)
-      //      .where('titleID', "==", this.titleID));
-      // unShareRef5.doc().delete().then(() => console.log("unshared"));
-      
-      // const unShareRef3 = this.afs.collection("articles").doc(this.titleID).collection("shares", ref => 
-      //   ref.where('uid', '==', this.uid)
-      //      .where('titleID', "==", this.titleID));
-      // unShareRef3.doc().delete().then(() => console.log("unshared"));
-
-      // this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
-      // this.followers.subscribe(results => {
-      //   for (let result of results) { 
-      //     const unShareRef4 = this.afs.collection("articles").doc(result.followerUid).collection("followingActivity", ref => 
-      //       ref.where('uid', '==', this.uid)
-      //         .where('titleID', "==", this.titleID));
-      //     unShareRef4.doc().delete().then(() => console.log("unshared"));
-      //   }
-      // })
-      // this.userHasShared = false;
+    
   }
 
   flag() {
@@ -336,47 +315,13 @@ export class ArticlePage implements OnInit {
   }
 
   unFlag() {
-    if (this.userHasFlagged) {
-
-      const unFlagRef1 = this.afs.collection("users").doc(this.uid).collection("flags", ref => 
-        ref.where('uid', '==', this.uid)
-           .where('titleID', "==", this.titleID));
-      unFlagRef1.doc().delete().then(() => console.log("unflagged"));
-      
-      const unFlagRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity", ref => 
-        ref.where('uid', '==', this.uid)
-           .where('titleID', "==", this.titleID));
-      unFlagRef2.doc().delete().then(() => console.log("unflagged"));
-
-      const unFlagRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity", ref => 
-        ref.where('uid', '==', this.uid)
-          .where('titleID', "==", this.titleID));
-      unFlagRef5.doc().delete().then(() => console.log("unflagged"));
-      
-      const unFlagRef3 = this.afs.collection("articles").doc(this.titleID).collection("flags", ref => 
-        ref.where('uid', '==', this.uid)
-           .where('titleID', "==", this.titleID));
-      unFlagRef3.doc().delete().then(() => console.log("unflagged"));
-
-      this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
-      this.followers.subscribe(results => {
-        for (let result of results) { 
-          const unFlagRef4 = this.afs.collection("articles").doc(result.followerUid).collection("followingActivity", ref => 
-            ref.where('uid', '==', this.uid)
-               .where('titleID', "==", this.titleID));
-          unFlagRef4.doc().delete().then(() => console.log("unflagged"));
-        }
-      })
-      this.userHasFlagged = false;
-    }
+   
   }
 
   newComment() {
     if (this.userHasRead) {
       this.date = new Date();
       this.currentTime = this.date.getTime();
-
-      const id = this.afs.createId();
 
       const shareRef1 = this.afs.collection("users").doc(this.uid).collection("comments");
         shareRef1.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment),
@@ -425,73 +370,42 @@ export class ArticlePage implements OnInit {
   }
 
   deleteComment() {
-    if (this.userHasFlagged) {
-
-      const unFlagRef1 = this.afs.collection("users").doc(this.uid).collection("comments", ref => 
-        ref.where('uid', '==', this.uid)
-           .where('titleID', "==", this.titleID));
-      unFlagRef1.doc().delete().then(() => console.log("comment deleted"));
-      
-      const unFlagRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity", ref => 
-        ref.where('uid', '==', this.uid)
-           .where('titleID', "==", this.titleID));
-      unFlagRef2.doc().delete().then(() => console.log("comment deleted"));
-
-      const unFlagRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity", ref => 
-        ref.where('uid', '==', this.uid)
-           .where('titleID', "==", this.titleID));
-      unFlagRef5.doc().delete().then(() => console.log("comment deleted"));
-      
-      const unFlagRef3 = this.afs.collection("articles").doc(this.titleID).collection("comments", ref => 
-        ref.where('uid', '==', this.uid)
-           .where('titleID', "==", this.titleID));
-      unFlagRef3.doc().delete().then(() => console.log("comment deleted"));
-
-      this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
-      this.followers.subscribe(results => {
-        for (let result of results) { 
-          const unFlagRef4 = this.afs.collection("articles").doc(result.followerUid).collection("followingActivity", ref => 
-            ref.where('uid', '==', this.uid)
-               .where('titleID', "==", this.titleID));
-          unFlagRef4.doc().delete().then(() => console.log("comment deleted"));
-        }
-      })
-    }
+    
   }
 
   likeComment($event, comment) {
-    console.log("commentLike event & comment data: " + $event, comment);
 
     if (!this.userHasRead) {
       this.presentToast("Articles must be read before comments can be liked");
     }
     
     else {
+      console.log("commentLike event & comment data: " + $event, comment);
       this.date = new Date();
       this.currentTime = this.date.getTime();
 
-      const shareRef1 = this.afs.collection("users").doc(this.uid).collection("comments").doc(comment.id).collection("commentLikes");
-        shareRef1.add({ uid: (this.uid), photoUrl: (this.photoUrl), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), commentIsTrue: (true) })
+      const shareRef1 = this.afs.collection("users").doc(this.uid).collection("likedComments");
+        shareRef1.add({ uid: (this.uid), photoUrl: (this.photoUrl), publishDate: (this.publishDate), publisher: (this.publisher), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
+          title: (this.title), titleID: (this.titleID), docID: (comment.customIdName), likedCommentIsTrue: (true) })
           .then(()=> console.log("Like Comment"))
           .catch((err)=> console.log(" LikeComment Error: " + err));
 
-      const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity").doc(comment.id).collection("commentLikes");
-        shareRef2.add({ uid: (this.uid), photoUrl: (this.photoUrl), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), commentIsTrue: (true) })
+      const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
+        shareRef2.add({ uid: (this.uid), photoUrl: (this.photoUrl), publishDate: (this.publishDate), publisher: (this.publisher), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
+          title: (this.title), titleID: (this.titleID), likedCommentIsTrue: (true) })
           .then(()=> console.log("Like Comment"))
           .catch((err)=> console.log(" LikeComment Error: " + err));
 
-      const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity").doc(comment.id).collection("commentLikes");
-        shareRef5.add({ uid: (this.uid), photoUrl: (this.photoUrl), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), commentIsTrue: (true) })
+      const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
+        shareRef5.add({ uid: (this.uid), photoUrl: (this.photoUrl), publishDate: (this.publishDate), publisher: (this.publisher), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
+          title: (this.title), titleID: (this.titleID), likedCommentIsTrue: (true) })
           .then(()=> console.log("Like Comment"))
           .catch((err)=> console.log(" LikeComment Error: " + err));
 
-      const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.id).collection("commentLikes");
+      const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.customIdName).collection("commentLikes");
                                                               
-        shareRef3.add({ uid: (this.uid), photoUrl: (this.photoUrl), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), commentIsTrue: (true) })
+        shareRef3.add({ uid: (this.uid), photoUrl: (this.photoUrl), publishDate: (this.publishDate), publisher: (this.publisher), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
+          title: (this.title), titleID: (this.titleID), likedCommentIsTrue: (true) })
           .then(()=> console.log("Like Comment"))
           .catch((err)=> console.log(" LikeComment Error: " + err));
 
@@ -499,8 +413,8 @@ export class ArticlePage implements OnInit {
       this.followers.subscribe(results => {
         for (let result of results) { 
           const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          shareRef4.add({ uid: (this.uid), photoUrl: (this.photoUrl), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
-            title: (this.title), titleID: (this.titleID), commentIsTrue: (true) })
+          shareRef4.add({ uid: (this.uid), photoUrl: (this.photoUrl), publishDate: (this.publishDate), publisher: (this.publisher), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
+            title: (this.title), titleID: (this.titleID), likedCommentIsTrue: (true) })
             .then(()=> console.log("Like Comment"))
           .catch((err)=> console.log(" LikeComment Error: " + err));
         }
@@ -510,121 +424,7 @@ export class ArticlePage implements OnInit {
   }
 
   unlikeComment($event, comment) {
-    if (this.userHasFlagged) {
 
-      const unFlagRef1 = this.afs.collection("users").doc(this.uid).collection("flags", ref => 
-        ref.where('uid', '==', this.uid)
-           .where('titleId', "==", this.titleID));
-      unFlagRef1.doc().delete().then(() => console.log("unLiked"));
-      
-      const unFlagRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity", ref => 
-        ref.where('uid', '==', this.uid)
-           .where('titleId', "==", this.titleID));
-      unFlagRef2.doc().delete().then(() => console.log("unLiked"));
-
-      const unFlagRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity", ref => 
-        ref.where('uid', '==', this.uid)
-          .where('titleId', "==", this.titleID));
-      unFlagRef5.doc().delete().then(() => console.log("unLiked"));
-      
-      const unFlagRef3 = this.afs.collection("articles").doc(this.titleID).collection("flags", ref => 
-        ref.where('uid', '==', this.uid)
-           .where('titleId', "==", this.titleID));
-      unFlagRef3.doc().delete().then(() => console.log("unLiked"));
-
-      this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
-      this.followers.subscribe(results => {
-        for (let result of results) { 
-          const unFlagRef4 = this.afs.collection("articles").doc(result.followerUid).collection("followingActivity", ref => 
-            ref.where('uid', '==', this.uid)
-              .where('titleId', "==", this.titleID));
-          unFlagRef4.doc().delete().then(() => console.log("unLiked"));
-        }
-      })
-    }
-
-  }
-
-  commentReply() {
-    if (!this.userHasRead) {
-      this.presentToast("Articles must be read before they can be commented on");
-    }
-    
-    else {
-      this.date = new Date();
-      this.currentTime = this.date.getTime();
-
-      const shareRef1 = this.afs.collection("users").doc(this.uid).collection("comments");
-        shareRef1.add({ uid: (this.uid), photoUrl: (this.photoUrl), comment: (this.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), commentIsTrue: (true) })
-          .then(()=> console.log("Comment Reply Added"))
-          .catch((err)=> console.log("Comment Reply Error: " + err));
-
-      const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
-        shareRef2.add({ uid: (this.uid), photoUrl: (this.photoUrl), comment: (this.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), commentIsTrue: (true) })
-          .then(()=> console.log("Comment Reply Added"))
-          .catch((err)=> console.log("Comment Reply Error: " + err));
-
-      const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
-        shareRef5.add({ uid: (this.uid), photoUrl: (this.photoUrl), comment: (this.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), commentIsTrue: (true) })
-          .then(()=> console.log("Comment Reply Added"))
-          .catch((err)=> console.log("Comment Reply Error: " + err));
-
-      const shareRef3 = this.afs.collection("articles").doc(this.title).collection("comments");
-        shareRef3.add({ uid: (this.uid), photoUrl: (this.photoUrl), comment: (this.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), commentIsTrue: (true) })
-          .then(()=> console.log("Comment Reply Added"))
-          .catch((err)=> console.log("Comment Reply Error: " + err));
-
-      this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
-      this.followers.subscribe(results => {
-        for (let result of results) { 
-          const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          shareRef4.add({ uid: (this.uid), photoUrl: (this.photoUrl), comment: (this.comment), createdAt: (this.currentTime), 
-            title: (this.title), titleID: (this.titleID), commentIsTrue: (true) })
-            .then(()=> console.log("Comment Reply Added"))
-            .catch((err)=> console.log("Comment Reply Error: " + err));
-        }
-      })
-      this.presentToast("Comment posted");
-    }
-  }
-
-  deleteCommentReply() {
-    if (this.userHasFlagged) {
-
-      const unFlagRef1 = this.afs.collection("users").doc(this.uid).collection("flags", ref => 
-        ref.where('uid', '==', this.uid)
-           .where('titleId', "==", this.titleID));
-      unFlagRef1.doc().delete().then(() => console.log("reply deleted"));
-      
-      const unFlagRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity", ref => 
-        ref.where('uid', '==', this.uid)
-           .where('titleId', "==", this.titleID));
-      unFlagRef2.doc().delete().then(() => console.log("reply deleted"));
-
-      const unFlagRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity", ref => 
-        ref.where('uid', '==', this.uid)
-           .where('titleId', "==", this.titleID));
-      unFlagRef5.doc().delete().then(() => console.log("reply deleted"));
-      
-      const unFlagRef3 = this.afs.collection("articles").doc(this.titleID).collection("flags", ref => 
-        ref.where('uid', '==', this.uid)
-           .where('titleId', "==", this.titleID));
-      unFlagRef3.doc().delete().then(() => console.log("reply deleted"));
-
-      this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
-      this.followers.subscribe(results => {
-        for (let result of results) { 
-          const unFlagRef4 = this.afs.collection("articles").doc(result.followerUid).collection("followingActivity", ref => 
-            ref.where('uid', '==', this.uid)
-              .where('titleId', "==", this.titleID));
-          unFlagRef4.doc().delete().then(() => console.log("reply deleted"));
-        }
-      })
-    }
   }
 
 }
