@@ -29,6 +29,8 @@
   
     </ion-item>
 
+    <p>Founder and CEO of GoPulse</p>
+
     <br>
     <br>
 
@@ -41,15 +43,19 @@
         </ion-avatar>
         
         <ion-label class="ion-text-wrap" (click)="openUser($event, active)">
-          <h2 *ngIf="active.sharedIsTrue">You shared an article </h2>
-          <h2 *ngIf="active.recievedIsTrue">{{ active.senderDisplayName }} sent you an article </h2>
-          <h2 *ngIf="active.sentIsTrue">You sent {{ active.sendeeDisplayName }} an article </h2>
-          <h2 *ngIf="active.commentIsTrue">You commented on an article</h2>
-          <h2 *ngIf="active.flaggedIsTrue">You flagged an article as clickbait</h2>
+          <h2 *ngIf="active.sharedIsTrue">You liked this article </h2>
+          <h2 *ngIf="active.recievedIsTrue">{{ active.senderDisplayName }} sent you this article </h2>
+          <h2 *ngIf="active.sentIsTrue">You sent {{ active.sendeeDisplayName }} this article </h2>
+          <h2 *ngIf="active.commentIsTrue">You commented on this article</h2>
+          <h2 *ngIf="active.flaggedIsTrue">You marked this article as narrative driven journalism</h2>
           <h2 *ngIf="active.likedCommentIsTrue">You liked this comment</h2>
         </ion-label>
   
       </ion-item>
+
+      <p padding *ngIf="active.commentIsTrue">
+        "{{ active.comment }}"
+      </p>
   
       <ion-item detail="false">
 
@@ -64,12 +70,6 @@
       </ion-item>
 
       <ion-item *ngIf="active.likedCommentIsTrue">
-        <p>
-          "{{ active.comment }}"
-        </p>
-      </ion-item>
-
-      <ion-item *ngIf="active.commentIsTrue">
         <p>
           "{{ active.comment }}"
         </p>

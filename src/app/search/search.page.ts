@@ -34,7 +34,7 @@ export class SearchPage implements OnInit  {
               public globalProps: GlobalParamsService) { }
               
   ngOnInit() {
-    fetch(this.topNewsUrl + this.tokenUrl + this.apiKey)
+    fetch('https://gnews.io/api/v4/top-headlines?&country=us&token=' + this.apiKey)
       .then((response) => {
           return response.json();
       })
@@ -64,7 +64,7 @@ export class SearchPage implements OnInit  {
 
   searchNews($event) {
     let q = $event.target.value;
-    fetch(this.searchUrl + q + this.tokenUrl + this.apiKey)
+    fetch("https://gnews.io/api/v4/search?q=" + q + "&token=" + this.apiKey)
       .then((response) => {
           return response.json();
       })
@@ -85,6 +85,8 @@ export class SearchPage implements OnInit  {
   openArticle($event, article) {
     this.globalProps.title = article.title;
     this.globalProps.articleUrl = article.url;
+    this.globalProps.image = article.image;
+    this.globalProps.content = article.content;
     this.globalProps.publishDate = article.publishedAt;
     this.globalProps.publisher = article.source.name;
     this.globalProps.titleID = article.title.replace(/[^A-Z0-9]+/ig, "-");

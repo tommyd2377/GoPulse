@@ -2,7 +2,6 @@ import { Component, OnInit  } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { GlobalParamsService } from '../global-params.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 declare var require: any
 
@@ -16,74 +15,47 @@ export class PulsePage implements OnInit {
 
   articles: string[];
 
+  topicsUrl: string = environment.newsApi.topicsUrl;
+  tokenUrl: string = environment.newsApi.tokenURL;
+  apiKey: string = environment.newsApi.key;
+  category: string = "world";
+
   constructor(private router: Router,
-              public http: HttpClient,
               public globalProps: GlobalParamsService) { }
 
   ngOnInit() {
-    this.worldNews();
-  }
-
-  worldNews() {
-    let news = [];
-    const httpOptions : Object = {
-      headers: new HttpHeaders({
-        'Accept': 'text/xml',
-        'Content-Type': 'text/xml',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
-      }),
-      responseType: 'text'
-    };
-
-    this.http.get("https://cors-anywhere.herokuapp.com/https://news.google.com/rss/headlines/section/topic/WORLD?hl=en-US&gl=US&ceid=US:en", httpOptions)
-      .subscribe((response) => {
-        let parseString = require('xml2js').parseString;
-        parseString(response, function (err, result) {
-           let newsItems = result.rss.channel[0].item;
-           console.log(newsItems);
-           for (let i of newsItems) {
-             news.push(i);
-           }
-        })
-      })
-      this.articles = news;
+    fetch('https://gnews.io/api/v4/top-headlines?&country=us&topic=world&token=' + this.apiKey)
+    .then((response) => {
+      return response.json()
+    })
+    .then((data) => {
+      console.log(data);
+      this.articles = data.articles;
+    });
   }
 
   segmentChanged(ev: any) {
     let topic = ev.detail.value;
     console.log('Segment changed', topic);
     let news = [];
-    const httpOptions : Object = {
-      headers: new HttpHeaders({
-        'Accept': 'text/xml',
-        'Content-Type': 'text/xml',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
-      }),
-      responseType: 'text'
-    };
-
-    this.http.get("https://cors-anywhere.herokuapp.com/https://news.google.com/rss/headlines/section/topic/" + topic + "?hl=en-US&gl=US&ceid=US:en", httpOptions)
-      .subscribe((response) => {
-        let parseString = require('xml2js').parseString;
-        parseString(response, function (err, result) {
-           let newsItems = result.rss.channel[0].item;
-           console.log(newsItems);
-           for (let i of newsItems) {
-             news.push(i);
-           }
-        })
-      })
-      this.articles = news;  
+    fetch('https://gnews.io/api/v4/top-headlines?&country=us&topic=' + topic + '&token=' + this.apiKey)
+    .then((response) => {
+      return response.json()
+    })
+    .then((data) => {
+      console.log(data);
+      this.articles = data.articles;
+    });
   }
   
   openArticle($event, article) {
     console.log($event, article);
-    this.globalProps.title = article.title[0];
-    this.globalProps.articleUrl = article.link[0];
-    this.globalProps.publishDate = article.pubDate[0];
-    this.globalProps.publisher = article.source[0]._;
+    this.globalProps.title = article.title;
+    this.globalProps.image = article.image;
+    this.globalProps.content = article.content;
+    this.globalProps.articleUrl = article.url;
+    this.globalProps.publishDate = article.publishedAt;
+    this.globalProps.publisher = article.source.name;
     let newTitle: string = article.title[0];
     this.globalProps.titleID = newTitle.replace(/[^A-Z0-9]+/ig, "-");
     console.log(this.globalProps);

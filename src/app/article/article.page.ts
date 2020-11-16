@@ -30,6 +30,8 @@ export class ArticlePage implements OnInit {
   articleUrl: string;
   comment: string;
   titleID: string;
+  image: string;
+  content: string;
   reads;
   shares;
   flags;
@@ -63,6 +65,8 @@ export class ArticlePage implements OnInit {
                 this.title = this.globalProps.title;
                 this.articleUrl = this.globalProps.articleUrl;
                 this.publishDate = this.globalProps.publishDate;
+                this.image = this.globalProps.image;
+                this.content = this.globalProps.content;
                 this.publisher = this.globalProps.publisher;
                 this.titleID = this.globalProps.titleID;
               }

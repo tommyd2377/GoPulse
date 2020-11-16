@@ -30,6 +30,7 @@
       <ion-item *ngIf="searchingNews" detail="false">
 
         <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
+          <img src="{{ article.image }}" alt="">
           <h1>{{ article.title }}</h1>
           <br>
           <h2>{{ article.source.name }}</h2> 

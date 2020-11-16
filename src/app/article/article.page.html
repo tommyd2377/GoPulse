@@ -11,9 +11,13 @@
   
   <div class="center-desktop">
 
+    <img src="{{ image }}" alt="">
+
     <h1>{{ title }}</h1>
 
     <p>{{ publishDate | date:'fullDate' }}</p>
+
+    <p>{{ content }}</p>
 
     <br>
 
@@ -25,22 +29,22 @@
       </ion-button>
 
       <ion-button *ngIf="!userHasShared" (click)="share()" fill="clear" icon-start>
-        <ion-icon name="arrow-redo-sharp"></ion-icon>
+        <ion-icon name="thumbs-up-sharp"></ion-icon>
         {{ (shareCount | async)?.length }}
       </ion-button>
 
       <ion-button *ngIf="userHasShared" (click)="unShare()" fill="clear" icon-start>
-        <ion-icon name="arrow-redo-sharp"></ion-icon>
+        <ion-icon name="thumbs-up-sharp"></ion-icon>
         {{ (shareCount | async)?.length }}
       </ion-button>
 
       <ion-button *ngIf="!userHasFlagged" (click)="flag()" fill="clear" icon-start>
-        <ion-icon name="flag"></ion-icon>
+        <ion-icon name="warning"></ion-icon>
         {{ (flagCount | async)?.length }}
       </ion-button>
 
       <ion-button *ngIf="userHasFlagged" (click)="unFlag()" fill="clear" icon-start>
-        <ion-icon name="flag"></ion-icon>
+        <ion-icon name="warning"></ion-icon>
         {{ (flagCount | async)?.length }}
       </ion-button>
 
@@ -75,21 +79,21 @@
         </ion-avatar>
         
         <ion-label (click)="openUser($event, comment)">
-          {{ comment.displayName }} left a comment
+          {{ comment.displayName }}
         </ion-label>
 
       </ion-item>
 
-      <ion-item>
+      <ion-item lines="none">
         <p>
           "{{ comment.comment }}"
         </p>
       </ion-item>
 
-      <!-- <ion-button (click)="likeComment($event, comment)" fill="clear">
+      <ion-button (click)="likeComment($event, comment)" fill="clear">
         <ion-icon name="thumbs-up-sharp"></ion-icon>
         {{ (commentLikeCount | async)?.length }}
-      </ion-button> -->
+      </ion-button>
 
       <ion-button (click)="openReplies($event, comment)" fill="clear">
         <ion-icon name="chatbubbles-sharp"></ion-icon>

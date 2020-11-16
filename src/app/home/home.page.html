@@ -8,7 +8,7 @@
 
   <div class="center-desktop">
 
-    <div *ngFor="let active of followingActivity">
+    <ion-list *ngFor="let active of followingActivity">
 
     <ion-item detail="false">
       <ion-avatar slot="start" (click)="openUser($event, active)">
@@ -41,25 +41,46 @@
             "{{ active.comment }}"
           </p>
         </ion-item>
-    </div>
+    </ion-list>
     <br>
 
-    <h5>Thank you for subscribing.</h5>
+    <h5>Thanks for subscribing.</h5>
 
     <p>
-      Below are your new GoCodes. Use these to invite the seven smartest people 
+      Below are your GoCodes. Use these to invite the seven smartest people 
       you know to join you here. It's important to bring new subscribers
       onto the platform that are intelligent and open to new perspectives.
     </p>
 
     <ul>
-      <li>{{ (profileDoc | async)?.goCodes[0] }}</li>
-      <li>{{ (profileDoc | async)?.goCodes[1] }}</li>
-      <li>{{ (profileDoc | async)?.goCodes[2] }}</li>
-      <li>{{ (profileDoc | async)?.goCodes[3] }}</li>
-      <li>{{ (profileDoc | async)?.goCodes[4] }}</li>
-      <li>{{ (profileDoc | async)?.goCodes[5] }}</li>
-      <li>{{ (profileDoc | async)?.goCodes[6] }}</li>
+      <ion-item (click)="copyCode(code1)" icon-start>
+        <ion-icon name="copy-outline"></ion-icon>
+        {{ (profileDoc | async)?.goCodes[0] }}
+      </ion-item>
+      <ion-item (click)="copyCode(code2)" icon-start>
+        <ion-icon name="copy-outline"></ion-icon>
+        {{ (profileDoc | async)?.goCodes[1] }}
+      </ion-item>
+      <ion-item (click)="copyCode(code3)" icon-start> 
+        <ion-icon name="copy-outline"></ion-icon>
+        {{ (profileDoc | async)?.goCodes[2] }}
+      </ion-item>
+      <ion-item (click)="copyCode(code4)" icon-start>
+        <ion-icon name="copy-outline"></ion-icon>
+        {{ (profileDoc | async)?.goCodes[3] }}
+      </ion-item>
+      <ion-item (click)="copyCode(code5)" icon-start>
+        <ion-icon name="copy-outline"></ion-icon>
+        {{ (profileDoc | async)?.goCodes[4] }}
+      </ion-item>
+      <ion-item (click)="copyCode(code6)" icon-start>
+        <ion-icon name="copy-outline"></ion-icon>
+        {{ (profileDoc | async)?.goCodes[5] }}
+      </ion-item>
+      <ion-item (click)="copyCode(code7)" icon-start>
+        <ion-icon name="copy-outline"></ion-icon>
+        {{ (profileDoc | async)?.goCodes[6] }}
+      </ion-item>
     </ul>
 
  
