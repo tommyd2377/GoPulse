@@ -11,13 +11,11 @@
   
   <div class="center-desktop">
 
-    <img src="{{ image }}" alt="">
+    <img no-padding src="{{ image }}" alt="">
 
     <h1>{{ title }}</h1>
 
     <p>{{ publishDate | date:'fullDate' }}</p>
-
-    <p>{{ content }}</p>
 
     <br>
 
@@ -55,6 +53,8 @@
 
     </div>
 
+    <p>{{ content }}</p>
+
     <br>
 
     <h3>Comments {{ (commentCount | async)?.length }}</h3>
@@ -62,7 +62,7 @@
     <br>
 
     <ion-item>
-      <ion-textarea [(ngModel)]="comment" type="text" placeholder="Say something smart..."></ion-textarea>
+      <ion-textarea clearOnEdit="true" [(ngModel)]="comment" type="text" placeholder="Say something smart..."></ion-textarea>
       <ion-button (click)="newComment()" fill="clear">
         <ion-icon name="send"></ion-icon>
       </ion-button>

@@ -56,7 +56,7 @@ export class PulsePage implements OnInit {
     this.globalProps.articleUrl = article.url;
     this.globalProps.publishDate = article.publishedAt;
     this.globalProps.publisher = article.source.name;
-    let newTitle: string = article.title[0];
+    let newTitle: string = article.title;
     this.globalProps.titleID = newTitle.replace(/[^A-Z0-9]+/ig, "-");
     console.log(this.globalProps);
     this.router.navigateByUrl('tabs/pulse/article/' + this.globalProps.titleID);

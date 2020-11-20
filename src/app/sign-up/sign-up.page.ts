@@ -66,19 +66,24 @@ export class SignUpPage {
     this.goCodesCollection = this.afs.collection("goCodes").doc(this.goCode).ref.get()
       .then((doc) => {
         if (doc.exists) {
-          if (doc.data().goCodeUsed === false) {
-            console.log("Document data:", doc.data());
+          console.log("Document data:", doc.data());
+          console.log(doc.data().hasBeenUsed);
+          if (doc.data().hasBeenUsed === false) {
+            console.log('not used', doc.data().creator)
             this.fireAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
             .then(res => {
               if (res.user) {
                 this.setProfile();
-                let creatorUid = doc.data().uid;
+                let creatorUid: string = doc.data().creator;
                 const creatorRef = this.afs.collection("users").doc(creatorUid).collection("privateActivity");
                   creatorRef.add({ newUserUid: res.user.uid, newUserName: this.fullName, 
-                    newUserDisplayName: res.user.displayName, goCodeUsed: true });
+                    newUserDisplayName: this.displayName, goCodeUsed: true });
+                    const creatorRef2 = this.afs.collection("users").doc(creatorUid).collection("followeeActivity");
+                    creatorRef2.add({ newUserUid: res.user.uid, newUserName: this.fullName, 
+                      newUserDisplayName: this.displayName, goCodeUsed: true });
                 const goCodeRef = this.afs.collection("goCodes").doc(this.goCode);
-                  goCodeRef.update({ goCodeUsed: true, usedBy: res.user.uid });
-                this.presentToast("User Created: " + res.user.displayName);
+                  goCodeRef.update({ hasBeenUsed: true, usedBy: res.user.uid });
+                this.presentToast("User Created: " + this.displayName);
               }
             })
             .catch(err => {
@@ -111,6 +116,12 @@ export class SignUpPage {
           let uid = user.uid;
             console.log(uid);
             this.newGoCodes = this.goCodes();
+            for (let newCode of this.newGoCodes) {
+              const GoRef = this.afs.collection("goCodes");
+              GoRef.add({ goCode: newCode, hasBeenUsed: false, creator: uid})
+                .then(() => console.log('gocode added: ' + newCode))
+                .catch((err) => console.log(err));
+            }
             let userData = this.afs.collection("users").doc(uid);
             userData.set({
               uid: uid,
