@@ -2,7 +2,7 @@
   "name": "GoPulse",
   "short_name": "GoPulse",
   "theme_color": "#1969d1",
-  "background_color": "#1969d1",
+  "background_color": "#262626",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",

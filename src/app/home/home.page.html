@@ -16,10 +16,10 @@
       </ion-avatar>
       
         <ion-label class="ion-text-wrap" button (click)="openUser($event, active)">
-          <h2 *ngIf="active.sharedIsTrue">{{ active.displayName }} shared an article</h2> 
-          <h2 *ngIf="active.sentIsTrue">{{ active.senderDisplayName }} sent you an article</h2> 
-          <h2 *ngIf="active.commentIsTrue">{{ active.displayName }} commented on an article</h2> 
-          <h2 *ngIf="active.flaggedIsTrue">{{ active.displayName }} flagged an article as clickbait</h2> 
+          <h2 *ngIf="active.sharedIsTrue">{{ active.displayName }} liked this article</h2> 
+          <h2 *ngIf="active.sentIsTrue">{{ active.senderDisplayName }} sent you this article</h2> 
+          <h2 *ngIf="active.commentIsTrue">{{ active.displayName }} commented on this article</h2> 
+          <h2 *ngIf="active.flaggedIsTrue">{{ active.displayName }} flagged this article as narrative driven journalism</h2> 
         </ion-label>
 
       </ion-item>

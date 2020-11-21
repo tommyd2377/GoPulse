@@ -74,13 +74,13 @@ export class SignUpPage {
             .then(res => {
               if (res.user) {
                 this.setProfile();
-                let creatorUid: string = doc.data().creator;
-                const creatorRef = this.afs.collection("users").doc(creatorUid).collection("privateActivity");
-                  creatorRef.add({ newUserUid: res.user.uid, newUserName: this.fullName, 
-                    newUserDisplayName: this.displayName, goCodeUsed: true });
-                    const creatorRef2 = this.afs.collection("users").doc(creatorUid).collection("followeeActivity");
-                    creatorRef2.add({ newUserUid: res.user.uid, newUserName: this.fullName, 
-                      newUserDisplayName: this.displayName, goCodeUsed: true });
+                // let creatorUid: string = doc.data().creator;
+                // const creatorRef = this.afs.collection("users").doc(creatorUid).collection("privateActivity");
+                //   creatorRef.add({ newUserUid: res.user.uid, newUserName: this.fullName, 
+                //     newUserDisplayName: this.displayName, goCodeUsed: true });
+                //     const creatorRef2 = this.afs.collection("users").doc(creatorUid).collection("followeeActivity");
+                //     creatorRef2.add({ newUserUid: res.user.uid, newUserName: this.fullName, 
+                //       newUserDisplayName: this.displayName, goCodeUsed: true });
                 const goCodeRef = this.afs.collection("goCodes").doc(this.goCode);
                   goCodeRef.update({ hasBeenUsed: true, usedBy: res.user.uid });
                 this.presentToast("User Created: " + this.displayName);

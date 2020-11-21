@@ -252,14 +252,14 @@ export class ArticlePage implements OnInit {
         }
       })
       this.userHasShared = true;
-      this.presentToast("Article shared!");
+      this.presentToast("Article liked");
     }
 
     else if (!this.userHasRead) {
-      this.presentToast("Articles must be read before they can be shared");
+      this.presentToast("Articles must be read before they can be liked");
     }
     else {
-      this.presentToast("Articles must be read before they can be shared");
+      this.presentToast("Articles must be read before they can be liked");
     }
    
   }
@@ -307,14 +307,14 @@ export class ArticlePage implements OnInit {
           .catch((err)=> console.log("Flagged Error: " + err));
         }
       })
-      this.presentToast("Article flagged as biased");
+      this.presentToast("Article flagged as narrative driven journalism");
       this.userHasFlagged = true;
     }
     else if (!this.userHasRead) {
-      this.presentToast("Articles must be read before they can be flagged as biased");
+      this.presentToast("Articles must be read before they can be flagged as narrative driven journalism");
     }
     else {
-      this.presentToast("Articles must be read before they can be flagged as biased");
+      this.presentToast("Articles must be read before they can be flagged as narrative driven journalism");
     }
   }
 
