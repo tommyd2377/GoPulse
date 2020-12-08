@@ -48,7 +48,7 @@ export class ProfilePage implements OnInit {
         
         this.profileDoc = this.afs.collection("users").doc(this.uid).valueChanges();
    
-        this.userActivity = this.afs.collection("users").doc(this.uid).collection("privateActivity").valueChanges()
+        this.userActivity = this.afs.collection("users").doc(this.uid).collection("privateActivity", ref => ref.orderBy('createdAt', 'desc')).valueChanges()
           .subscribe(activity => this.userActivity = activity);
 
         this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
@@ -63,7 +63,10 @@ export class ProfilePage implements OnInit {
     this.globalProps.articleUrl = active.articleUrl;
     this.globalProps.publishDate = active.publishDate;
     this.globalProps.publisher = active.publisher;
-    this.globalProps.titleID = active.title.replace(/[^A-Z0-9]+/ig, "-");
+    this.globalProps.content = active.content;
+    this.globalProps.image = active.image;
+    this.globalProps.description = active.description;
+    this.globalProps.titleID = active.titleID;
     this.router.navigateByUrl('tabs/profile/article/' + this.globalProps.titleID);
   }
 

@@ -53,6 +53,7 @@ export class PulsePage implements OnInit {
     this.globalProps.title = article.title;
     this.globalProps.image = article.image;
     this.globalProps.content = article.content;
+    this.globalProps.description = article.description;
     this.globalProps.articleUrl = article.url;
     this.globalProps.publishDate = article.publishedAt;
     this.globalProps.publisher = article.source.name;

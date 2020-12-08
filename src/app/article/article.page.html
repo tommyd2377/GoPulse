@@ -37,12 +37,12 @@
       </ion-button>
 
       <ion-button *ngIf="!userHasFlagged" (click)="flag()" fill="clear" icon-start>
-        <ion-icon name="warning"></ion-icon>
+        <ion-icon name="flag"></ion-icon>
         {{ (flagCount | async)?.length }}
       </ion-button>
 
       <ion-button *ngIf="userHasFlagged" (click)="unFlag()" fill="clear" icon-start>
-        <ion-icon name="warning"></ion-icon>
+        <ion-icon name="flag"></ion-icon>
         {{ (flagCount | async)?.length }}
       </ion-button>
 
@@ -53,7 +53,7 @@
 
     </div>
 
-    <p>{{ content }}</p>
+    <p>{{ description }}</p>
 
     <br>
 

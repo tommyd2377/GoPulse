@@ -5,6 +5,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { ToastController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
+import { GlobalParamsService } from '../global-params.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -28,7 +29,8 @@ export class SignUpPage {
               private afs: AngularFirestore,
               public platform: Platform,
               public alertController: AlertController,
-              public toastController: ToastController) { }
+              public toastController: ToastController,
+              public props: GlobalParamsService) { }
 
   async presentAlertConfirm() {
     const alert = await this.alertController.create({
@@ -117,8 +119,8 @@ export class SignUpPage {
             console.log(uid);
             this.newGoCodes = this.goCodes();
             for (let newCode of this.newGoCodes) {
-              const GoRef = this.afs.collection("goCodes");
-              GoRef.add({ goCode: newCode, hasBeenUsed: false, creator: uid})
+              const GoRef = this.afs.collection("goCodes").doc(newCode);
+              GoRef.set({ goCode: newCode, hasBeenUsed: false, creator: uid})
                 .then(() => console.log('gocode added: ' + newCode))
                 .catch((err) => console.log(err));
             }
@@ -137,6 +139,7 @@ export class SignUpPage {
           console.log("email verification sent to: " + user.uid);
         })
         .catch(error => console.log("email verification error: " + error));
+        this.props.initialGoCode = this.newGoCodes[0];
         this.router.navigateByUrl('/tabs');
       }
     }) 

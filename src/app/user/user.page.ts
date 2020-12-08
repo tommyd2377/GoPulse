@@ -81,7 +81,7 @@ export class UserPage implements OnInit {
           console.log("Error getting document:", error);
         });
 
-        this.userActivity = this.afs.collection("users").doc(this.userId).collection("publicActivity").valueChanges()
+        this.userActivity = this.afs.collection("users").doc(this.userId).collection("publicActivity", ref => ref.orderBy('createdAt', 'desc')).valueChanges()
           .subscribe(activity => this.userActivity = activity);
         
         this.followers = this.afs.collection("users").doc(this.userId).collection("followers").valueChanges();
@@ -96,7 +96,10 @@ export class UserPage implements OnInit {
     this.globalProps.articleUrl = active.articleUrl;
     this.globalProps.publishDate = active.publishDate;
     this.globalProps.publisher = active.publisher;
-    this.globalProps.titleID = active.title.replace(/[^A-Z0-9]+/ig, "-");
+    this.globalProps.image = active.image;
+    this.globalProps.description = active.description;
+    this.globalProps.content = active.content;
+    this.globalProps.titleID = active.titleID;
     this.router.navigateByUrl('tabs/' + this.globalProps.currentTab + '/article/' + this.globalProps.titleID);
   }
 

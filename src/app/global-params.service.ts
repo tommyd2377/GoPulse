@@ -13,9 +13,12 @@ export class GlobalParamsService {
   titleID: string;
   image: string;
   content: string;
+  description: string;
   
   currentTab: string = "home";
 
   userId: string;
+
+  initialGoCode: string;
 
 }

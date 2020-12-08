@@ -18,15 +18,22 @@
         <ion-label class="ion-text-wrap" button (click)="openUser($event, active)">
           <h2 *ngIf="active.sharedIsTrue">{{ active.displayName }} liked this article</h2> 
           <h2 *ngIf="active.sentIsTrue">{{ active.senderDisplayName }} sent you this article</h2> 
-          <h2 *ngIf="active.commentIsTrue">{{ active.displayName }} commented on this article</h2> 
-          <h2 *ngIf="active.flaggedIsTrue">{{ active.displayName }} flagged this article as narrative driven journalism</h2> 
+          <h2 *ngIf="active.commentIsTrue">{{ active.displayName }}</h2> 
+          <h2 *ngIf="active.flaggedIsTrue">{{ active.displayName }} labeled this article as narrative driven journalism</h2> 
         </ion-label>
 
+      </ion-item>
+
+      <ion-item *ngIf="active.commentIsTrue">
+        <p>
+          "{{ active.comment }}"
+        </p>
       </ion-item>
 
         <ion-item detail="false">
   
         <ion-label class="ion-text-wrap" (click)="openArticle($event, active)">
+          <img src="{{ active.image }}" alt="">
           <h1>{{ active.title }}</h1>
           <br>
           <h2>{{ active.publisher }}</h2> 
@@ -36,12 +43,8 @@
       
         </ion-item>
 
-        <ion-item *ngIf="active.commentIsTrue">
-          <p>
-            "{{ active.comment }}"
-          </p>
-        </ion-item>
     </ion-list>
+    
     <br>
 
     <h5>Thanks for subscribing.</h5>

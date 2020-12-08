@@ -21,4 +21,9 @@ export class TabsPage {
     this.props.currentTab = this.selectedTab;
   }
 
+  tabButtonClicked(tab) {
+    console.log(tab);
+    return tab;
+  }
+
 }

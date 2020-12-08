@@ -64,7 +64,7 @@ export class SearchPage implements OnInit  {
 
   searchNews($event) {
     let q = $event.target.value;
-    fetch("https://gnews.io/api/v4/search?q=" + q + "&token=" + this.apiKey)
+    fetch("https://gnews.io/api/v4/search?q=" + q + "&country=us&token=" + this.apiKey)
       .then((response) => {
           return response.json();
       })

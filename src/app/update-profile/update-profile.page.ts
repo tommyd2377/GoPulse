@@ -19,6 +19,7 @@ export class UpdateProfilePage {
   newDisplayName: string;
   newEmail: string;
   newFullName: string;
+  bio: string;
   profileDoc;
   photoUrl;
 
@@ -95,6 +96,11 @@ export class UpdateProfilePage {
           fullNameSearch: this.newFullName.toUpperCase() })
             .then(()=> console.log("fullname update doc"))
             .catch((err)=> console.log("fullname update doc error: " + err));
+        }
+        if (this.bio) {
+          userData.update({ bio: this.bio })
+            .then(()=> console.log("bio update doc"))
+            .catch((err)=> console.log("bio update doc error: " + err));
         }
       }
     })

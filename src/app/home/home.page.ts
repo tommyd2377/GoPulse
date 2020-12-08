@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { GlobalParamsService } from '../global-params.service';
+import { TabsPage } from '../tabs/tabs.page'
 
 @Component({
   selector: 'app-home',
@@ -29,7 +30,8 @@ export class HomePage implements OnInit {
               private router: Router,
               public toastController: ToastController,
               private afs: AngularFirestore,
-              public globalProps: GlobalParamsService) {}
+              public globalProps: GlobalParamsService,
+              public tabs: TabsPage) {}
 
   ngOnInit() {
     this.fireAuth.auth.onAuthStateChanged((user) => {
@@ -48,7 +50,7 @@ export class HomePage implements OnInit {
           this.code7 = doc.goCodes[6];
         });
 
-        this.followingActivity = this.afs.collection("users").doc(this.uid).collection("followingActivity").valueChanges()
+        this.followingActivity = this.afs.collection("users").doc(this.uid).collection("followingActivity", ref => ref.orderBy('createdAt', 'desc')).valueChanges()
           .subscribe(activity => this.followingActivity = activity);
       }
     })
@@ -61,7 +63,14 @@ export class HomePage implements OnInit {
     selBox.style.left = '0';
     selBox.style.top = '0';
     selBox.style.opacity = '0';
-    selBox.value = index;
+    if (index === undefined) {
+      console.log(index, this.globalProps.initialGoCode, this.code1)
+      selBox.value = this.globalProps.initialGoCode;
+    }
+    else {
+      console.log('else')
+      selBox.value = index;
+    }
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();

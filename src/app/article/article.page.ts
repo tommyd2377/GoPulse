@@ -32,6 +32,7 @@ export class ArticlePage implements OnInit {
   titleID: string;
   image: string;
   content: string;
+  description: string;
   reads;
   shares;
   flags;
@@ -51,6 +52,15 @@ export class ArticlePage implements OnInit {
   commentLikeCounts: any;
   commentReplyCounts: any;
   commentReplyCount: any;
+  unLikeID: string;
+  unLikeID1: any;
+  shares1: any;
+  shares2: any;
+  shares3: any;
+  unLikeID2: string;
+  unLikeID3: string;
+  unLikeID4: any;
+  followerUnLike: any;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -67,6 +77,7 @@ export class ArticlePage implements OnInit {
                 this.publishDate = this.globalProps.publishDate;
                 this.image = this.globalProps.image;
                 this.content = this.globalProps.content;
+                this.description = this.globalProps.description;
                 this.publisher = this.globalProps.publisher;
                 this.titleID = this.globalProps.titleID;
               }
@@ -96,11 +107,14 @@ export class ArticlePage implements OnInit {
 
         this.shareCount = this.afs.collection("articles").doc(this.titleID).collection("shares").valueChanges();
         
-        this.shares = this.afs.collection("articles").doc(this.titleID).collection("shares").valueChanges()
+        this.shares = this.afs.collection("articles").doc(this.titleID).collection("shares").valueChanges({idField: 'likeID'})
           .subscribe(results => {
             for (let result of results) { 
               if (result.uid === this.uid) {
-                  this.userHasShared = true;
+        
+                this.unLikeID = result.likeID;
+             
+                this.userHasShared = true;
               }
               else {
                 this.userHasShared = false;
@@ -193,14 +207,14 @@ export class ArticlePage implements OnInit {
     this.currentTime = this.date.getTime();
 
     const shareRef1 = this.afs.collection("users").doc(this.uid).collection("reads");
-      shareRef1.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title),
-        titleID: (this.titleID), readIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+      shareRef1.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), description: (this.description), content: (this.content),
+        titleID: (this.titleID), readIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
           .then(()=> console.log("Read"))
           .catch((err)=> console.log("Read Error: " + err));
 
     const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("reads");
-      shareRef3.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title),
-        titleID: (this.titleID), readIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+      shareRef3.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), description: (this.description), content: (this.content),
+        titleID: (this.titleID), readIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
           .then(()=> console.log("Read"))
           .catch((err)=> console.log("Read Error: " + err));
 
@@ -212,32 +226,32 @@ export class ArticlePage implements OnInit {
   }
 
   share() {
-     if (this.userHasRead) {    
+     if (this.userHasRead) {     
 
       this.date = new Date();
       this.currentTime = this.date.getTime();
 
       const shareRef1 = this.afs.collection("users").doc(this.uid).collection("shares");
-        shareRef1.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl),
-           titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+        shareRef1.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
+           titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
               .then(()=> console.log("Shared"))
               .catch((err)=> console.log("Shared Error: " + err));
 
       const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
-        shareRef2.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl),
-          titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+        shareRef2.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
+          titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
         .then(()=> console.log("Shared"))
           .catch((err)=> console.log("Shared Error: " + err));
 
       const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
-        shareRef5.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl),
-          titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+        shareRef5.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
+          titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
         .then(()=> console.log("Shared"))
           .catch((err)=> console.log("Shared Error: " + err));
 
       const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("shares");
-        shareRef3.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl),
-          titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+        shareRef3.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
+          titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
         .then(()=> console.log("Shared"))
           .catch((err)=> console.log("Shared Error: " + err));
 
@@ -245,8 +259,8 @@ export class ArticlePage implements OnInit {
       this.followers.subscribe(results => {
         for (let result of results) { 
           const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          shareRef4.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl),
-            titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+          shareRef4.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
+            titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
           .then(()=> console.log("Shared to follower: " + result.followerUid))
           .catch((err)=> console.log("Shared Error: " + err));
         }
@@ -265,7 +279,59 @@ export class ArticlePage implements OnInit {
   }
 
   unShare() {
-    
+    const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("shares").doc(this.unLikeID);
+    shareRef3.delete().then(() => console.log("unliked"));
+
+    this.shares1 = this.afs.collection("users").doc(this.uid).collection("shares").valueChanges({idField: 'likeID1'})
+    .subscribe(results => {
+      for (let result of results) { 
+        if (result.titleID === this.titleID) {
+          
+          this.unLikeID1 = result.likeID1;
+          const shareRef1 = this.afs.collection("users").doc(this.uid).collection("shares").doc(this.unLikeID1);
+          shareRef1.delete().then(() => console.log("unliked"));
+        }
+      }
+    });
+    this.shares2 = this.afs.collection("users").doc(this.uid).collection("publicActivity").valueChanges({idField: 'likeID2'})
+    .subscribe(results => {
+      for (let result of results) { 
+        if (result.titleID === this.titleID) {
+          this.unLikeID2 = result.likeID2;
+          const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity").doc(this.unLikeID2);
+          shareRef2.delete().then(() => console.log("unliked"));
+         
+        }
+      }
+    });
+    this.shares3 = this.afs.collection("users").doc(this.uid).collection("privateActivity").valueChanges({idField: 'likeID3'})
+    .subscribe(results => {
+      for (let result of results) { 
+        if (result.titleID === this.titleID) {
+
+          this.unLikeID3 = result.likeID3;
+          const shareRef4 = this.afs.collection("users").doc(this.uid).collection("privateActivity").doc(this.unLikeID3);
+          shareRef4.delete().then(() => console.log("unliked"));
+        }
+      }
+    });
+    this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
+      this.followers.subscribe(results => {
+        for (let result of results) { 
+          this.followerUnLike = this.afs.collection("users").doc(result.followerUid).collection("followingActivity").valueChanges({idField: 'likeID4'});
+          this.followerUnLike.subscribe(results1 => {
+            for (let result1 of results1) {
+              if (result1.titleID === this.titleID) {
+        
+                this.unLikeID4 = result1.likeID4;
+                const shareRef5 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity").doc(this.unLikeID4);
+                shareRef5.delete().then(() => console.log("unliked"));
+              }
+            }
+        })
+      }
+      });
+    this.userHasShared = false;
   }
 
   flag() {
@@ -274,26 +340,26 @@ export class ArticlePage implements OnInit {
       this.currentTime = this.date.getTime();
 
       const flagRef1 = this.afs.collection("users").doc(this.uid).collection("flags");
-        flagRef1.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl),
-          titleID: (this.titleID), flaggedIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+        flagRef1.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
+          titleID: (this.titleID), flaggedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
         .then(()=> console.log("Flagged"))
           .catch((err)=> console.log("Flagged Error: " + err));
 
       const flagRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
-        flagRef2.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl),
-          titleID: (this.titleID), flaggedIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+        flagRef2.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
+          titleID: (this.titleID), flaggedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
         .then(()=> console.log("Flagged"))
           .catch((err)=> console.log("Flagged Error: " + err));
 
       const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
-        shareRef5.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl),
-          titleID: (this.titleID), flaggedIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+        shareRef5.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
+          titleID: (this.titleID), flaggedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
         .then(()=> console.log("Flagged"))
           .catch((err)=> console.log("Flagged Error: " + err));
 
       const flagRef3 = this.afs.collection("articles").doc(this.titleID).collection("flags");
-        flagRef3.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl),
-          titleID: (this.titleID), flaggedIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+        flagRef3.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
+          titleID: (this.titleID), flaggedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
         .then(()=> console.log("Flagged"))
           .catch((err)=> console.log("Flagged Error: " + err));
 
@@ -301,8 +367,8 @@ export class ArticlePage implements OnInit {
       this.followers.subscribe(results => {
         for (let result of results) { 
           const flagRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          flagRef4.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl),
-            titleID: (this.titleID), flaggedIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+          flagRef4.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
+            titleID: (this.titleID), flaggedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
           .then(()=> console.log("Flagged to follower: " + result.followerUid))
           .catch((err)=> console.log("Flagged Error: " + err));
         }
@@ -328,26 +394,26 @@ export class ArticlePage implements OnInit {
       this.currentTime = this.date.getTime();
 
       const shareRef1 = this.afs.collection("users").doc(this.uid).collection("comments");
-        shareRef1.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment),
-          titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+        shareRef1.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
+          titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
           .then(()=> console.log("Comment"))
           .catch((err)=> console.log("Comment Error: " + err));
 
       const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
-        shareRef2.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment),
-          titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+        shareRef2.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
+          titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
           .then(()=> console.log("Comment"))
           .catch((err)=> console.log("Comment Error: " + err));
 
       const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
-      shareRef5.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment),
-        titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+      shareRef5.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
+        titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
         .then(()=> console.log("Comment"))
           .catch((err)=> console.log("Comment Error: " + err));
 
       const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("comments");
-        shareRef3.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment),
-          titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+        shareRef3.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
+          titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
           .then(()=> console.log("Comment"))
           .catch((err)=> console.log("Comment Error: " + err));
 
@@ -355,8 +421,8 @@ export class ArticlePage implements OnInit {
       this.followers.subscribe(results => {
         for (let result of results) { 
           const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          shareRef4.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment),
-            titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
+          shareRef4.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
+            titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
             .then(()=> console.log("Comment to follower: " + result.followerUid))
           .catch((err)=> console.log("Comment Error: " + err));
         }
@@ -390,26 +456,26 @@ export class ArticlePage implements OnInit {
 
       const shareRef1 = this.afs.collection("users").doc(this.uid).collection("likedComments");
         shareRef1.add({ uid: (this.uid), photoUrl: (this.photoUrl), publishDate: (this.publishDate), publisher: (this.publisher), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), docID: (comment.customIdName), likedCommentIsTrue: (true) })
+          title: (this.title), titleID: (this.titleID), docID: (comment.customIdName), image: (this.image), likedCommentIsTrue: (true), description: (this.description), content: (this.content) })
           .then(()=> console.log("Like Comment"))
           .catch((err)=> console.log(" LikeComment Error: " + err));
 
       const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
         shareRef2.add({ uid: (this.uid), photoUrl: (this.photoUrl), publishDate: (this.publishDate), publisher: (this.publisher), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), likedCommentIsTrue: (true) })
+          title: (this.title), titleID: (this.titleID), description: (this.description), image: (this.image), content: (this.content), likedCommentIsTrue: (true) })
           .then(()=> console.log("Like Comment"))
           .catch((err)=> console.log(" LikeComment Error: " + err));
 
       const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
         shareRef5.add({ uid: (this.uid), photoUrl: (this.photoUrl), publishDate: (this.publishDate), publisher: (this.publisher), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), likedCommentIsTrue: (true) })
+          title: (this.title), titleID: (this.titleID), description: (this.description), image: (this.image), content: (this.content), likedCommentIsTrue: (true) })
           .then(()=> console.log("Like Comment"))
           .catch((err)=> console.log(" LikeComment Error: " + err));
 
       const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.customIdName).collection("commentLikes");
                                                               
         shareRef3.add({ uid: (this.uid), photoUrl: (this.photoUrl), publishDate: (this.publishDate), publisher: (this.publisher), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), likedCommentIsTrue: (true) })
+          title: (this.title), titleID: (this.titleID), description: (this.description), image: (this.image), content: (this.content), likedCommentIsTrue: (true) })
           .then(()=> console.log("Like Comment"))
           .catch((err)=> console.log(" LikeComment Error: " + err));
 
@@ -418,7 +484,7 @@ export class ArticlePage implements OnInit {
         for (let result of results) { 
           const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
           shareRef4.add({ uid: (this.uid), photoUrl: (this.photoUrl), publishDate: (this.publishDate), publisher: (this.publisher), displayName: (this.displayName), comment: (this.comment), createdAt: (this.currentTime), 
-            title: (this.title), titleID: (this.titleID), likedCommentIsTrue: (true) })
+            title: (this.title), titleID: (this.titleID), description: (this.description), image: (this.image), content: (this.content), likedCommentIsTrue: (true) })
             .then(()=> console.log("Like Comment"))
           .catch((err)=> console.log(" LikeComment Error: " + err));
         }
