@@ -6,20 +6,23 @@
 
 <ion-content class="ion-padding">
 
-  <div class="center-desktop">
+  <ion-progress-bar [type]="'indeterminate'" *ngIf="showLoader"></ion-progress-bar>
+
+  <div *ngIf="!showLoader" class="center-desktop">
 
     <ion-list *ngFor="let active of followingActivity">
 
     <ion-item detail="false">
       <ion-avatar slot="start" (click)="openUser($event, active)">
-        <img src="{{ active.photoUrl }}">
+        <img *ngIf="!active.recievedIsTrue" src="{{ active.photoUrl }}">
+        <img *ngIf="active.recievedIsTrue" src="{{ active.senderPhotoUrl }}">
       </ion-avatar>
       
         <ion-label class="ion-text-wrap" button (click)="openUser($event, active)">
           <h2 *ngIf="active.sharedIsTrue">{{ active.displayName }} liked this article</h2> 
-          <h2 *ngIf="active.sentIsTrue">{{ active.senderDisplayName }} sent you this article</h2> 
+          <h2 *ngIf="active.recievedIsTrue">{{ active.senderDisplayName }} sent you this article</h2> 
           <h2 *ngIf="active.commentIsTrue">{{ active.displayName }}</h2> 
-          <h2 *ngIf="active.flaggedIsTrue">{{ active.displayName }} labeled this article as narrative driven journalism</h2> 
+          <h2 *ngIf="active.flaggedIsTrue">{{ active.displayName }} flagged this article as narrative driven journalism</h2> 
         </ion-label>
 
       </ion-item>
@@ -38,16 +41,16 @@
           <br>
           <h2>{{ active.publisher }}</h2> 
           <p>{{ active.publishDate | date:'fullDate' }}</p>
-          <br>
         </ion-label>
       
         </ion-item>
+        <br>
 
     </ion-list>
     
     <br>
 
-    <h5>Thanks for subscribing.</h5>
+    <h5>Thank you for subscribing.</h5>
 
     <p>
       Below are your GoCodes. Use these to invite the seven smartest people 
@@ -85,7 +88,6 @@
         {{ (profileDoc | async)?.goCodes[6] }}
       </ion-item>
     </ul>
-
  
   </div>
 

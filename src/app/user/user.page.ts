@@ -30,6 +30,19 @@ export class UserPage implements OnInit {
   photoUrl;
   userPhotoUrl;
   parentTab;
+  unFollowID: string;
+  unFollow1: any;
+  unFollow2: any;
+  unFollow3: any;
+  followerunFollow: any;
+  unFollowID4: any;
+  unFollowID2: string;
+  unFollowID1: string;
+  unFollowID3: string;
+  unFollow6: any;
+  unFollowID6: string;
+  unFollow7: any;
+  unFollowID7: any;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -45,23 +58,25 @@ export class UserPage implements OnInit {
         this.uid = user.uid;
         this.displayName = user.displayName;
         this.photoUrl = user.photoURL;
-
         this.userId = this.route.snapshot.paramMap.get('id');
 
         if (this.uid === this.userId) {
           this.thisIsYou = true;
         }
+        else {
+          this.thisIsYou = false;
+        }
 
-        this.cuFollowing = this.afs.collection("users").doc(this.uid).collection("following").valueChanges()
+        this.cuFollowing = this.afs.collection("users").doc(this.uid).collection("following").valueChanges({idField: 'followID'})
           .subscribe(results => {
             for (let result of results) { 
               if (result.followerUid === this.uid) {
                   this.userIsFollowing = true;
+                  this.unFollowID = result.followID;
               }
               else {
                 this.userIsFollowing = false;
               }
-              console.log(this.userIsFollowing);
             }
           })
 
@@ -132,7 +147,13 @@ export class UserPage implements OnInit {
         followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followedIsTrue: (true) })
                        .then(()=> console.log("Following"))
                        .catch((err)=> console.log("Following Error: " + err));
-
+      
+      const followRef7 = this.afs.collection("users").doc(this.userId).collection("privateActivity");
+      followRef7.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), followerPhotoUrl: (this.photoUrl), 
+        followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followedIsTrue: (true) })
+                      .then(()=> console.log("Following"))
+                      .catch((err)=> console.log("Following Error: " + err));
+                      
       const followRef3 = this.afs.collection("users").doc(this.uid).collection("following");
       followRef3.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), followerPhotoUrl: (this.photoUrl), 
         followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followingIsTrue: (true) })
@@ -144,6 +165,12 @@ export class UserPage implements OnInit {
         followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followingIsTrue: (true) })
                        .then(()=> console.log("Following"))
                        .catch((err)=> console.log("Following Error: " + err));
+
+      const followRef6 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
+      followRef6.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), followerPhotoUrl: (this.photoUrl), 
+        followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followingIsTrue: (true) })
+                      .then(()=> console.log("Following"))
+                      .catch((err)=> console.log("Following Error: " + err));
 
       this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       this.followers.subscribe(results => {
@@ -163,44 +190,95 @@ export class UserPage implements OnInit {
   unFollow() {
     if (this.userIsFollowing) {
 
-      const unFollowRef1 = this.afs.collection("users").doc(this.userId).collection("followers", ref => 
-        ref.where('followerUid', '==', this.uid));
-      unFollowRef1.doc().delete().then(() => console.log("unFollowed"));
+      const unFollowRef = this.afs.collection("users").doc(this.uid).collection("following").doc(this.unFollowID);
+        unFollowRef.delete().then(() => console.log("unFollowed"));
+
+      this.unFollow1 = this.afs.collection("users").doc(this.uid).collection("publicActivity").valueChanges({idField: 'unFollowID1'})
+        .subscribe(results => {
+          for (let result of results) { 
+            if (result.followeeUid === this.userId) {
+              
+              this.unFollowID1 = result.unFollowID1;
+              const unFollowRef1 = this.afs.collection("users").doc(this.uid).collection("publicActivity").doc(this.unFollowID1);
+              unFollowRef1.delete().then(() => console.log("unFollowed"));
+            }
+          }
+      });
+
+      this.unFollow6 = this.afs.collection("users").doc(this.uid).collection("privateActivity").valueChanges({idField: 'unFollowID6'})
+        .subscribe(results => {
+          for (let result of results) { 
+            if (result.followeeUid === this.userId) {
+              this.unFollowID6 = result.unFollowID1;
+              const unFollowRef6 = this.afs.collection("users").doc(this.uid).collection("privateActivity").doc(this.unFollowID6);
+              unFollowRef6.delete().then(() => console.log("unFollowed"));
+            }
+          }
+      });
       
-      const unFollowRef2 = this.afs.collection("users").doc(this.userId).collection("publicActivity", ref => 
-        ref.where('followerUid', '==', this.uid));
-      unFollowRef2.doc().delete().then(() => console.log("unFollowed"));
-      
-      const unFollowRef3 = this.afs.collection("users").doc(this.uid).collection("following", ref => 
-        ref.where('followeeUid', '==', this.userId));
-      unFollowRef3.doc().delete().then(() => console.log("unFollowed"));
-      
-      const unFollowRef4 = this.afs.collection("users").doc(this.uid).collection("publicActivity", ref => 
-        ref.where('followeeUid', '==', this.userId));
-      unFollowRef4.doc().delete().then(() => console.log("unFollowed"));
+      this.unFollow2 = this.afs.collection("users").doc(this.userId).collection("publicActivity").valueChanges({idField: 'unFollowID2'})
+      .subscribe(results => {
+        for (let result of results) { 
+          if (result.followerUid === this.uid) {
+            this.unFollowID2 = result.unFollowID2;
+            const unFollowRef2 = this.afs.collection("users").doc(this.userId).collection("publicActivity").doc(this.unFollowID2);
+            unFollowRef2.delete().then(() => console.log("unliked"));
+          
+          }
+        }
+      });
+
+      this.unFollow3 = this.afs.collection("users").doc(this.userId).collection("privateActivity").valueChanges({idField: 'unFollowID3'})
+      .subscribe(results => {
+        for (let result of results) { 
+          if (result.followerUid === this.uid) {
+            this.unFollowID3 = result.unFollowID3;
+            const unFollowRef4 = this.afs.collection("users").doc(this.userId).collection("privateActivity").doc(this.unFollowID3);
+            unFollowRef4.delete().then(() => console.log("unliked"));
+          }
+        }
+      });
+
+      this.unFollow7 = this.afs.collection("users").doc(this.userId).collection("followers").valueChanges({idField: 'unFollowID7'})
+      .subscribe(results => {
+        for (let result of results) { 
+          if (result.followerUid === this.uid) {
+            this.unFollowID7 = result.unFollowID7;
+            const unFollowRef4 = this.afs.collection("users").doc(this.userId).collection("followers").doc(this.unFollowID7);
+            unFollowRef4.delete().then(() => console.log("unliked"));
+          }
+        }
+      });
 
       this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
-      this.followers.subscribe(results => {
-        for (let result of results) { 
-          const unFollowRef5 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity", ref => 
-            ref.where('followeeUid', '==', this.userId)
-               .where('followerUid', '==', this.uid));
-          unFollowRef5.doc().delete().then(() => console.log("unFollowed"));
+        this.followers.subscribe(results => {
+          for (let result of results) { 
+            this.followerunFollow = this.afs.collection("users").doc(result.followerUid).collection("followingActivity").valueChanges({idField: 'unFollowID4'});
+            this.followerunFollow.subscribe(results1 => {
+              for (let result1 of results1) {
+                if (result.followeeUid === this.userId) {
+                  this.unFollowID4 = result1.likeID4;
+                  const unFollowRef5 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity").doc(this.unFollowID4);
+                  unFollowRef5.delete().then(() => console.log("unFollowed"));
+                }
+              }
+          })
         }
-      })
+      });
+
+      this.userIsFollowing = false;
+      this.presentToast("Not Following");
     }
-    this.userIsFollowing = false;
-    this.presentToast("Not Following");
   }
 
   goToFollowers() {
     this.globalProps.userId = this.userId;
-    this.router.navigateByUrl('tabs/user/' + this.userId + '/followers');
+    this.router.navigateByUrl('tabs/' + this.globalProps.currentTab + '/user/' + this.userId + '/followers');
   }
 
   goToFollowing() {
     this.globalProps.userId = this.userId;
-    this.router.navigateByUrl('tabs/user/' + this.userId + '/following');
+    this.router.navigateByUrl('tabs/' + this.globalProps.currentTab + '/user/' + this.userId + '/following');
   }
 
 }

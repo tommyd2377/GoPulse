@@ -5,7 +5,6 @@ import { Observable, BehaviorSubject, Subject, combineLatest } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { GlobalParamsService } from '../global-params.service';
-//import { Content } from '@ionic/angular';
 
 @Component({
   selector: 'app-search',
@@ -87,6 +86,7 @@ export class SearchPage implements OnInit  {
     this.globalProps.articleUrl = article.url;
     this.globalProps.image = article.image;
     this.globalProps.content = article.content;
+    this.globalProps.description = article.description;
     this.globalProps.publishDate = article.publishedAt;
     this.globalProps.publisher = article.source.name;
     this.globalProps.titleID = article.title.replace(/[^A-Z0-9]+/ig, "-");

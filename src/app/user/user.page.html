@@ -7,7 +7,7 @@
     <ion-title *ngIf="thisIsYou" color="primary">This is You</ion-title>
   </ion-toolbar>
 </ion-header>
-
+ 
 <ion-content class="ion-padding">
  
   <div class="center-desktop">
@@ -24,8 +24,9 @@
       </ion-label>
       
       <ion-label>
-        <ion-button *ngIf="!thisIsYou && !userIsFollowing" expand="block" fill="outline" (click)="follow()">Follow</ion-button>
-        <ion-button *ngIf="userIsFollowing" expand="block" fill="outline" (click)="follow()">UnFollow</ion-button>
+        <ion-button *ngIf="!userIsFollowing && !thisIsYou" expand="block" fill="outline" (click)="follow()">Follow</ion-button>
+        <ion-button *ngIf="userIsFollowing && !thisIsYou" expand="block" fill="outline" (click)="unFollow()">Unfollow</ion-button>
+        
         <ion-button expand="block" fill="outline" (click)="goToFollowers()">{{ (followers | async)?.length }} Followers</ion-button>
         <ion-button expand="block" fill="outline" (click)="goToFollowing()">{{ (following | async)?.length }} Following</ion-button>
       </ion-label>
@@ -79,7 +80,7 @@
           <h1>{{ active.title }}</h1>
           <br>
           <h2>{{ active.publisher }}</h2> 
-          <p>{{ active.date }}</p>
+          <p>{{ active.publishDate | date:'fullDate' }}</p>
           <br>
         </ion-label>
       

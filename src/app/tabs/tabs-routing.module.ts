@@ -30,11 +30,11 @@ const routes: Routes = [
               },
               {
                 path: 'followers',
-                loadChildren: () => import('../followers/followers.module').then( m => m.FollowersPageModule)
+                loadChildren: () => import('../user-followers/user-followers.module').then( m => m.UserFollowersPageModule)
               },
               {
                 path: 'following',
-                loadChildren: () => import('../following/following.module').then( m => m.FollowingPageModule)
+                loadChildren: () => import('../user-following/user-following.module').then( m => m.UserFollowingPageModule)
               },
             ]
           }
@@ -63,11 +63,11 @@ const routes: Routes = [
               },
               {
                 path: 'followers',
-                loadChildren: () => import('../followers/followers.module').then( m => m.FollowersPageModule)
+                loadChildren: () => import('../user-followers/user-followers.module').then( m => m.UserFollowersPageModule)
               },
               {
                 path: 'following',
-                loadChildren: () => import('../following/following.module').then( m => m.FollowingPageModule)
+                loadChildren: () => import('../user-following/user-following.module').then( m => m.UserFollowingPageModule)
               },
             ]
           }
@@ -96,11 +96,11 @@ const routes: Routes = [
               },
               {
                 path: 'followers',
-                loadChildren: () => import('../followers/followers.module').then( m => m.FollowersPageModule)
+                loadChildren: () => import('../user-followers/user-followers.module').then( m => m.UserFollowersPageModule)
               },
               {
                 path: 'following',
-                loadChildren: () => import('../following/following.module').then( m => m.FollowingPageModule)
+                loadChildren: () => import('../user-following/user-following.module').then( m => m.UserFollowingPageModule)
               },
             ]
           }
@@ -129,11 +129,11 @@ const routes: Routes = [
               },
               {
                 path: 'followers',
-                loadChildren: () => import('../followers/followers.module').then( m => m.FollowersPageModule)
+                loadChildren: () => import('../user-followers/user-followers.module').then( m => m.UserFollowersPageModule)
               },
               {
                 path: 'following',
-                loadChildren: () => import('../following/following.module').then( m => m.FollowingPageModule)
+                loadChildren: () => import('../user-following/user-following.module').then( m => m.UserFollowingPageModule)
               },
             ]
           },

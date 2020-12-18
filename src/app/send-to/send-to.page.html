@@ -13,7 +13,7 @@
 
     <div *ngFor="let follower of followers">
 
-      <ion-item (click)="sendArticle($event, follower)">
+      <ion-item (click)="presentAlertPrompt($event, follower)">
         <ion-avatar slot="start">
           <img src="{{ follower.followerPhotoUrl }}">
         </ion-avatar>

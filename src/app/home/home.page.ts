@@ -25,6 +25,7 @@ export class HomePage implements OnInit {
   code5: string;
   code6: string;
   code7: string;
+  showLoader: boolean = true;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -50,8 +51,10 @@ export class HomePage implements OnInit {
           this.code7 = doc.goCodes[6];
         });
 
-        this.followingActivity = this.afs.collection("users").doc(this.uid).collection("followingActivity", ref => ref.orderBy('createdAt', 'desc')).valueChanges()
-          .subscribe(activity => this.followingActivity = activity);
+        this.followingActivity = this.afs.collection("users").doc(this.uid).collection("followingActivity", 
+          ref => ref.orderBy('createdAt', 'desc')).valueChanges().subscribe(activity => this.followingActivity = activity);
+
+        this.showLoader = false;
       }
     })
   }
@@ -64,7 +67,7 @@ export class HomePage implements OnInit {
     selBox.style.top = '0';
     selBox.style.opacity = '0';
     if (index === undefined) {
-      console.log(index, this.globalProps.initialGoCode, this.code1)
+      console.log(index, this.globalProps.initialGoCode)
       selBox.value = this.globalProps.initialGoCode;
     }
     else {
@@ -92,12 +95,20 @@ export class HomePage implements OnInit {
     this.globalProps.articleUrl = active.articleUrl;
     this.globalProps.publishDate = active.publishDate;
     this.globalProps.publisher = active.publisher;
-    this.globalProps.titleID = active.title.replace(/[^A-Z0-9]+/ig, "-");
+    this.globalProps.image = active.image;
+    this.globalProps.description = active.description;
+    this.globalProps.content = active.publisher;
+    this.globalProps.titleID = active.titleID;
     this.router.navigateByUrl('tabs/home/article/' + this.globalProps.titleID);
   }
 
   openUser(event, active) {
-    this.router.navigateByUrl('tabs/home/user/' + active.uid);
+    if (active.senderUid) {
+      this.router.navigateByUrl('tabs/home/user/' + active.senderUid);
+    }
+    else if (active.uid) {
+      this.router.navigateByUrl('tabs/home/user/' + active.uid);
+    }
   }
 
 }

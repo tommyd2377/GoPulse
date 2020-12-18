@@ -112,35 +112,35 @@ export class SignUpPage {
           displayName: this.displayName,
           photoURL: "https://logodix.com/logo/1984123.png",
         }).then(() => {
-            console.log("Profile Updated: " + user.uid);
-          })
-        user.sendEmailVerification().then(() => {
           let uid = user.uid;
-            console.log(uid);
-            this.newGoCodes = this.goCodes();
-            for (let newCode of this.newGoCodes) {
-              const GoRef = this.afs.collection("goCodes").doc(newCode);
-              GoRef.set({ goCode: newCode, hasBeenUsed: false, creator: uid})
-                .then(() => console.log('gocode added: ' + newCode))
-                .catch((err) => console.log(err));
-            }
-            let userData = this.afs.collection("users").doc(uid);
-            userData.set({
-              uid: uid,
-              email: this.email,
-              displayName: this.displayName,
-              fullName: this.fullName,
-              fullNameSearch: this.fullName.toUpperCase(),
-              photoURL: "https://logodix.com/logo/1984123.png",
-              goCodes: this.newGoCodes
+          this.newGoCodes = this.goCodes();
+          for (let newCode of this.newGoCodes) {
+            const GoRef = this.afs.collection("goCodes").doc(newCode);
+            GoRef.set({ goCode: newCode, hasBeenUsed: false, creator: uid})
+              .then(() => console.log('gocode added: ' + newCode))
+              .catch((err) => console.log(err));
+          }
+          let userData = this.afs.collection("users").doc(uid);
+          userData.set({
+            uid: uid,
+            email: this.email,
+            displayName: this.displayName,
+            fullName: this.fullName,
+            fullNameSearch: this.fullName.toUpperCase(),
+            photoURL: "https://logodix.com/logo/1984123.png",
+            goCodes: this.newGoCodes
+          })
+          .then(() => { 
+            console.log("Profile Data Set: " + user.uid);
+            user.sendEmailVerification().then(() => {
+              console.log("email verification sent to: " + user.uid);
             })
-            .then(() => console.log("Profile Data Set: " + user.uid))
-            .catch((error) => console.log("Profile Data Set Error: " + error));
-          console.log("email verification sent to: " + user.uid);
-        })
-        .catch(error => console.log("email verification error: " + error));
-        this.props.initialGoCode = this.newGoCodes[0];
-        this.router.navigateByUrl('/tabs');
+            .catch(error => console.log("email verification error: " + error));
+            this.router.navigateByUrl('/tabs');
+          })
+          .catch((error) => console.log("Profile Data Set Error: " + error));
+          });
+        console.log("Profile Updated: " + user.uid);
       }
     }) 
   }

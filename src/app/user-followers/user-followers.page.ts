@@ -9,6 +9,7 @@ import { GlobalParamsService } from '../global-params.service';
   templateUrl: './user-followers.page.html',
   styleUrls: ['./user-followers.page.scss'],
 })
+
 export class UserFollowersPage implements OnInit {
 
   uid: string;
@@ -28,7 +29,7 @@ export class UserFollowersPage implements OnInit {
   }
   
   openUser($event, follower) {
-    this.router.navigateByUrl("tabs/" + this.globalProps.currentTab + "/user/" + follower.followeeUid);
+    this.router.navigateByUrl("tabs/" + this.globalProps.currentTab + "/user/" + follower.followerUid);
   }
 
 }

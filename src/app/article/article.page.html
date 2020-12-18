@@ -92,12 +92,12 @@
 
       <ion-button (click)="likeComment($event, comment)" fill="clear">
         <ion-icon name="thumbs-up-sharp"></ion-icon>
-        {{ (commentLikeCount | async)?.length }}
+        {{ comments.likesCount }}
       </ion-button>
 
       <ion-button (click)="openReplies($event, comment)" fill="clear">
         <ion-icon name="chatbubbles-sharp"></ion-icon>
-        {{ (commentReplyCount | async)?.length }}
+        {{ comment.replyCount }}
       </ion-button>
 
       <br>
