@@ -58,6 +58,24 @@
           "{{ active.comment }}"
         </p>
       </ion-item>
+
+      <ion-item *ngIf="active.likedCommentIsTrue">
+        <p>
+          "{{ active.comment }}"
+        </p>
+      </ion-item>
+
+      <ion-item *ngIf="active.sentIsTrue">
+        <p>
+          "{{ active.message }}"
+        </p>
+      </ion-item>
+
+      <ion-item *ngIf="active.recievedIsTrue">
+        <p>
+          "{{ active.message }}"
+        </p>
+      </ion-item>
   
       <ion-item (click)="openArticle($event, active)" detail="false">
 
@@ -66,16 +84,11 @@
           <h1>{{ active.title }}</h1>
           <br>
           <h2>{{ active.publisher }}</h2> 
+          <p>{{ active.publishDate | date:'shortTime' }}</p>
           <p>{{ active.publishDate | date:'fullDate' }}</p>
           <br>
         </ion-label>
       
-      </ion-item>
-
-      <ion-item *ngIf="active.likedCommentIsTrue">
-        <p>
-          "{{ active.comment }}"
-        </p>
       </ion-item>
   
     </div>

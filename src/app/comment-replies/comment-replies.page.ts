@@ -39,7 +39,7 @@ export class CommentRepliesPage implements OnInit {
           console.log(this.followers);
           console.log(this.comment);
           this.commentReplies = this.afs.collection("articles").doc(this.comment.titleID).collection("comments")
-            .doc(this.comment.customIdName).collection("commentReplies").valueChanges({idField: 'customIdName'})
+            .doc(this.comment.commentID).collection("commentReplies").valueChanges({idField: 'customIdName'})
               .subscribe(replies => this.commentReplies = replies);
       }
     })
@@ -90,43 +90,49 @@ export class CommentRepliesPage implements OnInit {
       })
       this.presentToast("Comment Liked!");
     
-  }
+  } 
 
   newComment() {
     console.log(this.commentReply);
     this.date = new Date();
       this.currentTime = this.date.getTime();
 
+      let replies = this.comment.replyCount;
+      let newReplies = replies + 1;
+
       const shareRef1 = this.afs.collection("users").doc(this.uid).collection("commentReplies");
         shareRef1.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
-          titleID: (this.comment.titleID), commentID: (this.comment.customIdName), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
+          titleID: (this.comment.titleID), commentID: (this.comment.commentID), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
           .then(()=> console.log("Comment"))
           .catch((err)=> console.log("Comment Error: " + err));
 
       const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
         shareRef2.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
-          titleID: (this.comment.titleID), commentID: (this.comment.customIdName), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
+          titleID: (this.comment.titleID), commentID: (this.comment.commentID), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
           .then(()=> console.log("Comment"))
           .catch((err)=> console.log("Comment Error: " + err));
 
       const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
       shareRef5.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
-        titleID: (this.comment.titleID), commentID: (this.comment.customIdName), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
+        titleID: (this.comment.titleID), commentID: (this.comment.commentID), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
         .then(()=> console.log("Comment"))
           .catch((err)=> console.log("Comment Error: " + err));
 
-      const shareRef3 = this.afs.collection("articles").doc(this.comment.titleID).collection("comments").doc(this.comment.customIdName).collection("commentReplies");
+      const shareRef3 = this.afs.collection("articles").doc(this.comment.titleID).collection("comments").doc(this.comment.commentID).collection("commentReplies");
         shareRef3.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
-          titleID: (this.comment.titleID), commentID: (this.comment.customIdName), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
+          titleID: (this.comment.titleID), commentID: (this.comment.commentID), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
           .then(()=> console.log("Comment"))
           .catch((err)=> console.log("Comment Error: " + err));
+
+          const shareRef7 = this.afs.collection("articles").doc(this.comment.titleID).collection("comments").doc(this.comment.commentID);
+          shareRef7.update({ replyCount: (newReplies)})
 
       this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       this.followers.subscribe(results => {
         for (let result of results) { 
           const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
           shareRef4.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
-            titleID: (this.comment.titleID), commentID: (this.comment.customIdName), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
+            titleID: (this.comment.titleID), commentID: (this.comment.commentID), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
             .then(()=> console.log("Comment to follower: " + result.followerUid))
           .catch((err)=> console.log("Comment Error: " + err));
         }

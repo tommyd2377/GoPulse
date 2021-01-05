@@ -58,7 +58,7 @@ export class SendToPage implements OnInit {
   async presentAlertPrompt($event, follower) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Write a message for ' + follower.displayName,
+      header: 'Write ' + follower.followerDisplayName + ' a message',
       inputs: [
         {
           name: 'paragraph',
@@ -69,15 +69,6 @@ export class SendToPage implements OnInit {
       ],
       buttons: [
         {
-          text: 'Send',
-          handler: (data: any) => {
-            console.log('Confirm Ok', data.paragraph);
-            let message: string = data.paragraph;
-            this.sendArticle($event, follower, message);
-            this.presentToast("Article sent to " + follower.displayName)
-          }
-        },
-        {
           text: 'Cancel',
           role: 'cancel',
           cssClass: 'secondary',
@@ -85,6 +76,15 @@ export class SendToPage implements OnInit {
             console.log('Confirm Cancel');
           }
         }, 
+        {
+          text: 'Send',
+          handler: (data: any) => {
+            console.log('Confirm Ok', data.paragraph);
+            let message: string = data.paragraph;
+            this.sendArticle($event, follower, message);
+            this.presentToast("Article sent to " + follower.followerDisplayName)
+          }
+        },
       ]
     });
     await alert.present();

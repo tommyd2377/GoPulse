@@ -19,6 +19,4 @@ export class GlobalParamsService {
 
   userId: string;
 
-  initialGoCode: string;
-
 }

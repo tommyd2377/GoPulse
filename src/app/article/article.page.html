@@ -14,7 +14,6 @@
     <img no-padding src="{{ image }}" alt="">
 
     <h1>{{ title }}</h1>
-
     <p>{{ publishDate | date:'fullDate' }}</p>
 
     <br>
@@ -92,7 +91,7 @@
 
       <ion-button (click)="likeComment($event, comment)" fill="clear">
         <ion-icon name="thumbs-up-sharp"></ion-icon>
-        {{ comments.likesCount }}
+        {{ comment.likesCount }}
       </ion-button>
 
       <ion-button (click)="openReplies($event, comment)" fill="clear">

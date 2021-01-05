@@ -35,13 +35,13 @@ export class HomePage implements OnInit {
               public tabs: TabsPage) {}
 
   ngOnInit() {
-    this.fireAuth.auth.onAuthStateChanged((user) => {
+    this.fireAuth.auth.onAuthStateChanged(async (user) => {
       if (user) {
         this.uid = user.uid;
         
         this.profileDoc = this.afs.collection("users").doc(this.uid).valueChanges();
 
-        this.codes = this.profileDoc.subscribe((doc) => { 
+        this.codes = await this.profileDoc.subscribe((doc) => { 
           this.code1 = doc.goCodes[0];
           this.code2 = doc.goCodes[1];
           this.code3 = doc.goCodes[2];
@@ -66,14 +66,7 @@ export class HomePage implements OnInit {
     selBox.style.left = '0';
     selBox.style.top = '0';
     selBox.style.opacity = '0';
-    if (index === undefined) {
-      console.log(index, this.globalProps.initialGoCode)
-      selBox.value = this.globalProps.initialGoCode;
-    }
-    else {
-      console.log('else')
-      selBox.value = index;
-    }
+    selBox.value = index;
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();
@@ -108,6 +101,9 @@ export class HomePage implements OnInit {
     }
     else if (active.uid) {
       this.router.navigateByUrl('tabs/home/user/' + active.uid);
+    }
+    else if (active.followeeUid) {
+      this.router.navigateByUrl('tabs/home/user/' + active.followeeUid);
     }
   }
 

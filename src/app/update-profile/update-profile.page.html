@@ -46,6 +46,13 @@
 
     <br>
 
+    <ion-button expand="full">
+      <ion-icon lazy="true" slot="start" name="image"></ion-icon>
+      <ion-label slot="end">Upload Image</ion-label>
+      <input type="file" (change)="uploadFile($event)" id="file-input"
+        accept="image/png, image/jpeg">
+    </ion-button>
+
     <ion-label position="floating">Update Profile Picture</ion-label>
     <ion-input type="file" (change)="uploadFile($event)"></ion-input>
     <div>{{ uploadPercent | async }}</div>
