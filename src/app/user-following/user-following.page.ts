@@ -11,19 +11,25 @@ import { Router } from '@angular/router';
 })
 export class UserFollowingPage implements OnInit {
   
-  uid: string;
-  following;
+  userId: string;
+  following: any;
 
   constructor(private fireAuth: AngularFireAuth,
     private afs: AngularFirestore,
     public router: Router,
     public globalProps: GlobalParamsService) { } 
 
-  ngOnInit() {        
-    this.uid = this.globalProps.userId;
-    console.log("currentUser: " + this.uid);
-    this.following = this.afs.collection("users").doc(this.uid).collection("following").valueChanges()
-      .subscribe(following => this.following = following);
+  ngOnInit() {      
+    this.fireAuth.auth.onAuthStateChanged((user) => {
+      if (user) { 
+        this.userId = this.globalProps.userId;
+        console.log("User: " + this.userId);
+        this.following = this.afs.collection("users").doc(this.userId).collection("following").valueChanges()
+          .subscribe(following => this.following = following);
+
+        console.log(this.following);
+      }
+    });
   } 
 
   openUser($event, followee) {

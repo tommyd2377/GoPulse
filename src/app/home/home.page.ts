@@ -102,7 +102,13 @@ export class HomePage implements OnInit {
     else if (active.uid) {
       this.router.navigateByUrl('tabs/home/user/' + active.uid);
     }
-    else if (active.followeeUid) {
+    else if (active.followerUid) {
+      this.router.navigateByUrl('tabs/home/user/' + active.followerUid);
+    }
+  }
+
+  openFollowee(event, active) {
+    if (active.followeeUid) {
       this.router.navigateByUrl('tabs/home/user/' + active.followeeUid);
     }
   }

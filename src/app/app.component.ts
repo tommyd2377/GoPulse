@@ -29,7 +29,6 @@ export class AppComponent {
       this.fireAuth.auth.onAuthStateChanged((user) => {
         
         if (user) {
-          console.log(user);
           this.router.navigateByUrl('tabs');
         }
 

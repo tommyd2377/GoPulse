@@ -29,11 +29,11 @@ const routes: Routes = [
                 import('../user/user.module').then(m => m.UserPageModule)
               },
               {
-                path: 'followers',
+                path: 'user-followers',
                 loadChildren: () => import('../user-followers/user-followers.module').then( m => m.UserFollowersPageModule)
               },
               {
-                path: 'following',
+                path: 'user-following',
                 loadChildren: () => import('../user-following/user-following.module').then( m => m.UserFollowingPageModule)
               },
             ]
@@ -62,11 +62,11 @@ const routes: Routes = [
                 import('../user/user.module').then(m => m.UserPageModule)
               },
               {
-                path: 'followers',
+                path: 'user-followers',
                 loadChildren: () => import('../user-followers/user-followers.module').then( m => m.UserFollowersPageModule)
               },
               {
-                path: 'following',
+                path: 'user-following',
                 loadChildren: () => import('../user-following/user-following.module').then( m => m.UserFollowingPageModule)
               },
             ]
@@ -95,11 +95,11 @@ const routes: Routes = [
                 import('../user/user.module').then(m => m.UserPageModule)
               },
               {
-                path: 'followers',
+                path: 'user-followers',
                 loadChildren: () => import('../user-followers/user-followers.module').then( m => m.UserFollowersPageModule)
               },
               {
-                path: 'following',
+                path: 'user-following',
                 loadChildren: () => import('../user-following/user-following.module').then( m => m.UserFollowingPageModule)
               },
             ]
@@ -128,11 +128,11 @@ const routes: Routes = [
                 import('../user/user.module').then(m => m.UserPageModule)
               },
               {
-                path: 'followers',
+                path: 'user-followers',
                 loadChildren: () => import('../user-followers/user-followers.module').then( m => m.UserFollowersPageModule)
               },
               {
-                path: 'following',
+                path: 'user-following',
                 loadChildren: () => import('../user-following/user-following.module').then( m => m.UserFollowingPageModule)
               },
             ]

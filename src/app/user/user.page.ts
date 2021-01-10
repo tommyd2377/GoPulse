@@ -58,6 +58,7 @@ export class UserPage implements OnInit {
         this.uid = user.uid;
         this.displayName = user.displayName;
         this.photoUrl = user.photoURL;
+        
         this.userId = this.route.snapshot.paramMap.get('id');
 
         if (this.uid === this.userId) {
@@ -70,7 +71,7 @@ export class UserPage implements OnInit {
         this.cuFollowing = this.afs.collection("users").doc(this.uid).collection("following").valueChanges({idField: 'followID'})
           .subscribe(results => {
             for (let result of results) { 
-              if (result.followeeUid === this.userId) {
+              if (result.followeeUid === this.userId && result.followerUid === this.uid) {
                   this.userIsFollowing = true;
                   this.unFollowID = result.followID;
               }
@@ -84,20 +85,18 @@ export class UserPage implements OnInit {
 
         this.userdoc = this.afs.collection("users").doc(this.userId).ref.get().then((doc) => {
           if (doc.exists) {
-            console.log("Document data:", doc.data());
-            console.log(doc.data().displayName);
             this.userDisplayName = doc.data().displayName;
             this.userPhotoUrl = doc.data().photoURL;
 
           } else {
-            console.log("No such document!");
+            this.presentToast("No such document!");
           }
         }).catch(function(error) {
-          console.log("Error getting document:", error);
+          this.presentToast("Error getting document:", error);
         });
 
-        this.userActivity = this.afs.collection("users").doc(this.userId).collection("publicActivity", ref => ref.orderBy('createdAt', 'desc')).valueChanges()
-          .subscribe(activity => this.userActivity = activity);
+        this.userActivity = this.afs.collection("users").doc(this.userId).collection("publicActivity", ref => 
+          ref.orderBy('createdAt', 'desc')).valueChanges().subscribe(activity => this.userActivity = activity);
         
         this.followers = this.afs.collection("users").doc(this.userId).collection("followers").valueChanges();
         
@@ -138,39 +137,39 @@ export class UserPage implements OnInit {
 
       const followRef1 = this.afs.collection("users").doc(this.userId).collection("followers");
         followRef1.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), followerPhotoUrl: (this.photoUrl), 
-                         followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followedIsTrue: (true) })
-                         .then(()=> console.log("Following"))
-                         .catch((err)=> console.log("Following Error: " + err));
+          followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followedIsTrue: (true) })
+            .then(()=> console.log("Following"))
+            .catch((err)=> console.log("Following Error: " + err));
 
       const followRef2 = this.afs.collection("users").doc(this.userId).collection("publicActivity");
       followRef2.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), followerPhotoUrl: (this.photoUrl), 
         followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followedIsTrue: (true) })
-                       .then(()=> console.log("Following"))
-                       .catch((err)=> console.log("Following Error: " + err));
+            .then(()=> console.log("Following"))
+            .catch((err)=> console.log("Following Error: " + err));
       
       const followRef7 = this.afs.collection("users").doc(this.userId).collection("privateActivity");
       followRef7.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), followerPhotoUrl: (this.photoUrl), 
         followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followedIsTrue: (true) })
-                      .then(()=> console.log("Following"))
-                      .catch((err)=> console.log("Following Error: " + err));
+            .then(()=> console.log("Following"))
+            .catch((err)=> console.log("Following Error: " + err));
                       
       const followRef3 = this.afs.collection("users").doc(this.uid).collection("following");
       followRef3.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), followerPhotoUrl: (this.photoUrl), 
         followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followingIsTrue: (true) })
-                       .then(()=> console.log("Following"))
-                       .catch((err)=> console.log("Following Error: " + err));
+            .then(()=> console.log("Following"))
+            .catch((err)=> console.log("Following Error: " + err));
 
       const followRef4 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
       followRef4.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), followerPhotoUrl: (this.photoUrl), 
         followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followingIsTrue: (true) })
-                       .then(()=> console.log("Following"))
-                       .catch((err)=> console.log("Following Error: " + err));
+            .then(()=> console.log("Following"))
+            .catch((err)=> console.log("Following Error: " + err));
 
       const followRef6 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
       followRef6.add({ followerUid: (this.uid), followerDisplayName: (this.displayName), followerPhotoUrl: (this.photoUrl), 
         followeeUid: (this.userId), followeeDisplayName: (this.userDisplayName), followeePhotoUrl: (this.userPhotoUrl), followingIsTrue: (true) })
-                      .then(()=> console.log("Following"))
-                      .catch((err)=> console.log("Following Error: " + err));
+            .then(()=> console.log("Following"))
+            .catch((err)=> console.log("Following Error: " + err));
 
       this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       this.followers.subscribe(results => {
@@ -183,7 +182,7 @@ export class UserPage implements OnInit {
         }
       })
       this.userIsFollowing = true;
-      this.presentToast("Following");
+      this.presentToast("You are now following " + this.userDisplayName);
     }
   }
 
@@ -196,7 +195,7 @@ export class UserPage implements OnInit {
       this.unFollow1 = this.afs.collection("users").doc(this.uid).collection("publicActivity").valueChanges({idField: 'unFollowID1'})
         .subscribe(results => {
           for (let result of results) { 
-            if (result.followeeUid === this.userId) {
+            if (result.followeeUid === this.userId && result.followerUid === this.uid) {
               
               this.unFollowID1 = result.unFollowID1;
               const unFollowRef1 = this.afs.collection("users").doc(this.uid).collection("publicActivity").doc(this.unFollowID1);
@@ -208,8 +207,8 @@ export class UserPage implements OnInit {
       this.unFollow6 = this.afs.collection("users").doc(this.uid).collection("privateActivity").valueChanges({idField: 'unFollowID6'})
         .subscribe(results => {
           for (let result of results) { 
-            if (result.followeeUid === this.userId) {
-              this.unFollowID6 = result.unFollowID1;
+            if (result.followeeUid === this.userId && result.followerUid === this.uid) {
+              this.unFollowID6 = result.unFollowID6;
               const unFollowRef6 = this.afs.collection("users").doc(this.uid).collection("privateActivity").doc(this.unFollowID6);
               unFollowRef6.delete().then(() => console.log("unFollowed"));
             }
@@ -219,10 +218,10 @@ export class UserPage implements OnInit {
       this.unFollow2 = this.afs.collection("users").doc(this.userId).collection("publicActivity").valueChanges({idField: 'unFollowID2'})
       .subscribe(results => {
         for (let result of results) { 
-          if (result.followerUid === this.uid) {
+          if (result.followeeUid === this.userId && result.followerUid === this.uid) {
             this.unFollowID2 = result.unFollowID2;
             const unFollowRef2 = this.afs.collection("users").doc(this.userId).collection("publicActivity").doc(this.unFollowID2);
-            unFollowRef2.delete().then(() => console.log("unliked"));
+            unFollowRef2.delete().then(() => console.log("unFollowed"));
           
           }
         }
@@ -231,10 +230,10 @@ export class UserPage implements OnInit {
       this.unFollow3 = this.afs.collection("users").doc(this.userId).collection("privateActivity").valueChanges({idField: 'unFollowID3'})
       .subscribe(results => {
         for (let result of results) { 
-          if (result.followerUid === this.uid) {
+          if (result.followeeUid === this.userId && result.followerUid === this.uid) {
             this.unFollowID3 = result.unFollowID3;
             const unFollowRef4 = this.afs.collection("users").doc(this.userId).collection("privateActivity").doc(this.unFollowID3);
-            unFollowRef4.delete().then(() => console.log("unliked"));
+            unFollowRef4.delete().then(() => console.log("unFollowed"));
           }
         }
       });
@@ -242,10 +241,10 @@ export class UserPage implements OnInit {
       this.unFollow7 = this.afs.collection("users").doc(this.userId).collection("followers").valueChanges({idField: 'unFollowID7'})
       .subscribe(results => {
         for (let result of results) { 
-          if (result.followerUid === this.uid) {
+          if (result.followeeUid === this.userId && result.followerUid === this.uid) {
             this.unFollowID7 = result.unFollowID7;
             const unFollowRef4 = this.afs.collection("users").doc(this.userId).collection("followers").doc(this.unFollowID7);
-            unFollowRef4.delete().then(() => console.log("unliked"));
+            unFollowRef4.delete().then(() => console.log("unFollowed"));
           }
         }
       });
@@ -256,8 +255,8 @@ export class UserPage implements OnInit {
             this.followerunFollow = this.afs.collection("users").doc(result.followerUid).collection("followingActivity").valueChanges({idField: 'unFollowID4'});
             this.followerunFollow.subscribe(results1 => {
               for (let result1 of results1) {
-                if (result.followeeUid === this.userId) {
-                  this.unFollowID4 = result1.likeID4;
+                if (result1.followeeUid === this.userId && result1.followerUid === this.uid) {
+                  this.unFollowID4 = result1.unFollowID4;
                   const unFollowRef5 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity").doc(this.unFollowID4);
                   unFollowRef5.delete().then(() => console.log("unFollowed"));
                 }
@@ -267,18 +266,18 @@ export class UserPage implements OnInit {
       });
 
       this.userIsFollowing = false;
-      this.presentToast("Not Following");
+      this.presentToast("You are no longer following " + this.userDisplayName);
     }
   }
 
   goToFollowers() {
     this.globalProps.userId = this.userId;
-    this.router.navigateByUrl('tabs/' + this.globalProps.currentTab + '/user/' + this.userId + '/followers');
+    this.router.navigateByUrl('tabs/' + this.globalProps.currentTab + '/user/' + this.userId + '/user-followers');
   }
 
   goToFollowing() {
     this.globalProps.userId = this.userId;
-    this.router.navigateByUrl('tabs/' + this.globalProps.currentTab + '/user/' + this.userId + '/following');
+    this.router.navigateByUrl('tabs/' + this.globalProps.currentTab + '/user/' + this.userId + '/user-following');
   }
 
 }

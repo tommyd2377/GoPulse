@@ -17,7 +17,6 @@ export class TabsPage {
   
   setCurrentTab() {
     this.selectedTab = this.tabs.getSelected();
-    console.log(this.selectedTab);
     this.props.currentTab = this.selectedTab;
   }
 

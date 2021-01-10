@@ -39,7 +39,6 @@ export class SearchPage implements OnInit  {
       })
       .then((data) => {
           this.articles = data.articles;
-          console.log(data);
       });
   }
 
@@ -57,7 +56,6 @@ export class SearchPage implements OnInit  {
   }          
 
   openUser($event, user) {
-    console.log($event, user);
     this.router.navigateByUrl('tabs/search/user/' + user.uid);
   }
 
@@ -68,14 +66,12 @@ export class SearchPage implements OnInit  {
           return response.json();
       })
       .then((data) => {
-          console.log(data);
           this.articles = data.articles;
       });
   }
 
   searchUsers($event) {
     let q = $event.target.value;
-    console.log("query: " + q);
     this.userResults = this.afs.collection("users", ref => ref.where('fullName', '==', q)).valueChanges()
       .subscribe(activity => this.userResults = activity);
   }
@@ -90,7 +86,6 @@ export class SearchPage implements OnInit  {
     this.globalProps.publishDate = article.publishedAt;
     this.globalProps.publisher = article.source.name;
     this.globalProps.titleID = article.title.replace(/[^A-Z0-9]+/ig, "-");
-    console.log(this.globalProps);
     this.router.navigateByUrl('tabs/search/article/' + this.globalProps.titleID)
   }
   

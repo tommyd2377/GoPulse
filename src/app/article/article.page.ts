@@ -69,6 +69,7 @@ export class ArticlePage implements OnInit {
   unFlagID3: string;
   unFlagID2: string;
   unFlagID1: string;
+  likeCommentCheck: any;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -151,11 +152,9 @@ export class ArticlePage implements OnInit {
 
         this.commentCount = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges();
 
-        this.comments = this.afs.collection("articles").doc(this.titleID).collection("comments").valueChanges({idField: 'commentID'})
-          .subscribe(comments => this.comments = comments)
-
-
-        
+        this.comments = this.afs.collection("articles").doc(this.titleID).collection("comments", 
+          ref => ref.orderBy('createdAt', 'desc')).valueChanges({idField: 'commentID'})
+            .subscribe(comments => this.comments = comments)
       }
     })
   }
@@ -190,11 +189,11 @@ export class ArticlePage implements OnInit {
     }
   }
 
-  async openReplies($event, comments) {
+  async openReplies($event, comment) {
       const modal = await this.modalController.create({
         component: CommentRepliesPage,
         componentProps: {
-          comment: comments
+          comment: comment
         }
       });
       return await modal.present();
@@ -501,68 +500,141 @@ export class ArticlePage implements OnInit {
       this.presentToast("Articles must be read before comments can be liked");
     }
     
-    else {
-      console.log("commentLike event & comment data: " + $event, comment);
-      this.date = new Date();
-      this.currentTime = this.date.getTime();
+    else if (this.userHasRead) {
 
-      let likes = comment.likesCount;
-      let newLikes = likes + 1;
+      console.log('else')
 
-      const shareRef1 = this.afs.collection("users").doc(this.uid).collection("likedComments");
-        shareRef1.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
-          publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), docID: (comment.commentID), image: (this.image), likedCommentIsTrue: (true), description: (this.description), 
-          content: (this.content), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
-          .then(()=> console.log("Like Comment"))
-          .catch((err)=> console.log(" LikeComment Error: " + err));
+      this.likeCommentCheck = this.afs.collection("users").doc(this.uid).collection("likedComments").valueChanges({idField: 'commentlikeID'})
+      .subscribe(results => {
+        console.log(results)
+        if (results.length > 0) {
+          for (let result of results) { 
+            console.log(result)
+            if (result.commentlikeID === comment.commentID && result.comment === comment.comment) {
+              console.log("comment already liked")
+            }
+            else {
 
-      const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
-        shareRef2.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
-          publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
-          likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
-          .then(()=> console.log("Like Comment"))
-          .catch((err)=> console.log(" LikeComment Error: " + err));
-
-      const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
-        shareRef5.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
-          publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
-          likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
-          .then(()=> console.log("Like Comment"))
-          .catch((err)=> console.log(" LikeComment Error: " + err));
-
-      const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.commentID).collection("commentLikes");
-                                                              
-        shareRef3.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
-          publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
-          likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
-          .then(()=> console.log("Like Comment"))
-          .catch((err)=> console.log(" LikeComment Error: " + err));
-      
-      const shareRef7 = this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.commentID);
-      shareRef7.update({ likesCount: (newLikes)})
-
-      this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
-      this.followers.subscribe(results => {
-        for (let result of results) { 
-          const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          shareRef4.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
-            publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
-            title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
-            likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
-            .then(()=> console.log("Like Comment"))
-          .catch((err)=> console.log(" LikeComment Error: " + err));
+              console.log("commentLike event & comment data: " + $event, comment);
+              this.date = new Date();
+              this.currentTime = this.date.getTime();
+        
+              let likes = comment.likesCount;
+              let newLikes = likes + 1;
+        
+              const shareRef1 = this.afs.collection("users").doc(this.uid).collection("likedComments");
+                shareRef1.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
+                  publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
+                  title: (this.title), titleID: (this.titleID), docID: (comment.commentID), image: (this.image), likedCommentIsTrue: (true), description: (this.description), 
+                  content: (this.content), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
+                  .then(()=> console.log("Like Comment"))
+                  .catch((err)=> console.log(" LikeComment Error: " + err));
+        
+              const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
+                shareRef2.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
+                  publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
+                  title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
+                  likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
+                  .then(()=> console.log("Like Comment"))
+                  .catch((err)=> console.log(" LikeComment Error: " + err));
+        
+              const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
+                shareRef5.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
+                  publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
+                  title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
+                  likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
+                  .then(()=> console.log("Like Comment"))
+                  .catch((err)=> console.log(" LikeComment Error: " + err));
+        
+              const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.commentID).collection("commentLikes");
+                                                                      
+                shareRef3.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
+                  publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
+                  title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
+                  likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
+                  .then(()=> console.log("Like Comment"))
+                  .catch((err)=> console.log(" LikeComment Error: " + err));
+              
+              const shareRef7 = this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.commentID);
+              shareRef7.update({ likesCount: (newLikes)})
+        
+              this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
+              this.followers.subscribe(results => {
+                for (let result of results) { 
+                  const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
+                  shareRef4.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
+                    publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
+                    title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
+                    likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
+                    .then(()=> console.log("Like Comment"))
+                  .catch((err)=> console.log(" LikeComment Error: " + err));
+                }
+              })
+              this.presentToast("Comment Liked!");
+            }
+          }
         }
+        else {
+
+          console.log("commentLike event & comment data: " + $event, comment);
+          this.date = new Date();
+          this.currentTime = this.date.getTime();
+    
+          let likes = comment.likesCount;
+          let newLikes = likes + 1;
+    
+          const shareRef1 = this.afs.collection("users").doc(this.uid).collection("likedComments");
+            shareRef1.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
+              publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
+              title: (this.title), titleID: (this.titleID), docID: (comment.commentID), image: (this.image), likedCommentIsTrue: (true), description: (this.description), 
+              content: (this.content), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
+              .then(()=> console.log("Like Comment"))
+              .catch((err)=> console.log(" LikeComment Error: " + err));
+    
+          const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
+            shareRef2.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
+              publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
+              title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
+              likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
+              .then(()=> console.log("Like Comment"))
+              .catch((err)=> console.log(" LikeComment Error: " + err));
+    
+          const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
+            shareRef5.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
+              publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
+              title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
+              likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
+              .then(()=> console.log("Like Comment"))
+              .catch((err)=> console.log(" LikeComment Error: " + err));
+    
+          const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.commentID).collection("commentLikes");
+                                                                  
+            shareRef3.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
+              publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
+              title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
+              likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
+              .then(()=> console.log("Like Comment"))
+              .catch((err)=> console.log(" LikeComment Error: " + err));
+          
+          const shareRef7 = this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.commentID);
+          shareRef7.update({ likesCount: (newLikes)})
+    
+          this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
+          this.followers.subscribe(results => {
+            for (let result of results) { 
+              const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
+              shareRef4.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
+                publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
+                title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
+                likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) })
+                .then(()=> console.log("Like Comment"))
+              .catch((err)=> console.log(" LikeComment Error: " + err));
+            }
+          })
+          this.presentToast("Comment Liked!");
+        }
+
       })
-      this.presentToast("Comment Liked!");
-    }
+      }
   }
-
-  unlikeComment($event, comment) {
-
-  }
-
 }

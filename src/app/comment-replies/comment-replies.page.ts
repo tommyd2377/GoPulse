@@ -11,8 +11,6 @@ import { ModalController, ToastController } from '@ionic/angular';
 })
 export class CommentRepliesPage implements OnInit {
 
-  @Input() comments;
-
   followers;
   uid: string;
   date: Date;
@@ -39,14 +37,15 @@ export class CommentRepliesPage implements OnInit {
           console.log(this.followers);
           console.log(this.comment);
           this.commentReplies = this.afs.collection("articles").doc(this.comment.titleID).collection("comments")
-            .doc(this.comment.commentID).collection("commentReplies").valueChanges({idField: 'customIdName'})
-              .subscribe(replies => this.commentReplies = replies);
+            .doc(this.comment.commentID).collection("commentReplies", 
+              ref => ref.orderBy('createdAt', 'desc')).valueChanges({idField: 'customIdName'})
+                .subscribe(replies => this.commentReplies = replies);
       }
-    })
+    }) 
   }
 
   openUser($event, comment) {
-
+ 
   }
 
   likeComment($event, comment) {
@@ -101,25 +100,25 @@ export class CommentRepliesPage implements OnInit {
       let newReplies = replies + 1;
 
       const shareRef1 = this.afs.collection("users").doc(this.uid).collection("commentReplies");
-        shareRef1.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
+        shareRef1.add({ authorUid: (this.comment.uid), authorDisplayName: (this.comment.displayName), authorPhotourl: (this.comment.photoUrl), image: (this.comment.image), uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
           titleID: (this.comment.titleID), commentID: (this.comment.commentID), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
           .then(()=> console.log("Comment"))
           .catch((err)=> console.log("Comment Error: " + err));
 
       const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
-        shareRef2.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
+        shareRef2.add({ authorUid: (this.comment.uid), authorDisplayName: (this.comment.displayName), authorPhotourl: (this.comment.photoUrl), image: (this.comment.image), uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
           titleID: (this.comment.titleID), commentID: (this.comment.commentID), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
           .then(()=> console.log("Comment"))
           .catch((err)=> console.log("Comment Error: " + err));
 
       const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
-      shareRef5.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
+      shareRef5.add({ authorUid: (this.comment.uid), authorDisplayName: (this.comment.displayName), authorPhotourl: (this.comment.photoUrl), image: (this.comment.image),uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
         titleID: (this.comment.titleID), commentID: (this.comment.commentID), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
         .then(()=> console.log("Comment"))
           .catch((err)=> console.log("Comment Error: " + err));
 
       const shareRef3 = this.afs.collection("articles").doc(this.comment.titleID).collection("comments").doc(this.comment.commentID).collection("commentReplies");
-        shareRef3.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
+        shareRef3.add({ authorUid: (this.comment.uid), authorDisplayName: (this.comment.displayName), authorPhotourl: (this.comment.photoUrl), image: (this.comment.image),uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
           titleID: (this.comment.titleID), commentID: (this.comment.commentID), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
           .then(()=> console.log("Comment"))
           .catch((err)=> console.log("Comment Error: " + err));
@@ -131,7 +130,7 @@ export class CommentRepliesPage implements OnInit {
       this.followers.subscribe(results => {
         for (let result of results) { 
           const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          shareRef4.add({ uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
+          shareRef4.add({ authorUid: (this.comment.uid), authorDisplayName: (this.comment.displayName), authorPhotourl: (this.comment.photoUrl), image: (this.comment.image),uid: (this.uid), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.comment.title), comment: (this.comment.comment),
             titleID: (this.comment.titleID), commentID: (this.comment.commentID), reply: (this.commentReply), commentReplyIsTrue: (true), articleUrl: (this.comment.articleUrl), publishDate: (this.comment.publishDate), publisher: (this.comment.publisher) })
             .then(()=> console.log("Comment to follower: " + result.followerUid))
           .catch((err)=> console.log("Comment Error: " + err));
