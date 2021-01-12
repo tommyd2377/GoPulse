@@ -10,6 +10,21 @@
 <ion-content class="ion-padding">
 
   <div class="center-desktop">
+
+    <ion-button expand="block">
+      <ion-icon lazy="true" slot="start" name="image"></ion-icon>
+      <ion-label slot="end">Add a profile picture</ion-label>
+      <input type="file" (change)="uploadFile($event)" id="file-input"
+        accept="image/png, image/jpeg">
+    </ion-button>
+
+    <div>{{ uploadPercent | async }}</div>
+    <ion-avatar *ngIf="downloadURL" id="ion-avatar" slot="start">
+      <img src="{{ downloadURL }}">
+    </ion-avatar>
+
+    <br>
+    <br>
   
     <ion-item>
       <ion-label position="floating">{{ (profileDoc | async)?.displayName }}</ion-label>
@@ -39,28 +54,6 @@
     <br>
   
     <ion-button (click)="updateProfile()" fill="outline" expand="block">Update</ion-button>
-
-    <br>
-
-    <br>
-
-    <br>
-
-    <ion-button expand="full">
-      <ion-icon lazy="true" slot="start" name="image"></ion-icon>
-      <ion-label slot="end">Upload Image</ion-label>
-      <input type="file" (change)="uploadFile($event)" id="file-input"
-        accept="image/png, image/jpeg">
-    </ion-button>
-
-    <ion-label position="floating">Update Profile Picture</ion-label>
-    <ion-input type="file" (change)="uploadFile($event)"></ion-input>
-    <div>{{ uploadPercent | async }}</div>
-    <ion-avatar id="ion-avatar" slot="start">
-      <img src="{{ downloadURL }}">
-    </ion-avatar>
-
-    <br>
 
   </div>
 

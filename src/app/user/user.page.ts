@@ -70,13 +70,17 @@ export class UserPage implements OnInit {
 
         this.cuFollowing = this.afs.collection("users").doc(this.uid).collection("following").valueChanges({idField: 'followID'})
           .subscribe(results => {
+            //TODO: There's multiple results!!!
             for (let result of results) { 
               if (result.followeeUid === this.userId && result.followerUid === this.uid) {
                   this.userIsFollowing = true;
+                  console.log(this.userIsFollowing);
                   this.unFollowID = result.followID;
+                  break;
               }
               else {
                 this.userIsFollowing = false;
+                console.log(this.userIsFollowing);
               }
             }
           })

@@ -71,13 +71,13 @@
 
     <ion-list *ngFor="let comment of comments">
 
-      <ion-item>
+      <ion-item lines="none">
         
         <ion-avatar slot="start">
           <img src="{{ comment.photoUrl }}">
         </ion-avatar>
         
-        <ion-label (click)="openUser($event, comment)">
+        <ion-label lines="none" (click)="openUser($event, comment)">
           {{ comment.displayName }}
         </ion-label>
 

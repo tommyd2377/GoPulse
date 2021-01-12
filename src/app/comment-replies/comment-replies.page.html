@@ -3,7 +3,7 @@
     <ion-buttons slot="end">
       <ion-button (click)="dismissModal()">Close</ion-button>
     </ion-buttons>
-    <ion-title color="primary">Reply to {{ comment.displayName }}'s comment</ion-title>
+    <ion-title color="primary">Reply to {{ comment.displayName }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -30,7 +30,7 @@
 
     <div *ngFor="let reply of commentReplies">
 
-       <ion-item>
+       <ion-item lines="none">
         
         <ion-avatar slot="start">
           <img src="{{ reply.photoUrl }}">
@@ -42,7 +42,7 @@
 
       </ion-item>
 
-      <ion-item>
+      <ion-item lines="none">
         <p>
           "{{ reply.reply }}"
         </p>
