@@ -125,6 +125,8 @@ export class SignUpPage {
             uid: uid,
             email: this.email,
             displayName: this.displayName,
+            bio: "Don't forget to update your picture and bio in your profile settings",
+            goCode: this.goCode,
             fullName: this.fullName,
             fullNameSearch: this.fullName.toUpperCase(),
             photoURL: "https://logodix.com/logo/1984123.png",

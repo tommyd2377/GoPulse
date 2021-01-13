@@ -4,7 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { GlobalParamsService } from '../global-params.service';
-import { TabsPage } from '../tabs/tabs.page'
+import { TabsPage } from '../tabs/tabs.page';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +14,7 @@ import { TabsPage } from '../tabs/tabs.page'
 
 export class HomePage implements OnInit {
 
+  showLoader: boolean = true;
   uid: string;
   followingActivity;
   profileDoc: any;
@@ -25,7 +26,6 @@ export class HomePage implements OnInit {
   code5: string;
   code6: string;
   code7: string;
-  showLoader: boolean = true;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -60,7 +60,6 @@ export class HomePage implements OnInit {
   }
 
   copyCode(index) {
-    console.log(index);
     const selBox = document.createElement('textarea');
     selBox.style.position = 'fixed';
     selBox.style.left = '0';

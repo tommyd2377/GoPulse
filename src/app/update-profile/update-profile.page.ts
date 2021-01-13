@@ -54,9 +54,7 @@ export class UpdateProfilePage {
                 .subscribe(profilePicture => { console.log(profilePicture)
                   this.downloadURL = profilePicture;
                   user.updateProfile({ photoURL: profilePicture })
-                    .then(()=> console.log("photoUrl profile update"));
-                  userData.update({ photoURL: profilePicture })
-                    .then(()=> console.log("photoUrl set"))
+                    .then(() => userData.update({ photoURL: profilePicture }));
                 })         
         ))   
         .subscribe()
@@ -72,35 +70,22 @@ export class UpdateProfilePage {
         let userData = this.afs.collection("users").doc(uid);
         if (this.newEmail) {
           user.updateEmail(this.newEmail)
-            .then(()=> console.log("email update"))
-            .catch((err)=> console.log("email update error: " + err));
-          userData.update({ email: this.newEmail })
-            .then(()=> console.log("email update doc"))
-            .catch((err)=> console.log("email update doc error: " + err));
+            .then(() => userData.update({ email: this.newEmail }));
         }
         if (this.newPassword) {
-          user.updatePassword(this.newPassword)
-            .then(()=> console.log("password update"))
-            .catch((err)=> console.log("password update error: " + err));
+          user.updatePassword(this.newPassword);
         } 
         if (this.newDisplayName) {
           user.updateProfile({ displayName: this.newDisplayName })
-            .then(()=> console.log("displayname update"))
-            .catch((err)=> console.log("displayname update error: " + err));
-          userData.update({ displayName: this.newDisplayName })
-            .then(()=> console.log("displayname update doc"))
-            .catch((err)=> console.log("displayname update doc error: " + err));
+            .then(() => userData.update({ displayName: this.newDisplayName }));
+          
         } 
         if (this.newFullName) {
           userData.update({ fullName: this.newFullName,
-          fullNameSearch: this.newFullName.toUpperCase() })
-            .then(()=> console.log("fullname update doc"))
-            .catch((err)=> console.log("fullname update doc error: " + err));
+          fullNameSearch: this.newFullName.toUpperCase() });
         }
         if (this.bio) {
-          userData.update({ bio: this.bio })
-            .then(()=> console.log("bio update doc"))
-            .catch((err)=> console.log("bio update doc error: " + err));
+          userData.update({ bio: this.bio });
         }
       }
     })

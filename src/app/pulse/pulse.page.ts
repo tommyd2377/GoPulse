@@ -13,6 +13,8 @@ declare var require: any
 
 export class PulsePage implements OnInit {
 
+  showLoader: boolean = true;
+
   articles: string[];
 
   topicsUrl: string = environment.newsApi.topicsUrl;
@@ -29,8 +31,8 @@ export class PulsePage implements OnInit {
       return response.json()
     })
     .then((data) => {
-      console.log(data);
       this.articles = data.articles;
+      this.showLoader = false;
     });
   }
 
@@ -43,7 +45,6 @@ export class PulsePage implements OnInit {
       return response.json()
     })
     .then((data) => {
-      console.log(data);
       this.articles = data.articles;
     });
   }
@@ -59,7 +60,6 @@ export class PulsePage implements OnInit {
     this.globalProps.publisher = article.source.name;
     let newTitle: string = article.title;
     this.globalProps.titleID = newTitle.replace(/[^A-Z0-9]+/ig, "-");
-    console.log(this.globalProps);
     this.router.navigateByUrl('tabs/pulse/article/' + this.globalProps.titleID);
   }
 

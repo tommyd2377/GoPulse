@@ -80,7 +80,6 @@ export class ArticlePage implements OnInit {
               public iab: InAppBrowser,
               public globalProps: GlobalParamsService,
               public analytics: AngularFireAnalytics) {
-                console.log(this.globalProps)
                 this.title = this.globalProps.title;
                 this.articleUrl = this.globalProps.articleUrl;
                 this.publishDate = this.globalProps.publishDate;
@@ -106,11 +105,11 @@ export class ArticlePage implements OnInit {
             for (let result of results) { 
               if (result.uid === this.uid) {
                   this.userHasRead = true;
+                  break;
               }
               else {
                 this.userHasRead = false;
               }
-              console.log("userhasread" + this.userHasRead);
             }
         });
 
@@ -124,6 +123,8 @@ export class ArticlePage implements OnInit {
                 this.unLikeID = result.likeID;
              
                 this.userHasShared = true;
+
+                break;
               }
               else {
                 this.userHasShared = false;
@@ -140,6 +141,7 @@ export class ArticlePage implements OnInit {
                 if (result.uid === this.uid) {
                     this.unFlagID = result.flagID;
                     this.userHasFlagged = true;
+                    break;
                 }
                 else {
                   this.userHasFlagged = false;
@@ -287,6 +289,7 @@ export class ArticlePage implements OnInit {
           this.unLikeID1 = result.likeID1;
           const unshareRef1 = this.afs.collection("users").doc(this.uid).collection("shares").doc(this.unLikeID1);
           unshareRef1.delete().then(() => console.log("unliked"));
+          break;
         }
       }
     });
@@ -297,7 +300,7 @@ export class ArticlePage implements OnInit {
           this.unLikeID2 = result.likeID2;
           const unshareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity").doc(this.unLikeID2);
           unshareRef2.delete().then(() => console.log("unliked"));
-         
+         break;
         }
       }
     });
@@ -309,6 +312,7 @@ export class ArticlePage implements OnInit {
           this.unLikeID3 = result.likeID3;
           const unshareRef4 = this.afs.collection("users").doc(this.uid).collection("privateActivity").doc(this.unLikeID3);
           unshareRef4.delete().then(() => console.log("unliked"));
+          break;
         }
       }
     });
@@ -323,6 +327,7 @@ export class ArticlePage implements OnInit {
                 this.unLikeID4 = result1.likeID4;
                 const unshareRef5 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity").doc(this.unLikeID4);
                 unshareRef5.delete().then(() => console.log("unliked"));
+                break;
               }
             }
         })
@@ -389,33 +394,35 @@ export class ArticlePage implements OnInit {
     this.unFlagshares1 = this.afs.collection("users").doc(this.uid).collection("flags").valueChanges({idField: 'flagID1'})
     .subscribe(results => {
       for (let result of results) { 
-        if (result.titleID === this.titleID) {
+        if (result.titleID === this.titleID && result.flaggedIsTrue === true) {
           
           this.unFlagID1 = result.flagID1;
           const unFlagRef1 = this.afs.collection("users").doc(this.uid).collection("flags").doc(this.unFlagID1);
           unFlagRef1.delete().then(() => console.log("unflagged"));
+          break;
         }
       }
     });
     this.unFlagshares2 = this.afs.collection("users").doc(this.uid).collection("publicActivity").valueChanges({idField: 'flagID2'})
     .subscribe(results => {
       for (let result of results) { 
-        if (result.titleID === this.titleID) {
+        if (result.titleID === this.titleID && result.flaggedIsTrue === true) {
           this.unFlagID2 = result.flagID2;
           const unFlagRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity").doc(this.unFlagID2);
           unFlagRef2.delete().then(() => console.log("unflagged"));
-         
+          break;
         }
       }
     });
     this.unFlagshares3 = this.afs.collection("users").doc(this.uid).collection("privateActivity").valueChanges({idField: 'flagID3'})
     .subscribe(results => {
       for (let result of results) { 
-        if (result.titleID === this.titleID) {
+        if (result.titleID === this.titleID && result.flaggedIsTrue === true) {
 
           this.unFlagID3 = result.flagID3;
           const unFlagRef4 = this.afs.collection("users").doc(this.uid).collection("privateActivity").doc(this.unFlagID3);
           unFlagRef4.delete().then(() => console.log("unflagged"));
+          break;
         }
       }
     });
@@ -425,7 +432,7 @@ export class ArticlePage implements OnInit {
           this.followerUnLike = this.afs.collection("users").doc(result.followerUid).collection("followingActivity").valueChanges({idField: 'flagID4'});
           this.followerUnLike.subscribe(results1 => {
             for (let result1 of results1) {
-              if (result1.titleID === this.titleID) {
+              if (result1.titleID === this.titleID && result.flaggedIsTrue === true) {
         
                 this.unFlagID4 = result1.flagID4;
                 const unFlagRef5 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity").doc(this.unFlagID4);
@@ -512,6 +519,7 @@ export class ArticlePage implements OnInit {
             console.log(result)
             if (result.commentlikeID === comment.commentID && result.comment === comment.comment) {
               console.log("comment already liked")
+              break;
             }
             else {
 
