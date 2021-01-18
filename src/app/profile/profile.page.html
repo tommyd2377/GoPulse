@@ -9,7 +9,22 @@
 
 <ion-content class="ion-padding">
 
-  <div class="center-desktop">
+  <div *ngIf="showLoader">
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <ion-spinner name="bubbles" color="primary"></ion-spinner>
+  </div>
+
+  <div *ngIf="!showLoader" class="center-desktop">
 
     <ion-item class="ion-text-wrap">
 
@@ -34,7 +49,7 @@
     <br>
     <br>
 
-    <div *ngFor="let active of userActivity">
+    <div *ngFor="let active of userActivity | async">
 
       <ion-item detail="false">
         

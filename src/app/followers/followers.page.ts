@@ -23,12 +23,8 @@ export class FollowersPage implements OnInit {
   ngOnInit() {
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
-        
-        console.log("currentUser: " + user);
         this.uid = user.uid;
-        this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges()
-          .subscribe(followers => this.followers = followers)
-          console.log(this.followers)
+        this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       }
     })
   }

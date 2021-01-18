@@ -14,6 +14,8 @@ import { Observable } from 'rxjs';
 
 export class ProfilePage implements OnInit {
 
+  showLoader: boolean = true;
+
   profileDoc;
   uid;
   userActivity;
@@ -43,19 +45,17 @@ export class ProfilePage implements OnInit {
 
         const ref = this.storage.ref('users/' + this.uid + '.jpg');
         this.profileUrl = ref.getDownloadURL();
-
-        console.log(this.profileUrl)
         
         this.profileDoc = this.afs.collection("users").doc(this.uid).valueChanges();
    
-        this.userActivity = this.afs.collection("users").doc(this.uid).collection("privateActivity", ref => ref.orderBy('createdAt', 'desc')).valueChanges()
-          .subscribe(activity => this.userActivity = activity);
+        this.userActivity = this.afs.collection("users").doc(this.uid).collection("privateActivity", ref => ref.orderBy('createdAt', 'desc')).valueChanges();
 
         this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
         
         this.following = this.afs.collection("users").doc(this.uid).collection("following").valueChanges();
       }
     })
+    this.showLoader = false;
   }
   
   openArticle($event, active) {

@@ -1,5 +1,6 @@
-import { Component, OnInit  } from '@angular/core';
+import { Component, OnInit, ViewChild  } from '@angular/core';
 import { Router } from '@angular/router';
+import { IonContent, Platform } from '@ionic/angular';
 import { environment } from '../../environments/environment';
 import { GlobalParamsService } from '../global-params.service';
 
@@ -13,6 +14,10 @@ declare var require: any
 
 export class PulsePage implements OnInit {
 
+  @ViewChild(IonContent, {static: true}) content: IonContent;
+
+  backToTop: boolean = false;
+
   showLoader: boolean = true;
 
   articles: string[];
@@ -23,6 +28,7 @@ export class PulsePage implements OnInit {
   category: string = "world";
 
   constructor(private router: Router,
+              public platform: Platform,  
               public globalProps: GlobalParamsService) { }
 
   ngOnInit() {
@@ -34,6 +40,18 @@ export class PulsePage implements OnInit {
       this.articles = data.articles;
       this.showLoader = false;
     });
+  }
+
+  getScrollPos(pos: number) {
+    if (pos > this.platform.height()) {
+         this.backToTop = true;
+    } else {
+         this.backToTop = false;
+    }
+  }
+
+  gotToTop() {
+    this.content.scrollToTop(500);
   }
 
   segmentChanged(ev: any) {
@@ -50,7 +68,6 @@ export class PulsePage implements OnInit {
   }
   
   openArticle($event, article) {
-    console.log($event, article);
     this.globalProps.title = article.title;
     this.globalProps.image = article.image;
     this.globalProps.content = article.content;

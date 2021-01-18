@@ -69,7 +69,7 @@
     
     <br>
 
-    <ion-list *ngFor="let comment of comments">
+    <ion-list *ngFor="let comment of comments | async">
 
       <ion-item lines="none">
         

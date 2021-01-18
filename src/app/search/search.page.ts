@@ -14,6 +14,8 @@ import { GlobalParamsService } from '../global-params.service';
 
 export class SearchPage implements OnInit  {
 
+  showLoader: boolean = true;
+
   userQuery = new Subject<string>();
   newsQuery: string;
 
@@ -39,6 +41,7 @@ export class SearchPage implements OnInit  {
       })
       .then((data) => {
           this.articles = data.articles;
+          this.showLoader = false;
       });
   }
 
@@ -48,10 +51,11 @@ export class SearchPage implements OnInit  {
       this.searchingUsers = false;
     }
     else if (ev.detail.value === "users") {
+      this.showLoader = true;
       this.searchingNews = false;
       this.searchingUsers = true;
-      this.userResults = this.afs.collection("users").valueChanges()
-        .subscribe(activity => this.userResults = activity);
+      this.userResults = this.afs.collection("users").valueChanges();
+      this.showLoader = false;
     }
   }          
 

@@ -4,20 +4,28 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" [scrollEvents]="true" (ionScroll)="getScrollPos($event.detail.scrollTop)">
 
   <div *ngIf="showLoader">
     <br>
     <br>
     <br>
-    <app-loading-spinner></app-loading-spinner>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <ion-spinner name="bubbles" color="primary"></ion-spinner>
   </div>
 
   <div *ngIf="!showLoader" class="center-desktop">
 
-    <ion-list *ngFor="let active of followingActivity">
+    <ion-list *ngFor="let active of followingActivity | async">
 
-    <ion-item detail="false">
+    <ion-item lines="none">
       <ion-avatar slot="start" (click)="openUser($event, active)">
         <img *ngIf="!active.recievedIsTrue" src="{{ active.photoUrl }}">
         <img *ngIf="active.recievedIsTrue" src="{{ active.senderPhotoUrl }}">
@@ -35,13 +43,13 @@
 
       </ion-item>
 
-      <ion-item *ngIf="active.commentIsTrue">
+      <ion-item lines="none" *ngIf="active.commentIsTrue">
         <p>
           "{{ active.comment }}"
         </p>
       </ion-item>
 
-      <ion-item *ngIf="active.likedCommentIsTrue">
+      <ion-item lines="none" *ngIf="active.likedCommentIsTrue">
 
         <ion-avatar slot="start" (click)="openUser($event, active)">
           <img src="{{ active.authorPhotoUrl }}">
@@ -53,13 +61,13 @@
 
       </ion-item>
 
-      <ion-item *ngIf="active.likedCommentIsTrue">
+      <ion-item lines="none" *ngIf="active.likedCommentIsTrue">
         <p>
           "{{ active.comment }}"
         </p>
       </ion-item>
 
-      <ion-item *ngIf="active.commentReplyIsTrue">
+      <ion-item lines="none" *ngIf="active.commentReplyIsTrue">
 
         <ion-avatar slot="start" (click)="openUser($event, active)">
           <img src="{{ active.authorPhotoUrl }}">
@@ -71,25 +79,25 @@
 
       </ion-item>
 
-      <ion-item *ngIf="active.commentReplyIsTrue">
+      <ion-item lines="none" *ngIf="active.commentReplyIsTrue">
         <p>
           "{{ active.reply }}"
         </p>
       </ion-item>
 
-      <ion-item *ngIf="active.likedCommentIsTrue">
+      <ion-item lines="none" *ngIf="active.likedCommentIsTrue">
         <p>
           "{{ active.comment }}"
         </p>
       </ion-item>
 
-      <ion-item *ngIf="active.recievedIsTrue">
+      <ion-item lines="none" *ngIf="active.recievedIsTrue">
         <p>
           "{{ active.message }}"
         </p>
       </ion-item>
 
-      <ion-item *ngIf="active.followingIsTrue">
+      <ion-item lines="none" *ngIf="active.followingIsTrue">
         <ion-avatar slot="start" (click)="openUser($event, active)">
           <img src="{{ active.followeePhotoUrl }}">
         </ion-avatar>
@@ -100,7 +108,7 @@
   
         </ion-item>
 
-        <ion-item detail="false">
+        <ion-item  lines="none">
   
         <ion-label class="ion-text-wrap" (click)="openArticle($event, active)">
           <img src="{{ active.image }}" alt="">
@@ -156,6 +164,10 @@
       </ion-item>
     </ul>
  
+  </div>
+
+  <div class="back-to-top-btn" *ngIf="backToTop" (click)="gotToTop()">
+    <ion-icon name="chevron-up-outline"></ion-icon>
   </div>
 
 </ion-content>

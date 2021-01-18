@@ -25,6 +25,23 @@
         (ionInput)="searchUsers($event)" placeholder="search for a subscriber..." clearInput="true">
     </ion-searchbar>
 
+    <div *ngIf="showLoader">
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <ion-spinner name="bubbles" color="primary"></ion-spinner>
+    </div>
+
+    <div *ngIf="!showLoader">
+
     <div *ngFor="let article of articles">
   
       <ion-item *ngIf="searchingNews" detail="false">
@@ -42,7 +59,7 @@
 
     </div>
 
-    <div *ngFor="let user of userResults">
+    <div *ngFor="let user of userResults | async">
 
       <ion-item *ngIf="searchingUsers" detail="false">
         
@@ -60,5 +77,3 @@
     </div>
 
   </div>
-
-</ion-content>

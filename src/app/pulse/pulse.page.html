@@ -6,14 +6,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-
-  <!-- <div *ngIf="showLoader">
-    <br>
-    <br>
-    <br>
-    <app-loading-spinner></app-loading-spinner>
-  </div> -->
+<ion-content class="ion-padding" [scrollEvents]="true" (ionScroll)="getScrollPos($event.detail.scrollTop)">
   
   <div class="center-desktop">
     
@@ -44,9 +37,24 @@
       </ion-segment-button>
     </ion-segment>
 
+    <div *ngIf="showLoader">
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <ion-spinner name="bubbles" color="primary"></ion-spinner>
+    </div>
+
     <ion-list *ngFor="let article of articles">
   
-      <ion-item detail="false">
+      <ion-item *ngIf="!showLoader" detail="false">
 
       <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
         <img src="{{ article.image }}" alt="">
@@ -61,6 +69,10 @@
 
     </ion-list>
  
+  </div>
+
+  <div class="back-to-top-btn" *ngIf="backToTop" (click)="gotToTop()">
+    <ion-icon name="chevron-up-outline"></ion-icon>
   </div>
 
 </ion-content>

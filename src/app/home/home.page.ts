@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { ToastController } from '@ionic/angular';
+import { AngularFirestore, AngularFirestoreCollection  } from '@angular/fire/firestore';
+import { IonContent, ToastController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { GlobalParamsService } from '../global-params.service';
 import { TabsPage } from '../tabs/tabs.page';
@@ -13,6 +13,10 @@ import { TabsPage } from '../tabs/tabs.page';
 })
 
 export class HomePage implements OnInit {
+
+  @ViewChild(IonContent, {static: true}) content: IonContent;
+
+  backToTop: boolean = false;
 
   showLoader: boolean = true;
   uid: string;
@@ -32,14 +36,15 @@ export class HomePage implements OnInit {
               public toastController: ToastController,
               private afs: AngularFirestore,
               public globalProps: GlobalParamsService,
-              public tabs: TabsPage) {}
+              public tabs: TabsPage,
+              public platform: Platform) {}
 
   ngOnInit() {
     this.fireAuth.auth.onAuthStateChanged(async (user) => {
       if (user) {
         this.uid = user.uid;
         
-        this.profileDoc = this.afs.collection("users").doc(this.uid).valueChanges();
+        this.profileDoc = await this.afs.collection("users").doc(this.uid).valueChanges();
 
         this.codes = await this.profileDoc.subscribe((doc) => { 
           this.code1 = doc.goCodes[0];
@@ -52,11 +57,23 @@ export class HomePage implements OnInit {
         });
 
         this.followingActivity = this.afs.collection("users").doc(this.uid).collection("followingActivity", 
-          ref => ref.orderBy('createdAt', 'desc')).valueChanges().subscribe(activity => this.followingActivity = activity);
+          ref => ref.orderBy('createdAt', 'desc')).valueChanges();
 
         this.showLoader = false;
       }
     })
+  }
+
+  getScrollPos(pos: number) {
+    if (pos > this.platform.height()) {
+         this.backToTop = true;
+    } else {
+         this.backToTop = false;
+    }
+  }
+
+  gotToTop() {
+    this.content.scrollToTop(500);
   }
 
   copyCode(index) {

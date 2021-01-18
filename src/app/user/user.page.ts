@@ -13,6 +13,8 @@ import { GlobalParamsService } from '../global-params.service';
 
 export class UserPage implements OnInit {
 
+  showLoader: boolean = true;
+
   thisIsYou: boolean;
   userIsFollowing: boolean;
   uid: string;
@@ -70,43 +72,42 @@ export class UserPage implements OnInit {
 
         this.cuFollowing = this.afs.collection("users").doc(this.uid).collection("following").valueChanges({idField: 'followID'})
           .subscribe(results => {
-            //TODO: There's multiple results!!!
             for (let result of results) { 
               if (result.followeeUid === this.userId && result.followerUid === this.uid) {
                   this.userIsFollowing = true;
-                  console.log(this.userIsFollowing);
                   this.unFollowID = result.followID;
                   break;
               }
               else {
                 this.userIsFollowing = false;
-                console.log(this.userIsFollowing);
               }
             }
           })
 
         this.userProfileDoc = this.afs.collection("users").doc(this.userId).valueChanges();
 
-        this.userdoc = this.afs.collection("users").doc(this.userId).ref.get().then((doc) => {
-          if (doc.exists) {
-            this.userDisplayName = doc.data().displayName;
-            this.userPhotoUrl = doc.data().photoURL;
+        // this.userdoc = this.afs.collection("users").doc(this.userId).ref.get().then((doc) => {
+        //   if (doc.exists) {
+        //     this.userDisplayName = doc.data().displayName;
+        //     this.userPhotoUrl = doc.data().photoURL;
 
-          } else {
-            this.presentToast("No such document!");
-          }
-        }).catch(function(error) {
-          this.presentToast("Error getting document:", error);
-        });
+
+        //   } else {
+        //     this.presentToast("No such document!");
+        //   }
+        // }).catch(function(error) {
+        //   this.presentToast("Error getting document:", error);
+        // });
 
         this.userActivity = this.afs.collection("users").doc(this.userId).collection("publicActivity", ref => 
-          ref.orderBy('createdAt', 'desc')).valueChanges().subscribe(activity => this.userActivity = activity);
+          ref.orderBy('createdAt', 'desc')).valueChanges();
         
         this.followers = this.afs.collection("users").doc(this.userId).collection("followers").valueChanges();
         
         this.following = this.afs.collection("users").doc(this.userId).collection("following").valueChanges();
       }
     })
+    this.showLoader = false;
   }
  
   openArticle($event, active) {
@@ -122,7 +123,6 @@ export class UserPage implements OnInit {
   }
 
   openUser($event, active) {
-    console.log($event, active);
     this.router.navigateByUrl('tabs/' + this.globalProps.currentTab + '/user/' + active.uid);
   }
 
@@ -204,6 +204,7 @@ export class UserPage implements OnInit {
               this.unFollowID1 = result.unFollowID1;
               const unFollowRef1 = this.afs.collection("users").doc(this.uid).collection("publicActivity").doc(this.unFollowID1);
               unFollowRef1.delete().then(() => console.log("unFollowed"));
+              break;
             }
           }
       });
@@ -215,6 +216,7 @@ export class UserPage implements OnInit {
               this.unFollowID6 = result.unFollowID6;
               const unFollowRef6 = this.afs.collection("users").doc(this.uid).collection("privateActivity").doc(this.unFollowID6);
               unFollowRef6.delete().then(() => console.log("unFollowed"));
+              break;
             }
           }
       });
@@ -226,7 +228,7 @@ export class UserPage implements OnInit {
             this.unFollowID2 = result.unFollowID2;
             const unFollowRef2 = this.afs.collection("users").doc(this.userId).collection("publicActivity").doc(this.unFollowID2);
             unFollowRef2.delete().then(() => console.log("unFollowed"));
-          
+            break;
           }
         }
       });
@@ -238,6 +240,7 @@ export class UserPage implements OnInit {
             this.unFollowID3 = result.unFollowID3;
             const unFollowRef4 = this.afs.collection("users").doc(this.userId).collection("privateActivity").doc(this.unFollowID3);
             unFollowRef4.delete().then(() => console.log("unFollowed"));
+            break;
           }
         }
       });
@@ -249,6 +252,7 @@ export class UserPage implements OnInit {
             this.unFollowID7 = result.unFollowID7;
             const unFollowRef4 = this.afs.collection("users").doc(this.userId).collection("followers").doc(this.unFollowID7);
             unFollowRef4.delete().then(() => console.log("unFollowed"));
+            break;
           }
         }
       });
@@ -263,12 +267,12 @@ export class UserPage implements OnInit {
                   this.unFollowID4 = result1.unFollowID4;
                   const unFollowRef5 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity").doc(this.unFollowID4);
                   unFollowRef5.delete().then(() => console.log("unFollowed"));
+                  break;
                 }
               }
           })
         }
       });
-
       this.userIsFollowing = false;
       this.presentToast("You are no longer following " + this.userDisplayName);
     }
