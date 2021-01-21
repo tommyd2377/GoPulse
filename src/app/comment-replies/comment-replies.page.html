@@ -28,7 +28,7 @@
       </ion-button>
     </ion-item>
 
-    <div *ngFor="let reply of commentReplies">
+    <div *ngFor="let reply of commentReplies | async">
 
        <ion-item lines="none">
         

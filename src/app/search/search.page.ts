@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Router } from '@angular/router';
 import { Observable, BehaviorSubject, Subject, combineLatest } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { GlobalParamsService } from '../global-params.service';
+import { IonContent, Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-search',
@@ -13,6 +14,10 @@ import { GlobalParamsService } from '../global-params.service';
 })
 
 export class SearchPage implements OnInit  {
+
+  @ViewChild(IonContent, {static: true}) content: IonContent;
+
+  backToTop: boolean = false;
 
   showLoader: boolean = true;
 
@@ -31,6 +36,7 @@ export class SearchPage implements OnInit  {
   searchingUsers: boolean = false;
 
   constructor(private router: Router,
+              public platform: Platform,
               private afs: AngularFirestore,
               public globalProps: GlobalParamsService) { }
               
@@ -43,6 +49,18 @@ export class SearchPage implements OnInit  {
           this.articles = data.articles;
           this.showLoader = false;
       });
+  }
+
+  getScrollPos(pos: number) {
+    if (pos > this.platform.height()) {
+         this.backToTop = true;
+    } else {
+         this.backToTop = false;
+    }
+  }
+
+  gotToTop() {
+    this.content.scrollToTop(500);
   }
 
   segmentChanged(ev: any) {

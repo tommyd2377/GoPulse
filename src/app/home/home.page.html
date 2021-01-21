@@ -68,6 +68,12 @@
       </ion-item>
 
       <ion-item lines="none" *ngIf="active.commentReplyIsTrue">
+        <p>
+          "{{ active.reply }}"
+        </p>
+      </ion-item>
+
+      <ion-item lines="none" *ngIf="active.commentReplyIsTrue">
 
         <ion-avatar slot="start" (click)="openUser($event, active)">
           <img src="{{ active.authorPhotoUrl }}">
@@ -81,7 +87,7 @@
 
       <ion-item lines="none" *ngIf="active.commentReplyIsTrue">
         <p>
-          "{{ active.reply }}"
+          "{{ active.comment }}"
         </p>
       </ion-item>
 

@@ -14,7 +14,7 @@ import { TabsPage } from '../tabs/tabs.page';
 
 export class HomePage implements OnInit {
 
-  @ViewChild(IonContent, {static: true}) content: IonContent;
+  @ViewChild(IonContent, {static: true}) content: IonContent; 
 
   backToTop: boolean = false;
 

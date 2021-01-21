@@ -12,6 +12,9 @@ export const createStripeCustomer = functions.auth
 
     const customer = await stripe.customers.create({
       email: userRecord.email,
+      metadata: {
+        firebaseUID: firebaseUID,
+      }
     });
 
     const sub = await stripe.subscriptions.create({
@@ -23,7 +26,7 @@ export const createStripeCustomer = functions.auth
       days_until_due: 30,
     })
 
-    return db.doc(`users/${firebaseUID}`).update({
+    return db.doc(`customers/${firebaseUID}`).update({
       stripeId: customer.id,
       status: sub.status,
       subId: sub.id

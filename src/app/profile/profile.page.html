@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" [scrollEvents]="true" (ionScroll)="getScrollPos($event.detail.scrollTop)">
 
   <div *ngIf="showLoader">
     <br>
@@ -62,6 +62,7 @@
           <h2 *ngIf="active.recievedIsTrue">{{ active.senderDisplayName }} sent you this article </h2>
           <h2 *ngIf="active.sentIsTrue">You sent {{ active.sendeeDisplayName }} this article </h2>
           <h2 *ngIf="active.commentIsTrue">You commented on this article</h2>
+          <h2 *ngIf="active.commentReplyIsTrue">You replied to this comment</h2>
           <h2 *ngIf="active.flaggedIsTrue">You labeled this article as narrative driven journalism</h2>
           <h2 *ngIf="active.likedCommentIsTrue">You liked this comment</h2>
         </ion-label>
@@ -69,6 +70,30 @@
       </ion-item>
 
       <ion-item *ngIf="active.commentIsTrue">
+        <p>
+          "{{ active.comment }}"
+        </p>
+      </ion-item>
+
+      <ion-item lines="none" *ngIf="active.commentReplyIsTrue">
+        <p>
+          "{{ active.reply }}"
+        </p>
+      </ion-item>
+
+      <ion-item lines="none" *ngIf="active.commentReplyIsTrue">
+
+        <ion-avatar slot="start" (click)="openUser($event, active)">
+          <img src="{{ active.authorPhotoUrl }}">
+        </ion-avatar> 
+
+        <ion-label>
+          <h2>{{ active.authorDisplayName }}</h2>
+        </ion-label>
+
+      </ion-item>
+
+      <ion-item lines="none" *ngIf="active.commentReplyIsTrue">
         <p>
           "{{ active.comment }}"
         </p>
@@ -107,6 +132,10 @@
   
     </div>
 
+  </div>
+
+  <div class="back-to-top-btn" *ngIf="backToTop" (click)="gotToTop()">
+    <ion-icon name="chevron-up-outline"></ion-icon>
   </div>
 
 </ion-content>

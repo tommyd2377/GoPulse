@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonContent, Platform, ToastController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -12,6 +12,10 @@ import { GlobalParamsService } from '../global-params.service';
 })
 
 export class UserPage implements OnInit {
+
+  @ViewChild(IonContent, {static: true}) content: IonContent;
+
+  backToTop: boolean = false;
 
   showLoader: boolean = true;
 
@@ -48,6 +52,7 @@ export class UserPage implements OnInit {
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
+              public platform: Platform,
               public route: ActivatedRoute,
               private afs: AngularFirestore,
               public globalProps: GlobalParamsService,
@@ -86,18 +91,18 @@ export class UserPage implements OnInit {
 
         this.userProfileDoc = this.afs.collection("users").doc(this.userId).valueChanges();
 
-        // this.userdoc = this.afs.collection("users").doc(this.userId).ref.get().then((doc) => {
-        //   if (doc.exists) {
-        //     this.userDisplayName = doc.data().displayName;
-        //     this.userPhotoUrl = doc.data().photoURL;
+        this.userdoc = this.afs.collection("users").doc(this.userId).ref.get().then((doc) => {
+          if (doc.exists) {
+            this.userDisplayName = doc.data().displayName;
+            this.userPhotoUrl = doc.data().photoURL;
 
 
-        //   } else {
-        //     this.presentToast("No such document!");
-        //   }
-        // }).catch(function(error) {
-        //   this.presentToast("Error getting document:", error);
-        // });
+          } else {
+            this.presentToast("No such document!");
+          }
+        }).catch(function(error) {
+          this.presentToast("Error getting document:", error);
+        });
 
         this.userActivity = this.afs.collection("users").doc(this.userId).collection("publicActivity", ref => 
           ref.orderBy('createdAt', 'desc')).valueChanges();
@@ -108,6 +113,18 @@ export class UserPage implements OnInit {
       }
     })
     this.showLoader = false;
+  }
+
+  getScrollPos(pos: number) {
+    if (pos > this.platform.height()) {
+         this.backToTop = true;
+    } else {
+         this.backToTop = false;
+    }
+  }
+
+  gotToTop() {
+    this.content.scrollToTop(500);
   }
  
   openArticle($event, active) {

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Router } from '@angular/router';
 import { GlobalParamsService } from '../global-params.service';
 import { Observable } from 'rxjs';
+import { IonContent, Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-profile',
@@ -13,6 +14,10 @@ import { Observable } from 'rxjs';
 })
 
 export class ProfilePage implements OnInit {
+
+  @ViewChild(IonContent, {static: true}) content: IonContent;
+
+  backToTop: boolean = false;
 
   showLoader: boolean = true;
 
@@ -35,7 +40,8 @@ export class ProfilePage implements OnInit {
               private router: Router,
               private afs: AngularFirestore,
               private storage: AngularFireStorage,
-              public globalProps: GlobalParamsService) { }
+              public globalProps: GlobalParamsService,
+              public platform: Platform) { }
   
   ngOnInit() {
     this.fireAuth.auth.onAuthStateChanged((user) => {
@@ -56,6 +62,18 @@ export class ProfilePage implements OnInit {
       }
     })
     this.showLoader = false;
+  }
+
+  getScrollPos(pos: number) {
+    if (pos > this.platform.height()) {
+         this.backToTop = true;
+    } else {
+         this.backToTop = false;
+    }
+  }
+
+  gotToTop() {
+    this.content.scrollToTop(500);
   }
   
   openArticle($event, active) {

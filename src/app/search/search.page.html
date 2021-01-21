@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" [scrollEvents]="true" (ionScroll)="getScrollPos($event.detail.scrollTop)">
 
   <div class="center-desktop">
 
@@ -76,4 +76,8 @@
 
     </div>
 
+  </div>
+
+  <div class="back-to-top-btn" *ngIf="backToTop" (click)="gotToTop()">
+    <ion-icon name="chevron-up-outline"></ion-icon>
   </div>

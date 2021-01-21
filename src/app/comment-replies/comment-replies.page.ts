@@ -34,12 +34,9 @@ export class CommentRepliesPage implements OnInit {
         this.photoUrl = user.photoURL
         this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges()
           .subscribe(followers => this.followers = followers);
-          console.log(this.followers);
-          console.log(this.comment);
           this.commentReplies = this.afs.collection("articles").doc(this.comment.titleID).collection("comments")
             .doc(this.comment.commentID).collection("commentReplies", 
-              ref => ref.orderBy('createdAt', 'desc')).valueChanges({idField: 'customIdName'})
-                .subscribe(replies => this.commentReplies = replies);
+              ref => ref.orderBy('createdAt', 'desc')).valueChanges({idField: 'customIdName'});
       }
     }) 
   }
@@ -49,7 +46,7 @@ export class CommentRepliesPage implements OnInit {
   }
 
   likeComment($event, comment) {
-    this.date = new Date();
+      this.date = new Date();
       this.currentTime = this.date.getTime();
 
       const shareRef1 = this.afs.collection("users").doc(this.uid).collection("likedComments");
