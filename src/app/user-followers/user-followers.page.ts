@@ -24,8 +24,7 @@ export class UserFollowersPage implements OnInit {
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) { 
         this.uid = this.globalProps.userId;
-        this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges()
-          .subscribe(followers => this.followers = followers)
+        this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       }
     });
   }

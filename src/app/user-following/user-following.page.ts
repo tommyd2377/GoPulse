@@ -23,11 +23,7 @@ export class UserFollowingPage implements OnInit {
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) { 
         this.userId = this.globalProps.userId;
-        console.log("User: " + this.userId);
-        this.following = this.afs.collection("users").doc(this.userId).collection("following").valueChanges()
-          .subscribe(following => this.following = following);
-
-        console.log(this.following);
+        this.following = this.afs.collection("users").doc(this.userId).collection("following").valueChanges();
       }
     });
   } 

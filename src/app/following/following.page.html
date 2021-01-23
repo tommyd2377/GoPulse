@@ -11,7 +11,7 @@
 
   <div class="center-desktop">
 
-    <div *ngFor="let followee of following">
+    <div *ngFor="let followee of following | async">
 
       <ion-item (click)="openUser($event, followee)">
         <ion-avatar slot="start">

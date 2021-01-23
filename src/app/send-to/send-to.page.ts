@@ -41,8 +41,7 @@ export class SendToPage implements OnInit {
         this.uid = user.uid;
         this.displayName = user.displayName
         this.photoUrl = user.photoURL
-        this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges()
-          .subscribe(followers => this.followers = followers);
+        this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       }
     })
   }

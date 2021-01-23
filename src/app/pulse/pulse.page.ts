@@ -56,7 +56,6 @@ export class PulsePage implements OnInit {
 
   segmentChanged(ev: any) {
     let topic = ev.detail.value;
-    console.log('Segment changed', topic);
     let news = [];
     fetch('https://gnews.io/api/v4/top-headlines?&country=us&topic=' + topic + '&token=' + this.apiKey)
     .then((response) => {
