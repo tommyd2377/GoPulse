@@ -40,7 +40,7 @@ export class AccountPage implements OnInit {
 
         this.signedUpOn = user.metadata.creationTime;
         
-        this.profileDoc = this.afs.collection("users").doc(user.uid).valueChanges();
+        this.profileDoc = this.afs.collection("customers").doc(user.uid).valueChanges();
         
         this.profileDoc.subscribe((doc) => { 
           this.goCode = doc.goCode;

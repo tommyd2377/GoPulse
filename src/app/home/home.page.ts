@@ -44,7 +44,7 @@ export class HomePage implements OnInit {
       if (user) {
         this.uid = user.uid;
         
-        this.profileDoc = await this.afs.collection("users").doc(this.uid).valueChanges();
+        this.profileDoc = await this.afs.collection("customers").doc(this.uid).valueChanges();
 
         this.codes = await this.profileDoc.subscribe((doc) => { 
           this.code1 = doc.goCodes[0];

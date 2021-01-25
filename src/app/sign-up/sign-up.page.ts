@@ -68,21 +68,11 @@ export class SignUpPage {
     this.goCodesCollection = this.afs.collection("goCodes").doc(this.goCode).ref.get()
       .then((doc) => {
         if (doc.exists) {
-          console.log("Document data:", doc.data());
-          console.log(doc.data().hasBeenUsed);
           if (doc.data().hasBeenUsed === false) {
-            console.log('not used', doc.data().creator)
             this.fireAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
             .then(res => {
               if (res.user) {
                 this.setProfile();
-                // let creatorUid: string = doc.data().creator;
-                // const creatorRef = this.afs.collection("users").doc(creatorUid).collection("privateActivity");
-                //   creatorRef.add({ newUserUid: res.user.uid, newUserName: this.fullName, 
-                //     newUserDisplayName: this.displayName, goCodeUsed: true });
-                //     const creatorRef2 = this.afs.collection("users").doc(creatorUid).collection("followeeActivity");
-                //     creatorRef2.add({ newUserUid: res.user.uid, newUserName: this.fullName, 
-                //       newUserDisplayName: this.displayName, goCodeUsed: true });
                 const goCodeRef = this.afs.collection("goCodes").doc(this.goCode);
                   goCodeRef.update({ hasBeenUsed: true, usedBy: res.user.uid });
                 this.presentToast("User Created: " + this.displayName);
@@ -111,45 +101,34 @@ export class SignUpPage {
         user.updateProfile({
           displayName: this.displayName,
           photoURL: "https://logodix.com/logo/1984123.png",
-        }).then(() => {
-          let uid = user.uid;
-          this.newGoCodes = this.goCodes();
-          for (let newCode of this.newGoCodes) {
-            const GoRef = this.afs.collection("goCodes").doc(newCode);
-            GoRef.set({ goCode: newCode, hasBeenUsed: false, creator: uid})
-              .then(() => console.log('gocode added: ' + newCode))
-              .catch((err) => console.log(err));
-          }
-          let userData = this.afs.collection("users").doc(uid);
-          userData.set({
-            uid: uid,
-            email: this.email,
-            displayName: this.displayName,
-            bio: "Don't forget to update your picture and bio in your profile settings",
-            fullName: this.fullName,
-            fullNameSearch: this.fullName.toUpperCase(),
-            photoURL: "https://logodix.com/logo/1984123.png",
-          })
-          let customerData = this.afs.collection("customers").doc(uid);
-          customerData.set({
-            uid: uid,
-            email: this.email,
-            goCode: this.goCode,
-            goCodes: this.newGoCodes
-          })
-          .then(() => { 
-            console.log("Profile Data Set: " + user.uid);
-            user.sendEmailVerification().then(() => {
-              console.log("email verification sent to: " + user.uid);
-            })
-            .catch(error => console.log("email verification error: " + error));
-            this.router.navigateByUrl('/tabs');
-          })
-          .catch((error) => console.log("Profile Data Set Error: " + error));
-          });
-        console.log("Profile Updated: " + user.uid);
+        });
+        let uid = user.uid;
+        this.newGoCodes = this.goCodes();
+        for (let newCode of this.newGoCodes) {
+          const GoRef = this.afs.collection("goCodes").doc(newCode);
+          GoRef.set({ goCode: newCode, hasBeenUsed: false, creator: uid})
+        }
+        let customerData = this.afs.collection("customers").doc(uid);
+        customerData.set({
+          uid: uid,
+          email: this.email,
+          goCode: this.goCode,
+          goCodes: this.newGoCodes
+        });
+        let userData = this.afs.collection("users").doc(uid);
+        userData.set({
+          uid: uid,
+          email: this.email,
+          displayName: this.displayName,
+          bio: "Don't forget to add a picture and bio in your profile settings",
+          fullName: this.fullName,
+          fullNameSearch: this.fullName.toUpperCase(),
+          photoURL: "https://logodix.com/logo/1984123.png",
+        });
+        user.sendEmailVerification();
       }
-    }) 
+    })
+    this.router.navigateByUrl('/tabs');
   }
 
   goCodes() {
