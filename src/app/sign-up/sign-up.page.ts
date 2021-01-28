@@ -114,17 +114,27 @@ export class SignUpPage {
           email: this.email,
           goCode: this.goCode,
           goCodes: this.newGoCodes
-        });
+            }).then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         let userData = this.afs.collection("users").doc(uid);
         userData.set({
           uid: uid,
           email: this.email,
           displayName: this.displayName,
-          bio: "Don't forget to add a picture and bio in your profile settings",
           fullName: this.fullName,
           fullNameSearch: this.fullName.toUpperCase(),
           photoURL: "https://logodix.com/logo/1984123.png",
-        });
+            }).then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
         user.sendEmailVerification();
       }
     })

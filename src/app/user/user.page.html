@@ -67,7 +67,7 @@
           <h2 *ngIf="active.likedCommentIsTrue">{{ active.displayName }} liked this comment</h2>
           <h2 *ngIf="active.commentIsTrue">{{ active.displayName }}</h2>
           <h2 *ngIf="active.commentReplyIsTrue">{{ active.displayName }} replied to this comment</h2>
-          <h2 *ngIf="active.flaggedIsTrue">{{ active.displayName }} labeled this article as narrative driven journalism</h2>
+          <h2 *ngIf="active.flaggedIsTrue">{{ active.displayName }} flagged this article: {{ active.flaggedAs }}</h2>
           <h2 *ngIf="active.followingIsTrue">{{ active.followerDisplayName }} started following</h2>
         </ion-label>
   

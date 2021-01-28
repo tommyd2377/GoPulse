@@ -107,12 +107,8 @@ export class AccountPage implements OnInit {
   cancelSubscription() {
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
-        let email = user.email;
         let id = user.uid;
-        user.delete()
-        .then(()=> {
-          const stripeCancel = this.afs.collection('canceledSubs');
-          stripeCancel.add({ email: (email), uid: (id) });
+        user.delete().then(()=> {
           this.router.navigateByUrl('/welcome');
           this.presentToast("Subscription Canceled for " + id);
       })

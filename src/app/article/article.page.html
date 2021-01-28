@@ -11,7 +11,7 @@
   
   <div class="center-desktop">
 
-    <img no-padding src="{{ image }}" alt="">
+    <img (dblclick)="openArticle()" no-padding src="{{ image }}" alt="">
 
     <h1>{{ title }}</h1>
     <p>{{ publishDate | date:'fullDate' }}</p>
