@@ -32,7 +32,7 @@ export class PulsePage implements OnInit {
               public globalProps: GlobalParamsService) { }
 
   ngOnInit() {
-    fetch('https://gnews.io/api/v4/top-headlines?&country=us&topic=world&token=' + this.apiKey)
+    fetch(this.topicsUrl + this.category + this.tokenUrl + this.apiKey)
     .then((response) => {
       return response.json()
     })
@@ -57,7 +57,7 @@ export class PulsePage implements OnInit {
   segmentChanged(ev: any) {
     let topic = ev.detail.value;
     let news = [];
-    fetch('https://gnews.io/api/v4/top-headlines?&country=us&topic=' + topic + '&token=' + this.apiKey)
+    fetch(this.topicsUrl + topic + this.tokenUrl + this.apiKey)
     .then((response) => {
       return response.json()
     })

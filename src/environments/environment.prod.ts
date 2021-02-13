@@ -11,10 +11,10 @@ export const environment = {
     measurementId: "G-NLZCPK65G4"
   },
   newsApi: {
-    topicsUrl: "https://gnews.io/api/v3/topics/",
-    topNewsUrl: "https://gnews.io/api/v3/top-news",
-    searchUrl: "https://gnews.io/api/v3/search?q=",
-    tokenURL: "?&token=",
+    topicsUrl: "https://gnews.io/api/v4/top-headlines?&topic=",
+    topNewsUrl: "https://gnews.io/api/v4/top-headlines?",
+    searchUrl: "https://gnews.io/api/v4/search?q=",
+    tokenURL: "&country=us&token=",
     key: "c4931a014b7fd1f739c2f493b08d751a"
   }
 };

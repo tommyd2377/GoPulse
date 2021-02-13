@@ -97,49 +97,37 @@ export class SendToPage implements OnInit {
       shareRef1.add({ senderUid: (this.uid), image: (this.image), description: (this.description), content: (this.content), message: (message),
         senderDisplayName: (this.displayName), senderPhotoUrl: (this.photoUrl), sendeeUid: (follower.followerUid), sendeePhotoUrl: (follower.followerPhotoUrl),
         sendeeDisplayName: (follower.followerDisplayName), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), 
-        sentIsTrue: (true), articleUrl: (this.articleUrl),publishDate: (this.publishDate), publisher: (this.publisher) })
-          .then(()=> console.log("Sent"))
-          .catch((err)=> console.log("Sent Error: " + err));
+        sentIsTrue: (true), articleUrl: (this.articleUrl),publishDate: (this.publishDate), publisher: (this.publisher) });
 
     const shareRef2 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
       shareRef2.add({ senderUid: (this.uid), image: (this.image), description: (this.description), content: (this.content), message: (message),
         senderDisplayName: (this.displayName), senderPhotoUrl: (this.photoUrl), sendeeUid: (follower.followerUid), sendeePhotoUrl: (follower.followerPhotoUrl),
         sendeeDisplayName: (follower.followerDisplayName), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sentIsTrue: (true), 
-        articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
-          .then(()=> console.log("Sent"))
-          .catch((err)=> console.log("Sent Error: " + err));
+        articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) });
 
     const shareRef4 = this.afs.collection("users").doc(follower.followerUid).collection("sends");
       shareRef4.add({ senderUid: (this.uid), image: (this.image), description: (this.description), content: (this.content), message: (message), 
         senderDisplayName: (this.displayName), senderPhotoUrl: (this.photoUrl), sendeeUid: (follower.followerUid), sendeePhotoUrl: (follower.followerPhotoUrl),
         sendeeDisplayName: (follower.followerDisplayName), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), recievedIsTrue: (true),
-        articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
-          .then(()=> console.log("Sent"))
-          .catch((err)=> console.log("Sent Error: " + err));
+        articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) });
 
     const shareRef6 = this.afs.collection("users").doc(follower.followerUid).collection("followingActivity");
       shareRef6.add({ senderUid: (this.uid), image: (this.image), description: (this.description), content: (this.content), message: (message),
         senderDisplayName: (this.displayName), senderPhotoUrl: (this.photoUrl), sendeeUid: (follower.followerUid), sendeePhotoUrl: (follower.followerPhotoUrl),
         sendeeDisplayName: (follower.followerDisplayName), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), recievedIsTrue: (true),
-        articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
-          .then(()=> console.log("Sent"))
-          .catch((err)=> console.log("Sent Error: " + err));
+        articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) });
 
     const shareRef5 = this.afs.collection("users").doc(follower.followerUid).collection("privateActivity");
       shareRef5.add({ senderUid: (this.uid), image: (this.image), description: (this.description), content: (this.content), message: (message),
         senderDisplayName: (this.displayName), senderPhotoUrl: (this.photoUrl), sendeeUid: (follower.followerUid), sendeePhotoUrl: (follower.followerPhotoUrl),
         sendeeDisplayName: (follower.followerDisplayName), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), recievedIsTrue: (true),
-        articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
-          .then(()=> console.log("Sent"))
-          .catch((err)=> console.log("Sent Error: " + err));
+        articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) });
 
     const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("sends");
       shareRef3.add({ senderUid: (this.uid), image: (this.image), description: (this.description), content: (this.content), message: (message),
         senderDisplayName: (this.displayName), senderPhotoUrl: (this.photoUrl), sendeeUid: (follower.followerUid), sendeePhotoUrl: (follower.followerPhotoUrl), 
         sendeeDisplayName: (follower.followerDisplayName), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sentIsTrue: (true), 
-        articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) })
-          .then(()=> console.log("Sent"))
-          .catch((err)=> console.log("Sent Error: " + err));
+        articleUrl: (this.articleUrl), publishDate: (this.publishDate), publisher: (this.publisher) });
     
     this.presentToast("Article sent to " + follower.followerDisplayName);
   }

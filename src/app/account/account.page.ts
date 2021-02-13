@@ -11,6 +11,7 @@ import { Platform } from '@ionic/angular';
   templateUrl: './account.page.html',
   styleUrls: ['./account.page.scss'],
 })
+
 export class AccountPage implements OnInit {
 
   uid: string;
@@ -107,12 +108,40 @@ export class AccountPage implements OnInit {
   cancelSubscription() {
     this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
-        let id = user.uid;
+        let uid = user.uid;
+
+        this.afs.collection("users").doc(uid).collection("followers").valueChanges().subscribe((followers) => {
+          for (let follower of followers) {
+            this.afs.collection("users").doc(follower.followerUid).collection("following").valueChanges({idField: "followeeId"}).subscribe((followees) => {
+              for (let followee of followees) {
+                if (followee.followeeUid === uid) {
+                  let followeeRef = this.afs.collection("users").doc(follower.followerUid).collection("following").doc(followee.followeeId);
+                  followeeRef.delete();
+                  break;
+                }
+              }
+            })
+          }
+        });
+
+        this.afs.collection("users").doc(uid).collection("following").valueChanges().subscribe((followees) => {
+          for (let followee of followees) {
+            this.afs.collection("users").doc(followee.followerUid).collection("followers").valueChanges({idField: "followerId"}).subscribe((followers) => {
+              for (let follower of followers) {
+                if (follower.followerUid === uid) {
+                  let followeeRef1 = this.afs.collection("users").doc(followee.followerUid).collection("following").doc(follower.followerId);
+                  followeeRef1.delete();
+                  break;
+                }
+              }
+            })
+          }
+        });
+
         user.delete().then(()=> {
           this.router.navigateByUrl('/welcome');
-          this.presentToast("Subscription Canceled for " + id);
-      })
-        .catch((err)=> this.presentToast("User Canceled Subscription: " + err));
+          this.presentToast("Subscription Canceled for " + uid);
+        }).catch((err)=> this.presentToast("User Canceled Subscription: " + err));
       }
     });
   }

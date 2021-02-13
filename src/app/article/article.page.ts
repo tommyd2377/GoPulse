@@ -246,7 +246,7 @@ export class ArticlePage implements OnInit {
         }
       })
       this.userHasShared = true;
-      this.presentToast("Article liked");
+      this.presentToast("Article Liked!");
     }
 
     else if (!this.userHasRead) {
@@ -390,10 +390,10 @@ export class ArticlePage implements OnInit {
       this.userHasFlagged = true;
     }
     else if (!this.userHasRead) {
-      this.presentToast("Articles must be read before they can be flagged as narrative driven journalism");
+      this.presentToast("Articles must be read before they can be flagged");
     }
     else {
-      this.presentToast("Articles must be read before they can be flagged as narrative driven journalism");
+      this.presentToast("Articles must be read before they can be flagged");
     }
   }
 

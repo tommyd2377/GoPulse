@@ -41,7 +41,7 @@ export class SearchPage implements OnInit  {
               public globalProps: GlobalParamsService) { }
               
   ngOnInit() {
-    fetch('https://gnews.io/api/v4/top-headlines?&country=us&token=' + this.apiKey)
+    fetch(this.topNewsUrl + this.tokenUrl + this.apiKey)
       .then((response) => {
           return response.json();
       })
@@ -50,7 +50,7 @@ export class SearchPage implements OnInit  {
           this.showLoader = false;
       });
   }
-
+ 
   getScrollPos(pos: number) {
     if (pos > this.platform.height()) {
          this.backToTop = true;
@@ -83,7 +83,7 @@ export class SearchPage implements OnInit  {
 
   searchNews($event) {
     let q = $event.target.value;
-    fetch("https://gnews.io/api/v4/search?q=" + q + "&country=us&token=" + this.apiKey)
+    fetch(this.searchUrl + q + this.tokenUrl + this.apiKey)
       .then((response) => {
           return response.json();
       })
@@ -97,7 +97,6 @@ export class SearchPage implements OnInit  {
     this.userResults = this.afs.collection("users", ref => ref.where('fullName', '==', q)).valueChanges()
       .subscribe(activity => this.userResults = activity);
   }
-
 
   openArticle($event, article) {
     this.globalProps.title = article.title;

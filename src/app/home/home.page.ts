@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, AngularFirestoreCollection  } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { IonContent, ToastController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { GlobalParamsService } from '../global-params.service';
@@ -46,7 +46,7 @@ export class HomePage implements OnInit {
         
         this.profileDoc = await this.afs.collection("customers").doc(this.uid).valueChanges();
 
-        this.codes = await this.profileDoc.subscribe((doc) => { 
+        this.codes = await this.profileDoc.subscribe((doc) => {
           this.code1 = doc.goCodes[0];
           this.code2 = doc.goCodes[1];
           this.code3 = doc.goCodes[2];
