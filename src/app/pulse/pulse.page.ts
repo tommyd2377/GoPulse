@@ -17,10 +17,12 @@ export class PulsePage implements OnInit {
   @ViewChild(IonContent, {static: true}) content: IonContent;
 
   backToTop: boolean = false;
-
   showLoader: boolean = true;
 
   articles: string[];
+  worldArticles: string[];
+  nationArticles: string[];
+  businessArticles: string[];
 
   topicsUrl: string = environment.newsApi.topicsUrl;
   tokenUrl: string = environment.newsApi.tokenURL;
@@ -37,7 +39,7 @@ export class PulsePage implements OnInit {
       return response.json()
     })
     .then((data) => {
-      this.articles = data.articles;
+      this.worldArticles = data.articles;
       this.showLoader = false;
     });
   }
@@ -55,14 +57,29 @@ export class PulsePage implements OnInit {
   }
 
   segmentChanged(ev: any) {
-    let topic = ev.detail.value;
-    let news = [];
+    let topic: string = ev.detail.value;
     fetch(this.topicsUrl + topic + this.tokenUrl + this.apiKey)
     .then((response) => {
       return response.json()
     })
     .then((data) => {
-      this.articles = data.articles;
+      switch (topic) {
+        case "world":
+          this.worldArticles = data.articles;
+          break;
+
+        case "nation":
+          this.nationArticles = data.articles;
+          break;
+        
+        case "business":
+          this.businessArticles = data.articles;
+          break;
+      
+        default:
+          this.articles = data.articles;
+          break;
+      }
     });
   }
   

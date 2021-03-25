@@ -11,23 +11,13 @@
 
   <div class="center-desktop">
   <p>
-    In order to remain independent without advertising, the service will cost $1 a month.
+    In order to remain independent without advertising, the service will cost $5 a month.
     No payment info is needed to get started and you can cancel your subscription at any time.
   </p>
 
   <ion-item>
     <ion-label position="floating">GoCode</ion-label>
     <ion-input required type="text" [(ngModel)]="goCode"></ion-input>
-  </ion-item>
- 
-  <ion-item>
-    <ion-label position="floating">Email</ion-label>
-    <ion-input required type="email" [(ngModel)]="email"></ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-label position="floating">Username</ion-label>
-    <ion-input required type="text" [(ngModel)]="displayName"></ion-input>
   </ion-item>
 
   <ion-item>
@@ -36,8 +26,26 @@
   </ion-item>
 
   <ion-item>
+    <ion-label position="floating">Username</ion-label>
+    <ion-input required type="text" [(ngModel)]="displayName" (keyup)="checkUsername()"></ion-input>
+  </ion-item>
+
+  <p style="color: #2fdf75" *ngIf="usernameAvailable && displayName">
+    {{ displayName }} is available
+  </p>
+
+  <p style="color: #ff4961" *ngIf="!usernameAvailable && displayName">
+    {{ displayName }} is not available
+  </p>
+
+  <ion-item>
+    <ion-label position="floating">Email</ion-label>
+    <ion-input required type="email" [(ngModel)]="email"></ion-input>
+  </ion-item>
+
+  <ion-item>
     <ion-label position="floating">Password</ion-label>
-    <ion-input required type="password" [(ngModel)]="password"></ion-input>
+    <ion-input required type="password" [(ngModel)]="password" (keyup)="checkPassword()"></ion-input>
   </ion-item>
 
   <br>

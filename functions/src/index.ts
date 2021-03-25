@@ -23,7 +23,7 @@ export const createStripeCustomer = functions.auth
       }],
       collection_method: 'send_invoice',
       days_until_due: 30,
-    })
+    });
 
     return db.doc("customers/" + firebaseUID).update({
       stripeId: customer.id,
@@ -34,11 +34,11 @@ export const createStripeCustomer = functions.auth
 
   export const onUserDeleted = functions.auth.user().onDelete(async (user) => {
     
-    const customer = ( await db.collection('customers').doc(user.uid).get()).data();
+    const customer = (await db.collection('customers').doc(user.uid).get()).data();
     
-      if (customer) {
-        await stripe.customers.del(customer.stripeId);
-      }
+    if (customer) {
+      await stripe.customers.del(customer.stripeId);
+    }
 
     return db.doc("customers/" + user.uid).delete();
   });

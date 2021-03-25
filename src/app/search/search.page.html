@@ -21,7 +21,7 @@
         (ionInput)="searchNews($event)" placeholder="search the news..." clearInput="true">
     </ion-searchbar>
 
-    <ion-searchbar *ngIf="searchingUsers" inputmode="search" enterkeyhint="search" debounce="1000" type="search" 
+    <ion-searchbar *ngIf="searchingUsers" [(ngModel)]="searchTerm" inputmode="search" enterkeyhint="search" debounce="1000" type="search" 
         (ionInput)="searchUsers($event)" placeholder="search for a subscriber..." clearInput="true">
     </ion-searchbar>
 
@@ -59,7 +59,7 @@
 
     </div>
 
-    <div *ngFor="let user of userResults | async">
+    <div *ngFor="let user of userResults">
 
       <ion-item *ngIf="searchingUsers" detail="false">
         

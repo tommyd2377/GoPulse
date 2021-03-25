@@ -52,7 +52,24 @@
       <ion-spinner name="bubbles" color="primary"></ion-spinner>
     </div>
 
-    <ion-list *ngFor="let article of articles">
+    <ion-list *ngFor="let article of worldArticles">
+  
+      <ion-item *ngIf="!showLoader" detail="false">
+
+      <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
+        <img src="{{ article.image }}" alt="">
+        <h1>{{ article.title }}</h1>
+        <br>
+        <h2>{{ article.source.name }}</h2> 
+        <p>{{ article.publishedAt | date:'fullDate' }}</p>
+        <br>
+      </ion-label>
+    
+      </ion-item>
+
+    </ion-list>
+
+    <ion-list *ngFor="let article of nationArticles">
   
       <ion-item *ngIf="!showLoader" detail="false">
 

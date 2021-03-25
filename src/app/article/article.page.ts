@@ -198,17 +198,18 @@ export class ArticlePage implements OnInit {
 
   openArticle() {
     this.iab.create(this.articleUrl);
-    this.userHasRead = true;
     this.date = new Date();
     this.currentTime = this.date.getTime();
 
     const shareRef1 = this.afs.collection("users").doc(this.uid).collection("reads");
-      shareRef1.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), description: (this.description), content: (this.content),
-        titleID: (this.titleID), readIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+      shareRef1.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), 
+        description: (this.description), content: (this.content), titleID: (this.titleID), readIsTrue: (true), 
+        articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
 
     const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("reads");
-      shareRef3.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), description: (this.description), content: (this.content),
-        titleID: (this.titleID), readIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+      shareRef3.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), 
+        description: (this.description), content: (this.content), titleID: (this.titleID), readIsTrue: (true), 
+        articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
   }
 
   openUser($event, comment) {
@@ -222,27 +223,32 @@ export class ArticlePage implements OnInit {
       this.currentTime = this.date.getTime();
 
       const shareRef1 = this.afs.collection("users").doc(this.uid).collection("shares");
-        shareRef1.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
-           titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+        shareRef1.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), 
+          photoUrl: (this.photoUrl), description: (this.description), content: (this.content), titleID: (this.titleID), sharedIsTrue: (true), 
+          articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
 
       const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
-        shareRef2.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
-          titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+        shareRef2.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), 
+          photoUrl: (this.photoUrl), description: (this.description), content: (this.content), titleID: (this.titleID), sharedIsTrue: (true), 
+          articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
 
       const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
-        shareRef5.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
-          titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+        shareRef5.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), 
+          photoUrl: (this.photoUrl), description: (this.description), content: (this.content), titleID: (this.titleID), sharedIsTrue: (true), 
+          articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
 
       const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("shares");
-        shareRef3.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
-          titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+        shareRef3.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), 
+          photoUrl: (this.photoUrl), description: (this.description), content: (this.content), titleID: (this.titleID), sharedIsTrue: (true), 
+          articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
 
       this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       this.followers.subscribe(results => {
         for (let result of results) { 
           const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          shareRef4.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
-            titleID: (this.titleID), sharedIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+          shareRef4.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), 
+            photoUrl: (this.photoUrl), description: (this.description), content: (this.content), titleID: (this.titleID), sharedIsTrue: (true), 
+            articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
         }
       })
       this.userHasShared = true;
@@ -266,7 +272,6 @@ export class ArticlePage implements OnInit {
     .subscribe(results => {
       for (let result of results) { 
         if (result.titleID === this.titleID && result.sharedIsTrue === true) {
-          
           this.unLikeID1 = result.likeID1;
           const unshareRef1 = this.afs.collection("users").doc(this.uid).collection("shares").doc(this.unLikeID1);
           unshareRef1.delete();
@@ -274,6 +279,7 @@ export class ArticlePage implements OnInit {
         }
       }
     });
+    
     this.shares2 = this.afs.collection("users").doc(this.uid).collection("publicActivity").valueChanges({idField: 'likeID2'})
     .subscribe(results => {
       for (let result of results) { 
@@ -281,10 +287,11 @@ export class ArticlePage implements OnInit {
           this.unLikeID2 = result.likeID2;
           const unshareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity").doc(this.unLikeID2);
           unshareRef2.delete();
-         break;
+          break;
         }
       }
     });
+    
     this.shares3 = this.afs.collection("users").doc(this.uid).collection("privateActivity").valueChanges({idField: 'likeID3'})
     .subscribe(results => {
       for (let result of results) { 
@@ -297,6 +304,7 @@ export class ArticlePage implements OnInit {
         }
       }
     });
+    
     this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       this.followers.subscribe(results => {
         for (let result of results) {
@@ -314,80 +322,47 @@ export class ArticlePage implements OnInit {
             }
         })
       }
-      });
+    });
     this.userHasShared = false;
     this.presentToast("Article unliked");
   }
 
   async flag() {
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Flag this article for your followers to see and discuss',
-      cssClass: 'my-custom-class',
-      buttons: [ 
-        {
-          text: 'Misleading Headline',
-          icon: 'sad',
+    if (this.userHasRead) {
+      const actionSheet = await this.actionSheetController.create({
+        header: 'Flag this article for your followers to see and discuss',
+        cssClass: 'my-custom-class',
+        buttons: [ 
+          {
+            text: 'Misleading Headline',
+            icon: 'sad',
+            handler: () => {
+              this.flagAs('Misleading Headline');
+            }
+          }, 
+          {
+            text: 'Sensationalism',
+            icon: 'warning',
+            handler: () => {
+              this.flagAs('Sensationalism');
+            }
+          },
+          {
+          text: 'Narrative Driven Journalism',
+          icon: 'skull',
           handler: () => {
-            this.flagAs('Misleading Headline');
-          }
-        }, 
-        {
-          text: 'Sensationalism',
-          icon: 'warning',
-          handler: () => {
-            this.flagAs('Sensationalism');
+            this.flagAs('Narrative Driven Journalism');
           }
         },
         {
-        text: 'Narrative Driven Journalism',
-        icon: 'skull',
-        handler: () => {
-          this.flagAs('Narrative Driven Journalism');
-        }
-      },
-      {
-        text: 'Cancel',
-        icon: 'close',
-        role: 'cancel',
-        handler: () => {
-        }
-      }]
-    });
-    await actionSheet.present();
-  }
-
-
-  flagAs(flag) {
-    if (this.userHasRead) {
-      this.date = new Date();
-      this.currentTime = this.date.getTime();
-
-      const flagRef1 = this.afs.collection("users").doc(this.uid).collection("flags");
-        flagRef1.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
-          titleID: (this.titleID), flaggedIsTrue: (true), flaggedAs: (flag), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
-
-      const flagRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
-        flagRef2.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
-          titleID: (this.titleID), flaggedIsTrue: (true), flaggedAs: (flag), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
-
-      const flagRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
-        flagRef5.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
-          titleID: (this.titleID), flaggedIsTrue: (true), flaggedAs: (flag), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
-
-      const flagRef3 = this.afs.collection("articles").doc(this.titleID).collection("flags");
-        flagRef3.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
-          titleID: (this.titleID), flaggedIsTrue: (true), flaggedAs: (flag), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
-
-      this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
-      this.followers.subscribe(results => {
-        for (let result of results) { 
-          const flagRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          flagRef4.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), description: (this.description), content: (this.content),
-            titleID: (this.titleID), flaggedIsTrue: (true), flaggedAs: (flag), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
-        }
-      })
-      this.presentToast("Article Flagged: " + flag);
-      this.userHasFlagged = true;
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+          }
+        }]
+      });
+      await actionSheet.present();
     }
     else if (!this.userHasRead) {
       this.presentToast("Articles must be read before they can be flagged");
@@ -397,45 +372,85 @@ export class ArticlePage implements OnInit {
     }
   }
 
+  flagAs(flag) {
+  
+      this.date = new Date();
+      this.currentTime = this.date.getTime();
+
+      const flagRef1 = this.afs.collection("users").doc(this.uid).collection("flags");
+        flagRef1.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), 
+          description: (this.description), content: (this.content), titleID: (this.titleID), flaggedIsTrue: (true), flaggedAs: (flag), 
+          articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+
+      const flagRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
+        flagRef2.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), 
+          description: (this.description), content: (this.content), titleID: (this.titleID), flaggedIsTrue: (true), flaggedAs: (flag), 
+          articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+
+      const flagRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
+        flagRef5.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), 
+          description: (this.description), content: (this.content), titleID: (this.titleID), flaggedIsTrue: (true), flaggedAs: (flag), 
+          articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+
+      const flagRef3 = this.afs.collection("articles").doc(this.titleID).collection("flags");
+        flagRef3.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), 
+          description: (this.description), content: (this.content), titleID: (this.titleID), flaggedIsTrue: (true), flaggedAs: (flag), 
+          articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+
+      this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
+      this.followers.subscribe(results => {
+        for (let result of results) { 
+          const flagRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
+          flagRef4.add({ uid: (this.uid), displayName: (this.displayName), createdAt: (this.currentTime), title: (this.title), photoUrl: (this.photoUrl), 
+            description: (this.description), content: (this.content), titleID: (this.titleID), flaggedIsTrue: (true), flaggedAs: (flag), 
+            articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+        }
+      })
+      this.presentToast("Article Flagged: " + flag);
+      this.userHasFlagged = true;
+  }
+
   unFlag() {
     const unFlagRef3 = this.afs.collection("articles").doc(this.titleID).collection("flags").doc(this.unFlagID);
     unFlagRef3.delete();
 
     this.unFlagshares1 = this.afs.collection("users").doc(this.uid).collection("flags").valueChanges({idField: 'flagID1'})
-    .subscribe(results => {
-      for (let result of results) { 
-        if (result.titleID === this.titleID && result.flaggedIsTrue === true) {
-          
-          this.unFlagID1 = result.flagID1;
-          const unFlagRef1 = this.afs.collection("users").doc(this.uid).collection("flags").doc(this.unFlagID1);
-          unFlagRef1.delete();
-          break;
+      .subscribe(results => {
+        for (let result of results) { 
+          if (result.titleID === this.titleID && result.flaggedIsTrue === true) {
+            this.unFlagID1 = result.flagID1;
+            const unFlagRef1 = this.afs.collection("users").doc(this.uid).collection("flags").doc(this.unFlagID1);
+            unFlagRef1.delete();
+            break;
+          }
         }
-      }
     });
+    
+    
     this.unFlagshares2 = this.afs.collection("users").doc(this.uid).collection("publicActivity").valueChanges({idField: 'flagID2'})
-    .subscribe(results => {
-      for (let result of results) { 
-        if (result.titleID === this.titleID && result.flaggedIsTrue === true) {
-          this.unFlagID2 = result.flagID2;
-          const unFlagRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity").doc(this.unFlagID2);
-          unFlagRef2.delete();
-          break;
+      .subscribe(results => {
+        for (let result of results) { 
+          if (result.titleID === this.titleID && result.flaggedIsTrue === true) {
+            this.unFlagID2 = result.flagID2;
+            const unFlagRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity").doc(this.unFlagID2);
+            unFlagRef2.delete();
+            break;
+          }
         }
-      }
     });
+    
     this.unFlagshares3 = this.afs.collection("users").doc(this.uid).collection("privateActivity").valueChanges({idField: 'flagID3'})
-    .subscribe(results => {
-      for (let result of results) { 
-        if (result.titleID === this.titleID && result.flaggedIsTrue === true) {
-
-          this.unFlagID3 = result.flagID3;
-          const unFlagRef4 = this.afs.collection("users").doc(this.uid).collection("privateActivity").doc(this.unFlagID3);
-          unFlagRef4.delete();
-          break;
+      .subscribe(results => {
+        for (let result of results) { 
+          if (result.titleID === this.titleID && result.flaggedIsTrue === true) {
+            this.unFlagID3 = result.flagID3;
+            const unFlagRef4 = this.afs.collection("users").doc(this.uid).collection("privateActivity").doc(this.unFlagID3);
+            unFlagRef4.delete();
+            break;
+          }
         }
-      }
     });
+    
     this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       this.followers.subscribe(results => {
         for (let result of results) { 
@@ -443,18 +458,17 @@ export class ArticlePage implements OnInit {
           this.followerUnLike.subscribe(results1 => {
             for (let result1 of results1) {
               if (result1.uid === this.uid && result1.titleID === this.titleID && result.flaggedIsTrue === true) {
-        
                 this.unFlagID4 = result1.unFlagID4;
                 const unFlagRef5 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity").doc(this.unFlagID4);
                 unFlagRef5.delete();
                 break;
               }
             }
-        })
-      }
-      });
-      this.userHasFlagged = false;
-      this.presentToast("Article Unflagged");
+          })
+        }
+    });
+    this.userHasFlagged = false;
+    this.presentToast("Article Unflagged");
   }
 
   newComment() {
@@ -463,27 +477,37 @@ export class ArticlePage implements OnInit {
       this.currentTime = this.date.getTime();
 
       const shareRef1 = this.afs.collection("users").doc(this.uid).collection("comments");
-        shareRef1.add({ uid: (this.uid), likesCount: (0), replyCount: (0), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
-          titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+        shareRef1.add({ uid: (this.uid), likesCount: (0), replyCount: (0), displayName: (this.displayName), photoUrl: (this.photoUrl), 
+          createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
+          titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), 
+          publisher: (this.publisher) });
 
       const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
-        shareRef2.add({ uid: (this.uid), likesCount: (0), replyCount: (0), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
-          titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+        shareRef2.add({ uid: (this.uid), likesCount: (0), replyCount: (0), displayName: (this.displayName), photoUrl: (this.photoUrl), 
+          createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
+          titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), 
+          publisher: (this.publisher) });
 
       const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
-      shareRef5.add({ uid: (this.uid), likesCount: (0), replyCount: (0), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
-        titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) })
+      shareRef5.add({ uid: (this.uid), likesCount: (0), replyCount: (0), displayName: (this.displayName), photoUrl: (this.photoUrl), 
+        createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
+        titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), 
+        publisher: (this.publisher) })
 
       const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("comments");
-        shareRef3.add({ uid: (this.uid), likesCount: (0), replyCount: (0), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
-          titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+        shareRef3.add({ uid: (this.uid), likesCount: (0), replyCount: (0), displayName: (this.displayName), photoUrl: (this.photoUrl), 
+          createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
+          titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), 
+          publisher: (this.publisher) });
 
       this.followers = this.afs.collection("users").doc(this.uid).collection("followers").valueChanges();
       this.followers.subscribe(results => {
         for (let result of results) { 
           const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
-          shareRef4.add({ uid: (this.uid), likesCount: (0), replyCount: (0), displayName: (this.displayName), photoUrl: (this.photoUrl), createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
-            titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), publisher: (this.publisher) });
+          shareRef4.add({ uid: (this.uid), likesCount: (0), replyCount: (0), displayName: (this.displayName), photoUrl: (this.photoUrl), 
+            createdAt: (this.currentTime), title: (this.title), comment: (this.comment), description: (this.description), content: (this.content),
+            titleID: (this.titleID), commentIsTrue: (true), articleUrl: (this.articleUrl), image: (this.image), publishDate: (this.publishDate), 
+            publisher: (this.publisher) });
         }
       })
       this.presentToast("Comment Posted!");
@@ -507,16 +531,12 @@ export class ArticlePage implements OnInit {
     if (!this.userHasRead) {
       this.presentToast("Articles must be read before comments can be liked");
     }
-    
     else if (this.userHasRead) {
-
-      this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.commentID).collection("commentLikes").valueChanges({idField: 'commentlikeID'})
-        .subscribe(results => {
-
+      this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.commentID).collection("commentLikes")
+        .valueChanges({idField: 'commentlikeID'}).subscribe(results => {
           if (results.length < 1) {
             this.like(comment);
           }
-
           else {
             for (let result of results) { 
               console.log(result)
@@ -527,7 +547,6 @@ export class ArticlePage implements OnInit {
               else {
                 this.like(comment);
               }
-      
             }
           }
         });
@@ -543,27 +562,27 @@ export class ArticlePage implements OnInit {
 
     const shareRef1 = this.afs.collection("users").doc(this.uid).collection("likedComments");
       shareRef1.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
-        publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
-        title: (this.title), titleID: (this.titleID), docID: (comment.commentID), image: (this.image), likedCommentIsTrue: (true), description: (this.description), 
+        publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), title: (this.title), 
+        titleID: (this.titleID), docID: (comment.commentID), image: (this.image), likedCommentIsTrue: (true), description: (this.description), 
         content: (this.content), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) });
 
     const shareRef2 = this.afs.collection("users").doc(this.uid).collection("publicActivity");
       shareRef2.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
-        publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
-        title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
+        publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), title: (this.title), 
+        titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
         likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) });
 
     const shareRef5 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
       shareRef5.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
-        publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
-        title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
+        publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), title: (this.title), 
+        titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
         likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) });
 
     const shareRef3 = this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.commentID).collection("commentLikes");
                                                             
       shareRef3.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
-        publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
-        title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
+        publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), title: (this.title), 
+        titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
         likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) });
     
     const shareRef7 = this.afs.collection("articles").doc(this.titleID).collection("comments").doc(comment.commentID);
@@ -574,8 +593,8 @@ export class ArticlePage implements OnInit {
       for (let result of results) { 
         const shareRef4 = this.afs.collection("users").doc(result.followerUid).collection("followingActivity");
         shareRef4.add({ uid: (this.uid), likesCount: (newLikes), replyCount: (comment.replyCount), photoUrl: (this.photoUrl), publishDate: (this.publishDate), 
-          publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), 
-          title: (this.title), titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
+          publisher: (this.publisher), displayName: (this.displayName), comment: (comment.comment), createdAt: (this.currentTime), title: (this.title), 
+          titleID: (this.titleID), docID: (comment.commentID), description: (this.description), image: (this.image), content: (this.content), 
           likedCommentIsTrue: (true), authorUid: (comment.uid), authorDisplayName: (comment.displayName), authorPhotoUrl: (comment.photoUrl) });
       }
     })

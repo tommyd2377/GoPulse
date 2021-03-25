@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Router } from '@angular/router';
-import { Observable, BehaviorSubject, Subject, combineLatest } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Subject, combineLatest } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { GlobalParamsService } from '../global-params.service';
 import { IonContent, Platform } from '@ionic/angular';
@@ -21,8 +20,15 @@ export class SearchPage implements OnInit  {
 
   showLoader: boolean = true;
 
+  searchTerm: string;
   userQuery = new Subject<string>();
   newsQuery: string;
+
+  startAt = new Subject();
+  endAt = new Subject();
+
+  startobs = this.startAt.asObservable();
+  endobs = this.endAt.asObservable();
 
   userResults;
   articles = [];
@@ -72,8 +78,12 @@ export class SearchPage implements OnInit  {
       this.showLoader = true;
       this.searchingNews = false;
       this.searchingUsers = true;
-      this.userResults = this.afs.collection("users").valueChanges();
       this.showLoader = false;
+      combineLatest([this.startobs, this.endobs]).subscribe((value) => {
+        this.fireQuery(value[0], value[1]).subscribe(users => {
+          this.userResults = users;
+        })
+      })
     }
   }          
 
@@ -94,8 +104,13 @@ export class SearchPage implements OnInit  {
 
   searchUsers($event) {
     let q = $event.target.value;
-    this.userResults = this.afs.collection("users", ref => ref.where('fullName', '==', q)).valueChanges()
-      .subscribe(activity => this.userResults = activity);
+    let nq = q.toUpperCase();
+    this.startAt.next(nq);
+    this.endAt.next(nq + '\uf8ff')
+  }
+
+  fireQuery(start, end) {
+    return this.afs.collection("users", ref => ref.orderBy('fullNameSearch').startAt(start).endAt(end)).valueChanges();
   }
 
   openArticle($event, article) {

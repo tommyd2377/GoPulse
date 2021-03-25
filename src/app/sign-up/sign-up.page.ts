@@ -23,6 +23,7 @@ export class SignUpPage {
   error: string;
   newGoCodes = [];
   goCodesCollection;
+  usernameAvailable: boolean;
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -64,6 +65,21 @@ export class SignUpPage {
     toast.present();
   }
 
+  checkPassword() {
+    console.log(this.password);
+  }
+
+  checkName(username: string) {
+    username = username.toLowerCase();
+    return this.afs.doc("usernames/" + username);
+  }
+
+  checkUsername() {
+    this.checkName(this.displayName).get().subscribe(username => {
+      this.usernameAvailable = !username.exists;
+    })
+  }
+
   emailSignUp() {
     this.goCodesCollection = this.afs.collection("goCodes").doc(this.goCode).ref.get()
       .then((doc) => {
@@ -73,6 +89,8 @@ export class SignUpPage {
             .then(res => {
               if (res.user) {
                 this.setProfile();
+                const usernameRef = this.afs.collection("usernames").doc(this.displayName);
+                  usernameRef.set({ username: this.displayName, uid: res.user.uid});
                 const goCodeRef = this.afs.collection("goCodes").doc(this.goCode);
                   goCodeRef.update({ hasBeenUsed: true, usedBy: res.user.uid });
                 this.presentToast("User Created: " + this.displayName);
@@ -114,12 +132,12 @@ export class SignUpPage {
           email: this.email,
           goCode: this.goCode,
           goCodes: this.newGoCodes
-            }).then((res) => {
-              console.log(res);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+        }).then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
         let userData = this.afs.collection("users").doc(uid);
         userData.set({
           uid: uid,
@@ -128,14 +146,13 @@ export class SignUpPage {
           fullName: this.fullName,
           fullNameSearch: this.fullName.toUpperCase(),
           photoURL: "https://logodix.com/logo/1984123.png",
-            }).then((res) => {
-              console.log(res);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-
-        user.sendEmailVerification();
+        }).then((res) => {
+          user.sendEmailVerification();
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       }
     })
     this.router.navigateByUrl('/tabs');

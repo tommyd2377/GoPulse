@@ -57,7 +57,7 @@ export class SendToPage implements OnInit {
   async presentAlertPrompt($event, follower) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Write ' + follower.followerDisplayName + ' a message',
+      header: 'Send ' + follower.followerDisplayName + ' a message with the article',
       inputs: [
         {
           name: 'paragraph',
@@ -72,13 +72,11 @@ export class SendToPage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
-            console.log('Confirm Cancel');
           }
         }, 
         {
           text: 'Send',
           handler: (data: any) => {
-            console.log('Confirm Ok', data.paragraph);
             let message: string = data.paragraph;
             this.sendArticle($event, follower, message);
             this.presentToast("Article sent to " + follower.followerDisplayName)
@@ -96,8 +94,8 @@ export class SendToPage implements OnInit {
     const shareRef1 = this.afs.collection("users").doc(this.uid).collection("sends");
       shareRef1.add({ senderUid: (this.uid), image: (this.image), description: (this.description), content: (this.content), message: (message),
         senderDisplayName: (this.displayName), senderPhotoUrl: (this.photoUrl), sendeeUid: (follower.followerUid), sendeePhotoUrl: (follower.followerPhotoUrl),
-        sendeeDisplayName: (follower.followerDisplayName), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), 
-        sentIsTrue: (true), articleUrl: (this.articleUrl),publishDate: (this.publishDate), publisher: (this.publisher) });
+        sendeeDisplayName: (follower.followerDisplayName), createdAt: (this.currentTime), title: (this.title), titleID: (this.titleID), sentIsTrue: (true), 
+        articleUrl: (this.articleUrl),publishDate: (this.publishDate), publisher: (this.publisher) });
 
     const shareRef2 = this.afs.collection("users").doc(this.uid).collection("privateActivity");
       shareRef2.add({ senderUid: (this.uid), image: (this.image), description: (this.description), content: (this.content), message: (message),
