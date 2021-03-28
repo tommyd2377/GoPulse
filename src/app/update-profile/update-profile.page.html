@@ -41,6 +41,8 @@
       <ion-input type="text" [(ngModel)]="bio"></ion-input>
     </ion-item>
 
+    <p>NOTE: You must first log out and log in before updating your email or password.</p>
+
     <ion-item>
       <ion-label position="floating">{{ (profileDoc | async)?.email}}</ion-label>
       <ion-input type="text" [(ngModel)]="newEmail"></ion-input>

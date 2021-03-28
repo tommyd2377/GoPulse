@@ -106,11 +106,12 @@ export class SearchPage implements OnInit  {
     let q = $event.target.value;
     let nq = q.toUpperCase();
     this.startAt.next(nq);
-    this.endAt.next(nq + '\uf8ff')
+    this.endAt.next(nq + '\uf8ff');
   }
 
   fireQuery(start, end) {
-    return this.afs.collection("users", ref => ref.orderBy('fullNameSearch').startAt(start).endAt(end)).valueChanges();
+    return this.afs.collection("users", ref => 
+      ref.orderBy('fullNameSearch').startAt(start).endAt(end)).valueChanges();
   }
 
   openArticle($event, article) {

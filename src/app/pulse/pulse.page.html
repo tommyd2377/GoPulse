@@ -54,7 +54,7 @@
 
     <ion-list *ngFor="let article of worldArticles">
   
-      <ion-item *ngIf="!showLoader" detail="false">
+      <ion-item *ngIf="!showLoader && worldIsTrue" detail="false">
 
       <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
         <img src="{{ article.image }}" alt="">
@@ -71,7 +71,7 @@
 
     <ion-list *ngFor="let article of nationArticles">
   
-      <ion-item *ngIf="!showLoader" detail="false">
+      <ion-item *ngIf="!showLoader && nationIsTrue" detail="false">
 
       <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
         <img src="{{ article.image }}" alt="">
@@ -85,11 +85,109 @@
       </ion-item>
 
     </ion-list>
- 
-  </div>
+
+    <ion-list *ngFor="let article of businessArticles">
+  
+      <ion-item *ngIf="!showLoader && businessIsTrue" detail="false">
+
+      <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
+        <img src="{{ article.image }}" alt="">
+        <h1>{{ article.title }}</h1>
+        <br>
+        <h2>{{ article.source.name }}</h2> 
+        <p>{{ article.publishedAt | date:'fullDate' }}</p>
+        <br>
+      </ion-label>
+    
+      </ion-item>
+
+    </ion-list>
+
+    <ion-list *ngFor="let article of technologyArticles">
+  
+      <ion-item *ngIf="!showLoader && technologyIsTrue" detail="false">
+
+      <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
+        <img src="{{ article.image }}" alt="">
+        <h1>{{ article.title }}</h1>
+        <br>
+        <h2>{{ article.source.name }}</h2> 
+        <p>{{ article.publishedAt | date:'fullDate' }}</p>
+        <br>
+      </ion-label>
+    
+      </ion-item>
+
+    </ion-list>
+
+    <ion-list *ngFor="let article of entertainmentArticles">
+  
+      <ion-item *ngIf="!showLoader && entertainmentIsTrue" detail="false">
+
+      <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
+        <img src="{{ article.image }}" alt="">
+        <h1>{{ article.title }}</h1>
+        <br>
+        <h2>{{ article.source.name }}</h2> 
+        <p>{{ article.publishedAt | date:'fullDate' }}</p>
+        <br>
+      </ion-label>
+    
+      </ion-item>
+
+    </ion-list>
+
+    <ion-list *ngFor="let article of sportsArticles">
+  
+      <ion-item *ngIf="!showLoader && sportsIsTrue" detail="false">
+
+      <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
+        <img src="{{ article.image }}" alt="">
+        <h1>{{ article.title }}</h1>
+        <br>
+        <h2>{{ article.source.name }}</h2> 
+        <p>{{ article.publishedAt | date:'fullDate' }}</p>
+        <br>
+      </ion-label>
+    
+      </ion-item>
+
+    </ion-list>
+
+    <ion-list *ngFor="let article of scienceArticles">
+  
+      <ion-item *ngIf="!showLoader && scienceIsTrue" detail="false">
+
+      <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
+        <img src="{{ article.image }}" alt="">
+        <h1>{{ article.title }}</h1>
+        <br>
+        <h2>{{ article.source.name }}</h2> 
+        <p>{{ article.publishedAt | date:'fullDate' }}</p>
+        <br>
+      </ion-label>
+    
+      </ion-item>
+
+    </ion-list>
+
+    <ion-list *ngFor="let article of healthArticles">
+  
+      <ion-item *ngIf="!showLoader && healthIsTrue" detail="false">
+
+      <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
+        <img src="{{ article.image }}" alt="">
+        <h1>{{ article.title }}</h1>
+        <br>
+        <h2>{{ article.source.name }}</h2> 
+        <p>{{ article.publishedAt | date:'fullDate' }}</p>
+        <br>
+      </ion-label>
+    
+      </ion-item>
+
+    </ion-list>
 
   <div class="back-to-top-btn" *ngIf="backToTop" (click)="gotToTop()">
     <ion-icon name="chevron-up-outline"></ion-icon>
   </div>
-
-</ion-content>

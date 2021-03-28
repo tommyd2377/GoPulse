@@ -4,8 +4,6 @@ import { IonContent, Platform } from '@ionic/angular';
 import { environment } from '../../environments/environment';
 import { GlobalParamsService } from '../global-params.service';
 
-declare var require: any
-
 @Component({
   selector: 'app-pulse',
   templateUrl: 'pulse.page.html',
@@ -23,6 +21,20 @@ export class PulsePage implements OnInit {
   worldArticles: string[];
   nationArticles: string[];
   businessArticles: string[];
+  technologyArticles: string[];
+  entertainmentArticles: string[];
+  sportsArticles: string[];
+  scienceArticles: string[];
+  healthArticles: string[];
+
+  worldIsTrue: boolean;
+  nationIsTrue: boolean;
+  businessIsTrue: boolean;
+  technologyIsTrue: boolean;
+  entertainmentIsTrue: boolean;
+  sportsIsTrue: boolean;
+  scienceIsTrue: boolean;
+  healthIsTrue: boolean;
 
   topicsUrl: string = environment.newsApi.topicsUrl;
   tokenUrl: string = environment.newsApi.tokenURL;
@@ -40,6 +52,7 @@ export class PulsePage implements OnInit {
     })
     .then((data) => {
       this.worldArticles = data.articles;
+      this.worldIsTrue = true;
       this.showLoader = false;
     });
   }
@@ -58,29 +71,244 @@ export class PulsePage implements OnInit {
 
   segmentChanged(ev: any) {
     let topic: string = ev.detail.value;
-    fetch(this.topicsUrl + topic + this.tokenUrl + this.apiKey)
-    .then((response) => {
-      return response.json()
-    })
-    .then((data) => {
       switch (topic) {
         case "world":
-          this.worldArticles = data.articles;
+          if (this.worldArticles) {
+            this.worldIsTrue = true;
+            this.nationIsTrue = false;
+            this.businessIsTrue = false;
+            this.technologyIsTrue = false;
+            this.entertainmentIsTrue = false;
+            this.sportsIsTrue = false;
+            this.scienceIsTrue = false;
+            this.healthIsTrue = false;
+          }
+          else {
+            fetch(this.topicsUrl + topic + this.tokenUrl + this.apiKey)
+            .then((response) => {
+              return response.json()
+            })
+            .then((data) => {
+              this.worldIsTrue = true;
+              this.nationIsTrue = false;
+              this.businessIsTrue = false;
+              this.technologyIsTrue = false;
+              this.entertainmentIsTrue = false;
+              this.sportsIsTrue = false;
+              this.scienceIsTrue = false;
+              this.healthIsTrue = false;
+              this.worldArticles = data.articles;
+            })
+          }
           break;
 
         case "nation":
-          this.nationArticles = data.articles;
+          if (this.nationArticles) {
+            this.worldIsTrue = false;
+            this.nationIsTrue = true;
+            this.businessIsTrue = false;
+            this.technologyIsTrue = false;
+            this.entertainmentIsTrue = false;
+            this.sportsIsTrue = false;
+            this.scienceIsTrue = false;
+            this.healthIsTrue = false;
+          }
+          else {
+            fetch(this.topicsUrl + topic + this.tokenUrl + this.apiKey)
+            .then((response) => {
+              return response.json()
+            })
+            .then((data) => {
+              this.worldIsTrue = false;
+              this.nationIsTrue = true;
+              this.businessIsTrue = false;
+              this.technologyIsTrue = false;
+              this.entertainmentIsTrue = false;
+              this.sportsIsTrue = false;
+              this.scienceIsTrue = false;
+              this.healthIsTrue = false;
+              this.nationArticles = data.articles;
+            })
+          }
           break;
         
         case "business":
-          this.businessArticles = data.articles;
+          if (this.businessArticles) {
+            this.worldIsTrue = false;
+            this.nationIsTrue = false;
+            this.businessIsTrue = true;
+            this.technologyIsTrue = false;
+            this.entertainmentIsTrue = false;
+            this.sportsIsTrue = false;
+            this.scienceIsTrue = false;
+            this.healthIsTrue = false;
+          }
+          else {
+            fetch(this.topicsUrl + topic + this.tokenUrl + this.apiKey)
+            .then((response) => {
+              return response.json()
+            })
+            .then((data) => {
+              this.worldIsTrue = false;
+              this.nationIsTrue = false;
+              this.businessIsTrue = true;
+              this.technologyIsTrue = false;
+              this.entertainmentIsTrue = false;
+              this.sportsIsTrue = false;
+              this.scienceIsTrue = false;
+              this.healthIsTrue = false;
+              this.businessArticles = data.articles;
+            })
+          }
           break;
-      
-        default:
-          this.articles = data.articles;
+
+          case "technology":
+          if (this.technologyArticles) {
+            this.worldIsTrue = false;
+            this.nationIsTrue = false;
+            this.businessIsTrue = false;
+            this.technologyIsTrue = true;
+            this.entertainmentIsTrue = false;
+            this.sportsIsTrue = false;
+            this.scienceIsTrue = false;
+            this.healthIsTrue = false;
+          }
+          else {
+            fetch(this.topicsUrl + topic + this.tokenUrl + this.apiKey)
+            .then((response) => {
+              return response.json()
+            })
+            .then((data) => {
+              this.worldIsTrue = false;
+              this.nationIsTrue = false;
+              this.businessIsTrue = false;
+              this.technologyIsTrue = true;
+              this.entertainmentIsTrue = false;
+              this.sportsIsTrue = false;
+              this.scienceIsTrue = false;
+              this.healthIsTrue = false;
+              this.technologyArticles = data.articles;
+            })
+          }
+          break;
+
+          case "entertainment":
+          if (this.entertainmentArticles) {
+            this.worldIsTrue = false;
+            this.nationIsTrue = false;
+            this.businessIsTrue = false;
+            this.technologyIsTrue = false;
+            this.entertainmentIsTrue = true;
+            this.sportsIsTrue = false;
+            this.scienceIsTrue = false;
+            this.healthIsTrue = false;
+          }
+          else {
+            fetch(this.topicsUrl + topic + this.tokenUrl + this.apiKey)
+            .then((response) => {
+              return response.json()
+            })
+            .then((data) => {
+              this.worldIsTrue = false;
+              this.nationIsTrue = false;
+              this.businessIsTrue = false;
+              this.technologyIsTrue = false;
+              this.entertainmentIsTrue = true;
+              this.sportsIsTrue = false;
+              this.scienceIsTrue = false;
+              this.healthIsTrue = false;
+              this.entertainmentArticles = data.articles;
+            })
+          }
+          break;
+
+          case "sports":
+          if (this.sportsArticles) {
+            this.worldIsTrue = false;
+            this.nationIsTrue = false;
+            this.businessIsTrue = false;
+            this.technologyIsTrue = false;
+            this.entertainmentIsTrue = false;
+            this.sportsIsTrue = true;
+            this.scienceIsTrue = false;
+            this.healthIsTrue = false;
+          }
+          else {
+            fetch(this.topicsUrl + topic + this.tokenUrl + this.apiKey)
+            .then((response) => {
+              return response.json()
+            })
+            .then((data) => {
+              this.worldIsTrue = false;
+              this.nationIsTrue = false;
+              this.businessIsTrue = false;
+              this.technologyIsTrue = false;
+              this.entertainmentIsTrue = false;
+              this.sportsIsTrue = true;
+              this.scienceIsTrue = false;
+              this.healthIsTrue = false;
+              this.sportsArticles = data.articles;
+            })
+          }
+          break;
+
+          case "science":
+          if (this.scienceArticles) {
+            this.worldIsTrue = false;
+              this.nationIsTrue = false;
+              this.businessIsTrue = false;
+              this.technologyIsTrue = false;
+              this.entertainmentIsTrue = false;
+              this.sportsIsTrue = false;
+              this.scienceIsTrue = true;
+              this.healthIsTrue = false;
+          }
+          else {
+            fetch(this.topicsUrl + topic + this.tokenUrl + this.apiKey)
+            .then((response) => {
+              return response.json()
+            })
+            .then((data) => {
+              this.nationIsTrue = false;
+              this.businessIsTrue = false;
+              this.technologyIsTrue = false;
+              this.entertainmentIsTrue = false;
+              this.sportsIsTrue = false;
+              this.scienceIsTrue = true;
+              this.healthIsTrue = false;
+              this.scienceArticles = data.articles;
+            })
+          }
+          break;
+
+          case "health":
+          if (this.healthArticles) {
+            this.nationIsTrue = false;
+            this.businessIsTrue = false;
+            this.technologyIsTrue = false;
+            this.entertainmentIsTrue = false;
+            this.sportsIsTrue = false;
+            this.scienceIsTrue = false;
+            this.healthIsTrue = true;
+          }
+          else {
+            fetch(this.topicsUrl + topic + this.tokenUrl + this.apiKey)
+            .then((response) => {
+              return response.json()
+            })
+            .then((data) => {
+              this.nationIsTrue = false;
+              this.businessIsTrue = false;
+              this.technologyIsTrue = false;
+              this.entertainmentIsTrue = false;
+              this.sportsIsTrue = false;
+              this.scienceIsTrue = false;
+              this.healthIsTrue = true;
+              this.healthArticles = data.articles;
+            })
+          }
           break;
       }
-    });
   }
   
   openArticle($event, article) {

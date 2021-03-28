@@ -19,7 +19,7 @@ export const createStripeCustomer = functions.auth
     const sub = await stripe.subscriptions.create({
       customer: customer.id,
       items: [{
-        price: 'gopulse',
+        price: 'price_1IZGkMKs8i098Uwtcee8jjBn',
       }],
       collection_method: 'send_invoice',
       days_until_due: 30,

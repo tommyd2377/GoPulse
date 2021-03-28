@@ -25,7 +25,6 @@ export class SignInPage {
     this.fireAuth.auth.signInWithEmailAndPassword(this.email, this.password)
       .then(res => {
         if (res.user) {
-          console.log("User Signed In: " + res.user);
           this.router.navigateByUrl('/tabs');
         }
       })
