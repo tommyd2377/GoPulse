@@ -30,6 +30,8 @@ export class HomePage implements OnInit {
   code5: string;
   code6: string;
   code7: string;
+  newGoCodes = [];
+  
 
   constructor(private fireAuth: AngularFireAuth,
               private router: Router,
@@ -44,25 +46,39 @@ export class HomePage implements OnInit {
       if (user) {
         this.uid = user.uid;
         
-        this.profileDoc = await this.afs.collection("customers").doc(this.uid).valueChanges();
+        this.newGoCodes = this.goCodes();
 
-        this.codes = await this.profileDoc.subscribe((doc) => {
-          this.code1 = doc.goCodes[0];
-          this.code2 = doc.goCodes[1];
-          this.code3 = doc.goCodes[2];
-          this.code4 = doc.goCodes[3];
-          this.code5 = doc.goCodes[4];
-          this.code6 = doc.goCodes[5];
-          this.code7 = doc.goCodes[6];
-        });
+        for (let newCode of this.newGoCodes) {
+          const GoRef = this.afs.collection("goCodes").doc(newCode);
+          GoRef.set({ goCode: newCode, hasBeenUsed: false, creator: this.uid})
+        }
 
-        this.followingActivity = this.afs.collection("users").doc(this.uid).collection("followingActivity", 
-          ref => ref.orderBy('createdAt', 'desc')).valueChanges();
+        this.code1 = this.newGoCodes[0];
+        this.code2 = this.newGoCodes[1];
+        this.code3 = this.newGoCodes[2];
+        this.code4 = this.newGoCodes[3];
+        this.code5 = this.newGoCodes[4];
+        this.code6 = this.newGoCodes[5];
+        this.code7 = this.newGoCodes[6];
 
         this.showLoader = false;
       }
     })
   }
+
+  goCodes() {
+    let goCodes = [];
+    for (let i = 0; i < 7; i++) {
+      let goCode: string = "";
+      let characters: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let charactersLength: number = characters.length;
+      for (let j = 0; j < 7; j++) {
+        goCode += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      goCodes.push(goCode)
+    } 
+    return goCodes;
+ }
 
   getScrollPos(pos: number) {
     if (pos > this.platform.height()) {
