@@ -37,24 +37,29 @@
       </ion-segment-button>
     </ion-segment>
 
-    <div *ngIf="showLoader">
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <ion-spinner name="bubbles" color="primary"></ion-spinner>
-    </div>
+  <div *ngIf="showLoader">
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    
+    <ion-spinner name="bubbles" color="primary"></ion-spinner>
+    
+  </div>
+
+  <div *ngIf="worldIsTrue">
 
     <ion-list *ngFor="let article of worldArticles">
   
-      <ion-item *ngIf="!showLoader && worldIsTrue" detail="false">
+      <ion-item *ngIf="!showLoader" detail="false">
 
       <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
         <img src="{{ article.image }}" alt="">
@@ -68,10 +73,14 @@
       </ion-item>
 
     </ion-list>
+
+  </div>
+
+  <div *ngIf="nationIsTrue">
 
     <ion-list *ngFor="let article of nationArticles">
   
-      <ion-item *ngIf="!showLoader && nationIsTrue" detail="false">
+      <ion-item *ngIf="!showLoader" detail="false">
 
       <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
         <img src="{{ article.image }}" alt="">
@@ -85,10 +94,14 @@
       </ion-item>
 
     </ion-list>
+
+  </div>
+
+  <div *ngIf="businessIsTrue">
 
     <ion-list *ngFor="let article of businessArticles">
   
-      <ion-item *ngIf="!showLoader && businessIsTrue" detail="false">
+      <ion-item *ngIf="!showLoader" detail="false">
 
       <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
         <img src="{{ article.image }}" alt="">
@@ -102,10 +115,14 @@
       </ion-item>
 
     </ion-list>
+
+  </div>
+
+  <div *ngIf="technologyIsTrue">
 
     <ion-list *ngFor="let article of technologyArticles">
   
-      <ion-item *ngIf="!showLoader && technologyIsTrue" detail="false">
+      <ion-item *ngIf="!showLoader" detail="false">
 
       <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
         <img src="{{ article.image }}" alt="">
@@ -119,10 +136,14 @@
       </ion-item>
 
     </ion-list>
+
+  </div>
+
+  <div *ngIf="entertainmentIsTrue">
 
     <ion-list *ngFor="let article of entertainmentArticles">
   
-      <ion-item *ngIf="!showLoader && entertainmentIsTrue" detail="false">
+      <ion-item *ngIf="!showLoader" detail="false">
 
       <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
         <img src="{{ article.image }}" alt="">
@@ -136,10 +157,14 @@
       </ion-item>
 
     </ion-list>
+
+  </div>
+
+  <div *ngIf="sportsIsTrue">
 
     <ion-list *ngFor="let article of sportsArticles">
   
-      <ion-item *ngIf="!showLoader && sportsIsTrue" detail="false">
+      <ion-item *ngIf="!showLoader" detail="false">
 
       <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
         <img src="{{ article.image }}" alt="">
@@ -153,10 +178,14 @@
       </ion-item>
 
     </ion-list>
+
+  </div>
+
+  <div *ngIf="scienceIsTrue">
 
     <ion-list *ngFor="let article of scienceArticles">
   
-      <ion-item *ngIf="!showLoader && scienceIsTrue" detail="false">
+      <ion-item *ngIf="!showLoader" detail="false">
 
       <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
         <img src="{{ article.image }}" alt="">
@@ -170,10 +199,14 @@
       </ion-item>
 
     </ion-list>
+
+  </div>
+
+  <div *ngIf="healthIsTrue">
 
     <ion-list *ngFor="let article of healthArticles">
   
-      <ion-item *ngIf="!showLoader && healthIsTrue" detail="false">
+      <ion-item *ngIf="!showLoader" detail="false">
 
       <ion-label class="ion-text-wrap" href='' router-direction="forward" (click)="openArticle($event, article)">
         <img src="{{ article.image }}" alt="">
@@ -187,6 +220,8 @@
       </ion-item>
 
     </ion-list>
+
+  </div>
 
   <div class="back-to-top-btn" *ngIf="backToTop" (click)="gotToTop()">
     <ion-icon name="chevron-up-outline"></ion-icon>
