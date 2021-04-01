@@ -18,7 +18,7 @@ export const environment = {
     topicsUrl: "https://gnews.io/api/v4/top-headlines?&topic=",
     topNewsUrl: "https://gnews.io/api/v4/top-headlines?",
     searchUrl: "https://gnews.io/api/v4/search?q=",
-    tokenURL: "&country=us&token=",
+    tokenURL: "&country=us&max=100&token=",
     key: "c4931a014b7fd1f739c2f493b08d751a"
   }
 };
